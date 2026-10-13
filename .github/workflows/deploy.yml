@@ -9,6 +9,16 @@ name: Deploy to Network Solutions subdomain
 on:
   push:
     branches: [main]
+    # Only site-affecting files — doc-only pushes must not burn a deploy run.
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - 'tsconfig*.json'
+      - 'ns.env.example'
   workflow_dispatch:          # manual redeploy button, same as Netlify's "Trigger deploy"
 
 jobs:

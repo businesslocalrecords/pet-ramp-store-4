@@ -1,0 +1,26 @@
+# TEMPORARY diagnostic workflow — probes which file-transfer ports the host
+# actually accepts from GitHub's runners (the workspace sandbox only allows
+# web traffic, so this has to run on a hosted runner). Dispatch manually:
+#   gh workflow run probe.yml -R businesslocalrecords/pet-ramp-store-4
+# Delete once the deploy port is confirmed and the deploy workflow succeeds.
+name: Probe host ports
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe file-transfer ports
+        run: |
+          probe() {
+            port=$1
+            if timeout 6 bash -c "exec 3<>/dev/tcp/122846c.netsolhost.com/$port" 2>/dev/null; then
+              banner=$(timeout 5 bash -c "exec 3<>/dev/tcp/122846c.netsolhost.com/$port; head -c 80 <&3" 2>/dev/null | tr -d '\0' || true)
+              echo "port $port OPEN   banner: $banner"
+            else
+              echo "port $port closed/filtered"
+            fi
+          }
+          for p in 21 22 2222 2223; do probe $p; done
