@@ -146,7 +146,7 @@ export const Faq: React.FC = () => {
               Contact us
             </a>
             <a
-              href={`mailto:support@pawgrippro.com`}
+              href={`mailto:pawgrip@businesslocalrecords.com`}
               className="inline-flex min-h-12 items-center gap-2 rounded-md border border-stone-700 px-6 py-3 font-bold text-stone-200 transition-colors hover:bg-stone-800"
             >
               Email support

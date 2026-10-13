@@ -1,5 +1,7 @@
 # Deployment — pawgrip.app on a Linode VPS (Cloudflare-fronted)
 
+> **Status (2026-10-13): Live.** `https://pawgrip.app` → Cloudflare (Flexible TLS) → Linode VPS (nginx serving `/var/www/pawgrip.app`). Auto-deploys on push to `main` via `.github/workflows/deploy-linode.yml` (build with `VITE_*` secrets → rsync `dist/` over SSH). Contact email: `pawgrip@businesslocalrecords.com`.
+
 > **UPDATE 2026-10-13 — migration off Network Solutions.** The storefront now
 > runs on the dedicated domain **pawgrip.app** (Cloudflare DNS + SSL) served
 > from a **Linode VPS** (nginx, static Vite build). Deploys are
@@ -36,7 +38,7 @@ Settings → Secrets and variables → Actions.
 - The **visit log** (`public/track.php` → `clicks.txt`) is inert on static nginx — it needs php-fpm. Add php-fpm + a `location ~ \.php$` block if you want it; until then `click-tracker.ts` fails harmlessly.
 - `public/.htaccess` still ships in `dist/` but nginx ignores it — the SPA / security / cache behavior is mirrored in `deploy/linode-setup.sh`.
 - No `base` change: the build keeps Vite's default `base: '/'`, correct for a domain-root docroot.
-- Point the **ad-platform allowlists** (Google Ads/Meta landing page, GA4 stream, Shopify Customer Events pixel, Merchant Center claim) at `https://pawgrip.app`. `index.html` `canonical`/`og:*`/JSON-LD now point at `https://pawgrip.app/`. The support email `support@pawgrippro.com` was left unchanged — forward/spin it up on `pawgrip.app` separately if you switch contact addresses.
+- Point the **ad-platform allowlists** (Google Ads/Meta landing page, GA4 stream, Shopify Customer Events pixel, Merchant Center claim) at `https://pawgrip.app`. `index.html` `canonical`/`og:*`/JSON-LD point at `https://pawgrip.app/`. Support email is now `pawgrip@businesslocalrecords.com` (owner alias) across the policy pages, FAQ and buy box; the `public/terms` site reference now reads `pawgrip.app`.
 - **Rollback** = revert the commit on `main` and push; the workflow redeploys. There is no artifact history — keep known-good commit hashes.
 
 ---

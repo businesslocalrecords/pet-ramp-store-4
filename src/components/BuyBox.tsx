@@ -223,7 +223,7 @@ export const BuyBox: React.FC = () => {
                 now &mdash; the {compact.name} ships now.{' '}
                 <a
                   className="font-medium text-blue-700 underline"
-                  href={`mailto:support@pawgrippro.com?subject=${encodeURIComponent(
+                  href={`mailto:pawgrip@businesslocalrecords.com?subject=${encodeURIComponent(
                     `Notify me: Extended ${extended.lengthIn}\u2033 ramp`
                   )}`}
                 >

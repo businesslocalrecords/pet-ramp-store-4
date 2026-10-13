@@ -125,7 +125,7 @@ export const BUSINESS = {
   state: 'NY',
   postalCode: '10007',
   country: 'United States',
-  email: 'support@pawgrippro.com',
+  email: 'pawgrip@businesslocalrecords.com',
   phone: '1-800-729-3844',
 } as const;
 
