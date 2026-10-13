@@ -162,7 +162,8 @@ glass header) cannot be captured this way — verify those manually.
 
 ## Deployment gotchas
 
-Hosting is the owner's paid domain.com (cPanel) subscription via a subdomain
+Hosting is the owner's paid Network Solutions (cPanel) subscription via a
+subdomain
 of `businesslocalrecords.com` — **`DEPLOYMENT.md` is the full working
 agreement** (credentials, GitHub Actions workflow, cutover checklist). The
 short version:

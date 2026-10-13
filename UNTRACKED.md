@@ -14,6 +14,7 @@ what would have to happen before it could be committed.
 | `tez imagz/` | `.PNG` images, contents undetermined | Unknown provenance — may be competitor or stock imagery | Review each file; keep only owner-owned or legally usable images, convert to web formats, place under `public/assets/…` |
 | `screenshots/` | QA screenshots from preview checks (`hero-1440.png`, `order-390.png`, …) | Verification output, not source; would add churn on every capture | Keep untracked. Publish-worthy shots can be added to `docs/` deliberately, one at a time |
 | `.kilo/` | Local planning/working notes for this repo's editing sessions (e.g. `.kilo/plans/*.md`) | Local tooling state, not part of the storefront | Keep untracked. Anything worth keeping long-term — decisions, rejected approaches — belongs in `claims.md`, `AGENTS.md` or `LAUNCH_BLOCKERS.md` instead |
+| `ns.env` | Network Solutions (cPanel) hosting credentials — the FTP/SSH/cPanel values that populate the deploy workflow's repository secrets (see `DEPLOYMENT.md` §1) | Live host credentials: committing them would publish write access to the production server. It is gitignored on purpose so it can never be staged | Keep untracked permanently. The deploy pipeline reads these values as GitHub Actions repository secrets; the local file only exists as the owner's fill-in sheet |
 
 Rules of thumb before any of this goes into git:
 

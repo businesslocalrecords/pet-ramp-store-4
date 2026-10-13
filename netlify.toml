@@ -1,5 +1,6 @@
 # RETIRED — Netlify is no longer part of this project's workflow. Deploys go
-# to the domain.com (cPanel) subdomain via GitHub Actions; DEPLOYMENT.md is
+# to the Network Solutions (cPanel) subdomain via GitHub Actions;
+# DEPLOYMENT.md is
 # the working agreement, public/.htaccess is the live equivalent of the
 # redirects and headers below. This file is kept only until the first
 # successful deploy is verified on the new host, then it should be deleted.

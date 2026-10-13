@@ -171,7 +171,7 @@ being replaced — see DEPLOYMENT.md), `/about/`, and
 ## Deployment
 
 Builds to static files in `dist/`. Hosting moved off Netlify to the owner's
-domain.com (cPanel) subscription — **full plan, credentials and cutover
+Network Solutions (cPanel) subscription — **full plan, credentials and cutover
 checklist live in `DEPLOYMENT.md`** — and the store is served from a subdomain
 (`<store>.businesslocalrecords.com`) so the root domain keeps its existing
 application. In short:
@@ -226,7 +226,7 @@ src/
 public/                          static pages + assets/ (+ .htaccess for Apache)
 public/.htaccess                Apache config — mirrors netlify.toml (retired)
 scripts/shopify-seed.mjs         Admin API catalog seeder
-DEPLOYMENT.md                   domain.com hosting: credentials, pipeline,
+DEPLOYMENT.md                   Network Solutions hosting: credentials, pipeline,
                                 cutover checklist (replaces Netlify)
 AGENTS.md                        working agreement — read before editing
 claims.md                        claim audit / rewording table

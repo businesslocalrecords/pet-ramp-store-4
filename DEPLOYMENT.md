@@ -1,19 +1,34 @@
-# Deployment — domain.com (cPanel) subdomain hosting
+# Deployment — Network Solutions (cPanel) subdomain hosting
 
-**Status:** Netlify is being retired from this project's workflow. This file is
-the working agreement for the replacement: a push-to-deploy pipeline from this
-GitHub repo to a **subdomain** on the owner's paid domain.com (cPanel) hosting.
+**Status:** Netlify is retired from this project's workflow. Deploys now
+target the owner's paid **Network Solutions cPanel** subscription under the
+**`pawgrip.businesslocalrecords.com`** subdomain. The root of the account
+keeps serving the main application; nothing here touches it.
 
-Target: **`<store>.businesslocalrecords.com`** (subdomain name to be confirmed —
-`pawgrip` is the working example). The root of that hosting account keeps
-serving the main application at `businesslocalrecords.com`; nothing in this
-repo touches the root document root.
+Current environment facts (confirmed with the owner):
+
+| Item | Value |
+|---|---|
+| Host type | cPanel (Apache), Network Solutions |
+| Temporary cPanel host | `122846c.netsolhost.com` |
+| Subdomain | `pawgrip` (created in cPanel → Domains) |
+| Document root | `htdocs/pawgrip` (as shown in the File Manager) |
+| DNS | `pawgrip.businesslocalrecords.com` is pending propagation — Network Solutions quotes up to 24 hours |
+| Credentials | owner fills `ns.env` in the repo root (gitignored, never committed); the values become GitHub Actions repository secrets |
+
+Until DNS resolves, the subdomain's content is also reachable at
+`122846c.netsolhost.com/pawgrip/` — **but it will render broken there on
+purpose**: Vite builds with the default `base: '/'`, so assets are requested
+from `/assets/…`, which only exist under a dedicated document root. Do not
+"fix" that by changing `base` — it would break the real subdomain deploy.
+The correct browser check is the real domain once DNS propagates.
 
 ---
 
-## 1. Credentials needed from domain.com's hosting section
+## 1. Credentials needed from the Network Solutions hosting account
 
-domain.com shared hosting is **cPanel** (Apache). It has no Netlify-style
+Network Solutions shared hosting is **cPanel** (Apache). It has no
+Netlify-style
 deploy API, so push-to-deploy has to be rebuilt from two halves:
 
 - the **trigger** (what Netlify's webhook did) → **GitHub Actions**, in this
@@ -21,19 +36,26 @@ deploy API, so push-to-deploy has to be rebuilt from two halves:
 - the **write** (what Netlify's deploy API did) → **one credential from the
   host** that authorizes uploading the built files over FTP/SFTP or SSH.
 
-Only three things are actually needed, and only the first two come from
-domain.com:
+Only two things are actually needed, and both come from the cPanel account:
 
-| # | Credential | From | Used for |
+| # | Credential | Used for | Where it is found |
 |---|---|---|---|
-| 1 | **cPanel login** — cPanel URL, username, password (domain.com dashboard → hosting → cPanel) | domain.com | One-time setup only: create the subdomain + its document root, create a scoped FTP account, enable SSH/AutoSSL. You can do these three steps yourself in cPanel (5 minutes) and never hand over the master password — then I only need item 2. |
-| 2 | **Deploy credential** (one of): **FTP account** (cPanel → FTP Accounts) scoped to the subdomain's directory — host, port, username, password, directory; **or SSH access** for the cPanel user (enable in cPanel → Security → SSH Access, import a public key so no password is shared) | domain.com | This is what the GitHub Actions workflow authenticates with on every push. |
-| 3 | **GitHub PAT with `repo` scope** | GitHub | **Optional** — only for cPanel's own "Git Version Control" pull-based workflow. Not needed for the GitHub Actions route. |
+| 1 | **Deploy credential** — one of: an **FTP account** scoped to the subdomain's directory (`122846c_pawgrip` style username), or **SSH access** for the main cPanel user (public-key import preferred) | The GitHub Actions workflow authenticates with this on every push | cPanel → FTP Accounts, or cPanel → Security → SSH Access |
+| 2 | *(Optional)* **cPanel login** | One-time setup only | cPanel → `https://122846c.netsolhost.com` |
+
+`ns.env` in the repo root is the fill-in template for these — it is
+gitignored, holds the exact formats and the cPanel page where each value is
+found, and its keys map one-to-one to the secret names below. It is **never
+committed** (`UNTRACKED.md` records why).
+
+A **GitHub PAT with `repo` scope** is only needed if you would rather use
+cPanel's own "Git Version Control" pull-based workflow; it is not needed for
+the GitHub Actions route.
 
 One more input the pipeline needs: this repo's `VITE_*` build variables
 (Shopify + analytics IDs from `.env.example`), because Vite inlines them at
 build time — same gotcha as Netlify. Those live as **GitHub Actions
-secrets/variables** on this repo, not as domain.com credentials.
+secrets/variables** on this repo, not as hosting-account credentials.
 
 ### Where the credentials are stored
 
@@ -44,16 +66,18 @@ once the secrets exist, the workflow uses them without anyone re-sending them.
 
 ### One-time cPanel setup (subdomain fork)
 
-1. cPanel → **Domains → Create subdomain**: `pawgrip` for domain
-   `businesslocalrecords.com`. It auto-creates the document root (typically
-   `~/pawgrip`) and the DNS record. The root app at `businesslocalrecords.com`
-   is untouched — that is exactly the "fork by subdomain" split.
-2. If the domain's DNS is hosted somewhere else (Cloudflare, etc.), add the
-   `pawgrip` record pointing at the same server there instead.
-3. cPanel → **SSL/TLS Status → Run AutoSSL** so the subdomain gets its own
-   certificate (required — Shopify checkout redirects and Ads both reject
-   insecure origins).
-4. Repeat these steps per future storefront: one subdomain, one document
+1. ~~Create subdomain~~ **DONE** — `pawgrip` exists in cPanel → Domains with
+   document root `htdocs/pawgrip`. The root app at `businesslocalrecords.com`
+   is untouched — that is the "fork by subdomain" split. DNS for
+   `pawgrip.businesslocalrecords.com` is propagating (up to 24 h).
+2. Create the scoped **FTP account** (cPanel → FTP Accounts, directory
+   `htdocs/pawgrip`) **or** enable **SSH Access** (cPanel → Security) and
+   import a public key. This is the only step still owed, and its result is
+   what fills `ns.env`.
+3. After DNS resolves, cPanel → **SSL/TLS Status → Run AutoSSL** so the
+   subdomain gets its own certificate (required — Shopify checkout redirects
+   and Ads both reject insecure origins).
+4. Repeat this pattern per future storefront: one subdomain, one document
    root, one set of credentials, one GitHub workflow.
 
 ---
@@ -65,7 +89,7 @@ deploy credential are confirmed. Until then the file lives here so it is
 reviewable. It is intentionally boring: no Netlify-specific anything.
 
 ```yaml
-name: Deploy to domain.com subdomain
+name: Deploy to Network Solutions subdomain
 
 on:
   push:
@@ -99,7 +123,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}   # e.g. /pawgrip/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}   # htdocs/pawgrip/ (relative to the FTP login, not an absolute path)
           local-dir: ./dist/
           protocol: ftps            # change to 'ftp' only if the server lacks FTPS
           dangerous-clean-slate: false
@@ -149,16 +173,18 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 ## 4. Cutover checklist
 
-1. [ ] Confirm the subdomain name (working example: `pawgrip`).
-2. [ ] Create subdomain + document root + AutoSSL in cPanel (or send me the
-       cPanel login and I will do it).
-3. [ ] Create the scoped FTP account (or enable SSH + share a public key).
-4. [ ] Add the deploy secrets and the `VITE_*` variables in GitHub repo
-       settings.
-5. [ ] Decide the forms replacement (#3 above) and implement it.
-6. [ ] Commit `.github/workflows/deploy.yml`, retire `netlify.toml` (delete
-       after the first successful deploy), push to `main`.
-7. [ ] Verify: site loads on `https://<store>.businesslocalrecords.com`,
+1. [x] Subdomain created: `pawgrip.businesslocalrecords.com` (DNS
+       propagating, up to 24 h — temporarily verifiable via the cPanel
+       temp host, see the caveat in the status section).
+2. [ ] Create the scoped FTP account (or enable SSH + import a public key) and
+       fill `ns.env`.
+3. [ ] Run AutoSSL once DNS resolves (cPanel → SSL/TLS Status).
+4. [ ] Map the `ns.env` values to GitHub repo secrets (Settings → Secrets and
+       variables → Actions) and add the `VITE_*` build variables.
+5. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
+6. [ ] Commit `.github/workflows/deploy.yml`, delete `netlify.toml` after the
+       first successful deploy, push to `main`.
+7. [ ] Verify: site loads on `https://pawgrip.businesslocalrecords.com`,
        static policy pages work, Shopify checkout redirects land, console is
        clean.
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
