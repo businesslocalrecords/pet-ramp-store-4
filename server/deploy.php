@@ -29,6 +29,12 @@
  *     the mirror's delete pass — they are not part of the payload and must
  *     survive every deploy. Anything else the site does not know about
  *     SHOULD be deleted: that is what keeps removals in sync.
+ *   - Race safety: the version marker (raw) and the tarball (codeload) are
+ *     cached by different CDNs, so after a branch push one can be fresher
+ *     than the other. The tarball's own marker is checked against the
+ *     expected version before anything is mirrored (409 on mismatch), and
+ *     the workflow passes ?expect=<sha> and retries — a stale payload can
+ *     never be marked as current.
  */
 
 const TOKEN       = 'REPLACE_WITH_THE_DEPLOY_TOKEN';
@@ -239,6 +245,25 @@ if (!$ok) {
     }
     rrmdir_php($tmp);
     exit('extract failed');
+}
+
+/* --- consistency check -----------------------------------------------------
+   raw.githubusercontent.com and codeload.github.com are separate CDNs
+   behind ONE git push, so the version marker can be fresh while the
+   tarball is still stale (or the reverse). Mirroring that combination
+   would poison .deploy-version: the site would sit a build behind while
+   claiming to be current — exactly the silent failure this guards. The
+   tarball carries its own deploy-version.txt, so the two must agree
+   before anything is mirrored. A 409 here makes the workflow retry. */
+$expected  = $expect !== '' ? $expect : (string) $version;
+$tarMarker = $tmp . '/src/deploy-version.txt';
+if ($expected !== ''
+    && (!is_file($tarMarker)
+        || trim((string) @file_get_contents($tarMarker)) !== trim($expected))) {
+    logline($here, 'ERROR payload/marker mismatch expected=' . trim($expected));
+    rrmdir_php($tmp);
+    http_response_code(409);
+    exit('payload marker mismatch, expected ' . trim($expected));
 }
 
 /* --- mirror into place: rsync via exec, pure PHP as the fallback ---------- */

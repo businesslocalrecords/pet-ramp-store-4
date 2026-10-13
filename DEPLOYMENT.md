@@ -185,16 +185,41 @@ http://pawgrip.businesslocalrecords.com/deploy.php?token=<DEPLOY_TOKEN>
 then the URL flips to `https` in `deploy.yml` — one-line change).
 
 **What the endpoint does, in order:** auth via `hash_equals` (403 without
-the token) → version gate (unchanged SHA ⇒ "already up to date", no
-download) → fetch the tarball from codeload → extract (`tar` via `exec`,
-falling back to PHP's `PharData`) → mirror into its own directory (`rsync
---delete`, falling back to a pure-PHP mirror; `deploy.php`, the logs and the
-temp dir are always excluded) → strip `deploy-version.txt` from the live
-copy, record the version in `.deploy-version` → append a line to
-`deploy.log` next to itself. It is idempotent and can be re-run at any time
-from a browser; `deploy.log` is the first thing to check when something
+the token) → version gate against `?expect=<sha>` (409 "stale payload" when
+the marker the CDN serves doesn't match the commit that just built)
+→ consistency check that the tarball's own `deploy-version.txt` matches the
+expected version (409 otherwise — `raw` and `codeload` are separate CDNs
+behind one push, and a fresh marker over a stale tarball is what poisoned
+the version state on 2026-10-13 before this check existed) → download the
+tarball from codeload → extract (`tar` via `exec`, falling back to PHP's
+`PharData`, then a pure-PHP gzopen+tar-header parser) → mirror into its own
+directory (`rsync --delete`, falling back to a pure-PHP mirror; the
+server-side state files are always excluded) → strip `deploy-version.txt`
+from the live copy, record the version in `.deploy-version` → append a line
+to `deploy.log` next to itself. It is idempotent and can be re-run at any
+time from a browser; `deploy.log` is the first thing to check when something
 looks stale. If the hosting account ever turns out to have PHP disabled,
 the fallback is the manual WinSCP upload (or the cron variant below).
+
+**Files that exist only on the server** (excluded from the mirror's delete
+pass, so they survive every deploy): `deploy.php` itself, `deploy.log`,
+`clicks.txt` (the visit log written by `track.php`), the optional
+`clicks-view-token.txt` (guards the log's read-back endpoint), and the
+`.deploy-version` marker. Everything else that the payload doesn't contain
+**should** be deleted on deploy — that is what keeps removals in sync.
+
+### The visit log (clicks.txt)
+
+`public/track.php` ships inside the site payload: the same POST-only,
+path-validated visit logger the root domain runs, appending one
+pipe-delimited line per visit (ET time, city from `?city=` or the first path
+segment, IP, path, user agent) to `clicks.txt` next to itself. The SPA fires
+it on every page load via `navigator.sendBeacon` (`src/lib/click-tracker.ts`).
+Reading it back: File Manager opens `clicks.txt` directly; this host answers
+403 for `.txt` over HTTP (writes are unaffected — a 403 there rather than
+the SPA catch-all's 200 proves the file exists). `track.php?view=1&token=…`
+also serves it, guarded by `clicks-view-token.txt` — a file the owner
+creates by hand once (absent = the read path stays closed).
 
 ### Alternative: cron polling (if the panel has Cron Jobs)
 
