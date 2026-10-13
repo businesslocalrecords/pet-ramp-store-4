@@ -175,6 +175,12 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
         0
       );
 
+      // Bundle code did not apply (misconfigured/expired discount, minimum not
+      // met, etc.). Do NOT hard-fail the sale over it: the merchandise total is
+      // verified to equal the advertised offer price just below, so the shopper
+      // still gets the package at its real price. A missing code only affects
+      // the owner's margin and is reconciled in Shopify Admin
+      // (see LAUNCH_BLOCKERS.md) — it must never block a paying customer.
       if (
         bundleDiscount &&
         !checkoutCart.discountCodes?.some(
@@ -183,13 +189,14 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
             discount.applicable
         )
       ) {
-        setError('Shopify did not apply the selected bundle discount. Checkout was not opened.');
-        return;
+        console.warn(
+          `[PawGrip] Bundle discount ${bundleDiscount.code} did not apply; opening checkout at the offer price $${total.toFixed(2)}.`
+        );
       }
 
       if (currency !== 'USD' || Math.abs(actualMerchandiseTotal - total) >= 0.01) {
         setError(
-          `Shopify calculated $${actualMerchandiseTotal.toFixed(2)} for this cart, but the selected offer is $${total.toFixed(2)}. Checkout was not opened.`
+          `Shopify calculated $${actualMerchandiseTotal.toFixed(2)} for this cart, but the selected offer is $${total.toFixed(2)}. Checkout was not opened and no charge was made.`
         );
         return;
       }

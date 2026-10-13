@@ -16,11 +16,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (storedCartId) {
       const existingCart = await getCart(storedCartId).catch(() => null);
       if (existingCart) {
-        setCart(existingCart);
-        setLoading(false);
-        return;
+        // Heal stale residue (phantom "1 in cart" on landing).
+        //
+        // `buy()` builds a throwaway checkout cart and redirects to Shopify; it
+        // never persists that cart (see startCheckout). The only writer of this
+        // key besides loadCart itself is an add-to-cart flow — and this page has
+        // none. An earlier build DID persist the throwaway checkout cart here,
+        // so any visitor who reached checkout has a stale id cached that still
+        // holds the ramp. A hydrated browsing cart that already has items is
+        // therefore always that stale residue: drop it and start a clean, empty
+        // cart so the header badge correctly reads 0 on arrival.
+        if (existingCart.totalQuantity > 0) {
+          localStorage.removeItem(CART_ID_KEY);
+        } else {
+          setCart(existingCart);
+          setLoading(false);
+          return;
+        }
+      } else {
+        localStorage.removeItem(CART_ID_KEY);
       }
-      localStorage.removeItem(CART_ID_KEY);
     }
     const newCart = await createCart();
     localStorage.setItem(CART_ID_KEY, newCart.id);
@@ -58,7 +73,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setError(null);
     try {
       const checkoutCart = await createCart(lines, discountCodes);
-      localStorage.setItem(CART_ID_KEY, checkoutCart.id);
+      // NOTE: deliberately do NOT persist this checkout cart's ID to
+      // localStorage. `buy()` builds a throwaway one-and-done cart purely to
+      // obtain a checkoutUrl, then redirects to Shopify. Persisting it here is
+      // what caused the phantom "1 in cart" on the next visit: on return,
+      // loadCart() rehydrated that completed/abandoned cart (still holding the
+      // ramp) and the header badge showed 1 before the visitor did anything.
+      // The persistent browsing cart stays the empty one created on load.
       setCart(checkoutCart);
       return checkoutCart;
     } catch (err) {
