@@ -15,7 +15,8 @@ Current environment facts (confirmed with the owner):
 | Document root | `htdocs/pawgrip` (as shown in the File Manager) |
 | DNS | **Verified resolving** on 2026-10-13: `pawgrip.businesslocalrecords.com`, `businesslocalrecords.com` and the temp host all answer from `74.91.138.133`. The subdomain's *vhost* was still not mapped to its docroot that day (404 from the wrong backend) — Network Solutions quotes up to 24 h |
 | Deploy account | SFTP account `sftp_agent_01`, directory `/htdocs` — usable from ordinary (home) connections only; see "Why the deploy pulls instead of pushes" below |
-| Pipeline shape | **Two-stage, 443-only:** GitHub Actions builds and pushes to the public `publish` branch; a 1-minute cPanel cron on the host pulls and extracts it into `htdocs/pawgrip` |
+| Pipeline shape | **Two-stage, 443-only:** GitHub Actions builds and pushes to the public `publish` branch, then calls `deploy.php` on the host, which pulls the tarball and mirrors it into `htdocs/pawgrip` |
+| Visit log | `track.php` (in the site payload) appends one line per visit to `clicks.txt` beside it; read via File Manager, or `track.php?view=1` with a hand-made `clicks-view-token.txt` |
 
 DNS verification means the subdomain should serve files the moment they
 land in `htdocs/pawgrip` — the propagation wait affects visitors' resolvers,
