@@ -99,7 +99,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                   </span>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </div>
         
@@ -140,7 +140,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
               className="w-full flex items-center justify-center text-sm font-medium text-stone-600 hover:text-stone-900"
             >
               Close
-            </>
+            </button>
           )}
         </div>
       </div>
