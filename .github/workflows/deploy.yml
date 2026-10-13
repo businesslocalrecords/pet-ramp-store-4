@@ -1,9 +1,22 @@
-# Push-to-deploy for the pawgrip subdomain on Network Solutions (cPanel).
-# This replaces what Netlify did:
-#   trigger -> this workflow, on every push to main (Netlify's webhook role)
-#   write   -> SFTP upload of dist/ into htdocs/pawgrip (Netlify's deploy-API role)
-# DEPLOYMENT.md is the working agreement; ns.env (gitignored) holds the
-# credential values that became this repo's secrets.
+# Deploy pipeline for the pawgrip subdomain on Network Solutions (cPanel).
+#
+# The host blocks every file-transfer and cPanel-API port from GitHub's
+# datacenter IP ranges (only 443 site traffic passes — verified with
+# probe.yml on 2026-10-13: github.com:22 and host:443 reachable, but
+# 21/22/2222/2083/2082 all filtered). So an Actions-side SFTP upload can
+# never connect. The pipeline therefore runs in two stages, both on 443:
+#
+#   stage 1 (this workflow): build dist/ and push it to the public
+#     `publish` branch of this repo (codeload/git over 443 — allowed).
+#   stage 2 (host side, one-time setup): a cPanel cron job, once per
+#     minute, downloads the branch tarball and extracts it into
+#     htdocs/pawgrip. The server pulls FROM GitHub, so the host's inbound
+#     block does not apply.
+#
+# Netlify's contract (push to main -> live site) is preserved: the cron
+# polls every minute, so end-to-end latency is the build time plus <=1
+# minute. DEPLOYMENT.md is the working agreement (findings, cron command,
+# rollout checklist); ns.env (gitignored) holds fallback credentials.
 name: Deploy to Network Solutions subdomain
 
 on:
@@ -21,8 +34,11 @@ on:
       - 'ns.env.example'
   workflow_dispatch:          # manual redeploy button, same as Netlify's "Trigger deploy"
 
+permissions:
+  contents: write             # push the publish branch with the default token
+
 jobs:
-  build-and-deploy:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,17 +58,24 @@ jobs:
           VITE_META_PIXEL_ID: ${{ secrets.VITE_META_PIXEL_ID }}
           VITE_REQUIRE_BUSINESS_INFO: ${{ vars.VITE_REQUIRE_BUSINESS_INFO }}
 
-      - name: Upload dist/ to the subdomain document root
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
-        with:
-          username: ${{ secrets.SFTP_USERNAME }}
-          server: ${{ secrets.SFTP_SERVER }}
-          port: ${{ secrets.SFTP_PORT }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: './dist/*'
-          # 'pawgrip' — the account logs directly into /htdocs (the LIVE root
-          # docroot), so this MUST stay the subfolder; see "Do not deploy to
-          # /htdocs" in DEPLOYMENT.md.
-          remote_path: ${{ secrets.SFTP_DIR }}
-          sftp_only: true                        # sub-account has no shell; rsync-over-SSH would fail
-          sftpArgs: '-o ConnectTimeout=30'
+      - name: Publish dist/ to the publish branch (server pulls it)
+        run: |
+          set -euo pipefail
+          # stage the build so the publish branch holds dist/ contents at
+          # its root (dotfiles included — dist/.htaccess must survive)
+          rm -rf /tmp/publish-stage
+          mkdir -p /tmp/publish-stage
+          cp -a dist/. /tmp/publish-stage/
+
+          # orphan branch: replace whatever publish held with this build
+          git checkout --orphan publish
+          git rm -r --cached --quiet . > /dev/null
+          find . -maxdepth 1 -mindepth 1 -not -name .git -not -name dist -exec rm -rf {} +
+          rm -rf dist
+          cp -a /tmp/publish-stage/. .
+
+          git add -A
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m "deploy $GITHUB_SHA"
+          git push -f origin publish

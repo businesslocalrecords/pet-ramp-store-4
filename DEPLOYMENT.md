@@ -9,12 +9,13 @@ Current environment facts (confirmed with the owner):
 
 | Item | Value |
 |---|---|
-| Host type | cPanel (Apache), Network Solutions |
+| Host type | cPanel (Apache) behind an openresty proxy, Network Solutions |
 | Temporary cPanel host | `122846c.netsolhost.com` |
 | Subdomain | `pawgrip` (created in cPanel → Domains) |
 | Document root | `htdocs/pawgrip` (as shown in the File Manager) |
 | DNS | **Verified resolving** on 2026-10-13: `pawgrip.businesslocalrecords.com`, `businesslocalrecords.com` and the temp host all answer from `74.91.138.133`. Network Solutions quotes up to 24 h, so remote resolvers may still catch up |
-| Credentials | **SFTP account created**: user `sftp_agent_01`, directory `/htdocs` (Network Solutions applies an up-to-10-minute activation delay). Values live in `ns.env` (gitignored) and become GitHub Actions repository secrets |
+| Deploy account | SFTP account `sftp_agent_01`, directory `/htdocs` — usable from ordinary (home) connections only; see "Why the deploy pulls instead of pushes" below |
+| Pipeline shape | **Two-stage, 443-only:** GitHub Actions builds and pushes to the public `publish` branch; a 1-minute cPanel cron on the host pulls and extracts it into `htdocs/pawgrip` |
 
 DNS verification means the subdomain should serve files the moment they
 land in `htdocs/pawgrip` — the propagation wait affects visitors' resolvers,
@@ -25,6 +26,33 @@ temp host also mirrors the docroot at `122846c.netsolhost.com/pawgrip/`,
 under a dedicated document root. Do not "fix" that by changing `base` — it
 would break the real subdomain deploy. The correct browser check is the real
 domain; note its HTTPS certificate is not issued yet (AutoSSL owed).
+
+---
+
+## Why the deploy pulls instead of pushes
+
+The obvious pipeline — Actions builds and uploads over SFTP — **cannot work
+against this host**, verified on 2026-10-13 with `.github/workflows/probe.yml`
+(dispatch it any time to re-check):
+
+| Target | Result from a GitHub-hosted runner | Meaning |
+|---|---|---|
+| `github.com:22` (control) | **OPEN** | the probe and the runner's egress are fine |
+| `122846c.netsolhost.com:443` (control) | **OPEN** | web traffic passes |
+| `122846c.netsolhost.com:21 / :22 / :2222` | closed/filtered | FTP/SFTP are blocked from datacenter IPs |
+| `122846c.netsolhost.com:2083 / :2082` | closed/filtered | cPanel API ports blocked too |
+| `122846c.netsolhost.com/execute/…`, `/login/`, `/cpanelwebcall/` | `403` from the proxy | cPanel API not proxied on 443 either |
+
+Network Solutions' firewall drops non-443 traffic from cloud/datacenter
+ranges — the classic Newfold posture. Only 443 works, so the deploy has to
+travel over 443 in the **pull** direction: the server fetching from GitHub is
+ordinary outbound web traffic and bypasses the block entirely. (The SFTP
+account still works from a normal home/office connection, which is why it is
+kept as a manual/fallback path.)
+
+The same link is also what makes the host's own "10-minute activation delay"
+irrelevant to the pipeline — nothing connects to the host's file ports at
+all.
 
 ---
 
@@ -43,8 +71,8 @@ Only two things are actually needed, and both come from the cPanel account:
 
 | # | Credential | Used for | Where it is found |
 |---|---|---|---|
-| 1 | **The SFTP account** — Network Solutions issues SFTP accounts (not classic FTP): user ID, password, and the directory it may access | The GitHub Actions workflow authenticates with this on every push | The "Create SFTP Account" dialog you already used → `sftp_agent_01` |
-| 2 | *(Optional)* **cPanel login** (username `122846c` + hosting password from the Account Manager) | One-time setup only — not needed for deploys | Account Manager → hosting → Manage |
+| 1 | **The SFTP account** — Network Solutions issues SFTP accounts (not classic FTP): user ID, password, and the directory it may access | Manual deploys / fallback only. The automated pipeline does **not** need it — the host blocks datacenter IPs, so GitHub pulls nothing through it | The "Create SFTP Account" dialog you already used → `sftp_agent_01` |
+| 2 | *(Optional)* **cPanel login** (username `122846c` + hosting password from the Account Manager) | The one-time cron setup, if done through the UI instead of by you | Account Manager → hosting → Manage |
 
 **Account details that matter for the workflow:** the account was created with
 Directory `/htdocs`, which means an SFTP login lands **directly in /htdocs** —
@@ -115,71 +143,79 @@ plan.
 
 ## 2. The pipeline (what replaces Netlify)
 
-**`.github/workflows/deploy.yml` is committed and live** (2026-10-13). The
-snippet below is kept here as reference; the file is the source of truth. It
-is intentionally boring: no Netlify-specific anything.
+`.github/workflows/deploy.yml` is committed and live. The build stage is the
+same as Netlify's was (Node 22, `npm ci`, `npm run build` with the `VITE_*`
+secrets inlined). What changed is the **delivery**: instead of pushing files
+to the host over SFTP (impossible here — see above), the workflow pushes the
+built `dist/` to this repo's public **`publish` branch**, and the host pulls
+it.
 
-```yaml
-name: Deploy to Network Solutions subdomain
+### Stage 1 — Actions → `publish` branch (over 443, done)
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:          # manual redeploy button, same as Netlify's
+After a green build, the workflow creates an orphan `publish` branch holding
+the contents of `dist/` at its root (`.htaccess` included) and force-pushes
+it. This repo is public, so the branch is anonymously downloadable at:
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22    # matches local tooling
-          cache: npm
-
-      - run: npm ci
-      - run: npm run build     # tsc -b && vite build → dist/
-        env:
-          VITE_SHOPIFY_STOREFRONT_DOMAIN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_DOMAIN }}
-          VITE_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_TOKEN }}
-          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
-          VITE_GOOGLE_ADS_CONVERSION_ID: ${{ secrets.VITE_GOOGLE_ADS_CONVERSION_ID }}
-          VITE_META_PIXEL_ID: ${{ secrets.VITE_META_PIXEL_ID }}
-          VITE_REQUIRE_BUSINESS_INFO: ${{ vars.VITE_REQUIRE_BUSINESS_INFO }}
-
-      - name: Upload dist/ to the subdomain document root
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
-        with:
-          username: ${{ secrets.SFTP_USERNAME }}
-          server: ${{ secrets.SFTP_SERVER }}
-          port: ${{ secrets.SFTP_PORT }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: './dist/*'
-          remote_path: ${{ secrets.SFTP_DIR }}   # `pawgrip` — relative to the SFTP login, which is /htdocs
-          sftp_only: true                         # this account has no shell access
-          sftpArgs: '-o ConnectTimeout=30'
+```
+https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish
 ```
 
-The upload step is **SFTP with password auth** because that is the account
-type Network Solutions issues. It uses `wlixcc/SFTP-Deploy-Action@v1.2.6`
-(latest release; password login supported since v1.2.4). `sftp_only: true`
-matters — a sub-account has no shell, so rsync-over-SSH would fail.
+### Stage 2 — cPanel cron → `htdocs/pawgrip` (one-time setup by the owner)
 
-Secret names used above (values come from `ns.env`) — **all six are now set
-as repository secrets** on `businesslocalrecords/pet-ramp-store-4`:
+A cron job that runs **once per minute** (cPanel → Cron Jobs; 1 minute is
+the finest cPanel granularity) fetches the branch tarball and extracts it
+over the subdomain's document root. Exact command to paste into cPanel's
+Cron Jobs UI:
 
-| Secret | Value |
+```
+cd $HOME && curl -sL https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish -o /tmp/pawgrip.tgz && rm -rf /tmp/pawgrip-src && mkdir -p /tmp/pawgrip-src && tar -xzf /tmp/pawgrip.tgz -C /tmp/pawgrip-src --strip-components=1 && rsync -a --delete /tmp/pawgrip-src/ $HOME/htdocs/pawgrip/ >> $HOME/pawgrip-deploy.log 2>&1
+```
+
+Notes on the command:
+
+- It only uses `curl`, `tar` and `rsync` — all standard on cPanel. If
+  `rsync` turns out to be missing, replace `rsync -a --delete A/ B/` with
+  `cp -a A/. B/` (no delete; stale hashed files linger harmlessly).
+- Every run appends to `$HOME/pawgrip-deploy.log` — readable from File
+  Manager, and the first place to look when a deploy stalls.
+- `--delete` is what keeps removals in sync (a deleted page disappears from
+  the site), and it is also **why the target must stay `htdocs/pawgrip`**:
+  the delete applies inside that directory only, but never widen the path —
+  pointing it at `htdocs` would wipe the main site.
+- Schedule: `* * * * *` (every minute). Expect the publish branch to land
+  first, before enabling the cron.
+
+### Latency and semantics
+
+| Event | Delay |
 |---|---|
-| `SFTP_SERVER` | `122846c.netsolhost.com` |
-| `SFTP_PORT` | `2222` — SFTP rides SSH, not FTP port 21; confirm on the host if a connect fails |
-| `SFTP_USERNAME` | `sftp_agent_01` (the full generated ID, not the bare name) |
-| `SFTP_PASSWORD` | the password set in the dialog |
-| `SFTP_DIR` | `pawgrip` (relative to the SFTP login, which lands in `/htdocs`) |
-| `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | the live storefront values (public by design; the site cannot query products without them) |
+| push to `main` → publish branch updated | one Actions run (~3–5 min, mostly the Tailwind build) |
+| publish branch → live on the subdomain | ≤ 1 minute (the cron tick) |
+
+That is Netlify-equivalent behavior ("push → live"), just with a poller
+instead of a webhook, and it survives host firewalls entirely. Manual
+redeploy of an old build = re-run the workflow, or `gh workflow run`.
+
+### Repo secrets (fallback + build inputs)
+
+| Secret | Value / status |
+|---|---|
+| `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | set — the live storefront values (public by design; the site cannot query products without them) |
+| `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID` | unset until the owner supplies them; an unset var behaves as empty, so the build is unaffected |
+| `SFTP_SERVER` / `SFTP_PORT` / `SFTP_USERNAME` / `SFTP_PASSWORD` / `SFTP_DIR` | set but **not used by the pipeline** — kept for the manual path (below) and so the SFTP upload step can be restored in one edit if the host ever allowlists GitHub's runner IP ranges (published at `https://api.github.com/meta`) |
 
 The analytics `VITE_*` IDs stay unset until the owner supplies them — an
 unset variable behaves the same as an empty one, so the build is unaffected.
+
+### Manual / fallback deploy (SFTP from a normal connection)
+
+The `sftp_agent_01` account works from a home/office connection (the block
+is datacenter-IP-specific), so the fastest way to hand-upload is WinSCP or
+FileZilla: host `122846c.netsolhost.com`, **SFTP**, port **22** (Network
+Solutions' doc for this product says 22, not the legacy 2222), user
+`sftp_agent_01`, and the target directory `htdocs/pawgrip`. Credentials are
+in `ns.env`. This path is also the sanity check that the account actually
+activated — if FileZilla lists `/htdocs` contents, it is live.
 
 ### netlify.toml → `.htaccess`
 
@@ -201,7 +237,7 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 | Netlify feature | Replacement / status |
 |---|---|
-| Push-to-deploy webhook | **GitHub Actions workflow `.github/workflows/deploy.yml` — committed and live.** |
+| Push-to-deploy webhook | **Two-stage, 443-only:** Actions publishes `dist/` to the public `publish` branch; a 1-minute cPanel cron extracts it into `htdocs/pawgrip`. Direct SFTP/FTP/cPanel-API from GitHub is impossible on this host (all non-443 ports filtered from datacenter IPs — see "Why the deploy pulls instead of pushes"). |
 | `netlify.toml` redirects + headers | `public/.htaccess` **— shipped, inert until Apache serves the site.** |
 | Environment variables in dashboard | GitHub Actions secrets/variables **— user creates these once.** |
 | **Netlify Forms** (contact + founding-tester forms) | **BLOCKER — needs a decision.** The forms in `public/contact/` and `public/guide/` POST via `data-netlify="true"` and are detected through the hidden forms in `index.html`. Apache will not process them; submissions will silently die. Options: (a) small PHP mail handler on the subdomain (cPanel ships PHP), (b) third-party endpoint (Formspree, Basin, Getform). Owner picks one before cutover; AGENTS.md/README point here. |
@@ -214,25 +250,26 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 1. [x] Subdomain created: `pawgrip.businesslocalrecords.com` — DNS verified
        resolving from the workspace (remote resolvers may lag up to 24 h).
-2. [x] Deploy account created: SFTP `sftp_agent_01` → `/htdocs`, deploy
-       target `pawgrip` relative to the login (values in `ns.env`).
+2. [x] Deploy account created: SFTP `sftp_agent_01` → `/htdocs` (manual path
+       only; the pipeline does not use it).
 3. [ ] Run AutoSSL (cPanel → SSL/TLS Status) so the subdomain gets a
        certificate — required before any Shopify checkout redirect or Ads
        traffic touches it.
-4. [x] Repository secrets created: `SFTP_SERVER`, `SFTP_PORT`, `SFTP_USERNAME`,
-       `SFTP_PASSWORD`, `SFTP_DIR` and the two Shopify `VITE_*` storefront
-       values (via `gh secret set`; `ns.env` is the source).
-5. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
-6. [x] Commit `.github/workflows/deploy.yml` — done. Still to do after the
-       first successful deploy: delete `netlify.toml`.
-7. [ ] Verify: site loads on `https://pawgrip.businesslocalrecords.com`,
-       static policy pages work, Shopify checkout redirects land, console is
-       clean. First workflow run doubles as the connectivity test for the
-       SFTP account (activation can lag the creation dialog by ~10 minutes).
+4. [x] GitHub side built: `.github/workflows/deploy.yml` (build → publish
+       branch) and repo secrets for the `VITE_*` build inputs.
+5. [ ] **Owner adds the cron job** (cPanel → Cron Jobs, `* * * * *`, exact
+       command in §2) — after the first publish branch push exists.
+6. [ ] Verify: store live at `https://pawgrip.businesslocalrecords.com`
+       (assets load — `base:'/'` requires its own docroot), static policy
+       pages work, Shopify checkout redirects land, console clean, and
+       `pawgrip-deploy.log` in the home directory shows no errors.
+7. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
        any domain allowlists (GA4 data streams, Meta pixel domains, Shopify
        customer-events pixel, Merchant Center claim).
-9. [ ] Let DNS/proxy settle, then delete the Netlify site.
+9. [ ] Delete `netlify.toml` (kept until this point as reference) and the
+       Netlify site. `probe.yml` can be deleted once the cron deploy has
+       succeeded for a week.
 
 ### Rollback
 
