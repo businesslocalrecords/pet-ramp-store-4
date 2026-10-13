@@ -18,9 +18,11 @@ identity on the landing page. A fake address is worse than a missing one.
 
 **How it is enforced (env-flag deferral):**
 - Today the flag is unset, so `npm run build` passes and the banner shows.
-- When ready, set `VITE_REQUIRE_BUSINESS_INFO=true` in the Netlify dashboard.
-  With the flag ON and any placeholder still present, `vite.config.ts`
-  **fails the build**, and the Footer throws a loud render error.
+- When ready, set `VITE_REQUIRE_BUSINESS_INFO=true` as a GitHub Actions
+  repository variable (repo Settings → Secrets and variables → Actions; see
+  `DEPLOYMENT.md`). With the flag ON and any placeholder still present,
+  `vite.config.ts` **fails the build**, and the Footer throws a loud render
+  error.
 - Fill in: street address, suite/unit, city, state, ZIP, phone.
 
 **Done when:** `BUSINESS_IS_INCOMPLETE` is `false` and the footer renders the
@@ -124,13 +126,14 @@ story — no invented founding date, customer counts, or credentials.
 
 ## 10. Analytics IDs
 
-**Where:** `.env.local` / Netlify env: `VITE_GA_MEASUREMENT_ID`,
-`VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID` (all empty in
-`.env.example`).
+**Where:** `.env.local` / deploy pipeline secrets (GitHub repo Settings →
+Secrets and variables → Actions; see `DEPLOYMENT.md`):
+`VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`,
+`VITE_META_PIXEL_ID` (all empty in `.env.example`).
 
-**Done when:** the IDs are set in Netlify and a redeploy shows events landing
-(page views already fire; `size_finder_used` / `faq_open` / `lead_submit` /
-`tester_apply` are wired).
+**Done when:** the IDs are set as deploy secrets and a new deploy shows events
+landing (page views already fire; `size_finder_used` / `faq_open` /
+`lead_submit` / `tester_apply` are wired).
 
 ## 11. Seeder live run
 

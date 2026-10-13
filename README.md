@@ -163,24 +163,34 @@ gate is documented in `AGENTS.md`.
 ## Static pages
 
 `public/` holds plain-HTML pages so they work without JS: `/shipping/`,
-`/returns/`, `/warranty/`, `/privacy/`, `/terms/`, `/contact/` (Netlify
-form), `/about/`, and `/guide/how-to-choose-a-dog-car-ramp/` (with the
-founding-tester form). Their policy numbers mirror `src/lib/policy.ts`.
+`/returns/`, `/warranty/`, `/privacy/`, `/terms/`, `/contact/` (form backend
+being replaced — see DEPLOYMENT.md), `/about/`, and
+`/guide/how-to-choose-a-dog-car-ramp/`. Their policy numbers mirror
+`src/lib/policy.ts`.
 
 ## Deployment
 
-Builds to static files in `dist/`:
+Builds to static files in `dist/`. Hosting moved off Netlify to the owner's
+domain.com (cPanel) subscription — **full plan, credentials and cutover
+checklist live in `DEPLOYMENT.md`** — and the store is served from a subdomain
+(`<store>.businesslocalrecords.com`) so the root domain keeps its existing
+application. In short:
 
-- **Netlify** — build command `npm run build`, publish `dist`, Node 22
-  (pinned in `netlify.toml`, along with security headers and asset caching).
-- Add environment variables in the host dashboard, not the repo, and trigger
-  a NEW deploy when they change.
+- **Push to `main` on `github.com/businesslocalrecords/pet-ramp-store-4`
+  builds and deploys automatically** via GitHub Actions (Netlify's webhook
+  role), which uploads `dist/` to the subdomain's document root.
+- `public/.htaccess` translates `netlify.toml` (retired) to Apache: the SPA
+  catch-all rewrite, the security headers and the hashed-asset caching.
+- `VITE_*` variables are inlined at BUILD time — they live as GitHub Actions
+  repository secrets/variables, and changing one means a NEW deploy.
 - `VITE_REQUIRE_BUSINESS_INFO=true` makes the build fail while the business
   address is still a placeholder — the enforcement switch for Merchant
   Center readiness.
+- The contact and founding-tester forms used Netlify Forms; they must be
+  re-pointed to a replacement before cutover (see DEPLOYMENT.md).
 
 Point your Google Ads / Meta campaign landing page URL at the deployed
-domain.
+subdomain.
 
 ## Structure
 
@@ -213,9 +223,12 @@ src/
 ├── lib/                         see the single-sources table above
 └── styles/globals.css           Tailwind v4 theme + tokens
 
-public/                          static pages + assets/
+public/                          static pages + assets/ (+ .htaccess for Apache)
+public/.htaccess                Apache config — mirrors netlify.toml (retired)
 scripts/shopify-seed.mjs         Admin API catalog seeder
+DEPLOYMENT.md                   domain.com hosting: credentials, pipeline,
+                                cutover checklist (replaces Netlify)
 AGENTS.md                        working agreement — read before editing
 claims.md                        claim audit / rewording table
-LAUNCH_BLOCKERS.md               what is still needed before paid traffic
+LAUNCH_BLOCKERS.md              what is still needed before paid traffic
 ```

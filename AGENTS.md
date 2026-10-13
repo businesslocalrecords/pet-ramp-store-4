@@ -4,15 +4,18 @@ Working agreement for anyone (human or AI) editing this storefront. Read this
 before your first change; it exists because the repo is small enough to look
 obvious and wrong often enough.
 
-## The two-directory trap
+## The directory trap
 
-There are three copies of this project on this machine:
+There are multiple copies of this project on this machine:
 
 - **`pet-ramp-store`** — prototype 1, FROZEN. The VS Code window usually has
   this one open. **Do not edit it** unless explicitly told to.
 - **`pet-ramp-store-2`** — prototype 2, superseded. Do not target it for this
   launch.
-- **`pet-ramp-store-3`** — prototype 3, the live work. All edits, builds and
+- **`pet-ramp-store-3`** — prototype 3, superseded by 4 (still on GitHub as
+  `businesslocalrecords/pet-ramp-store-3`). Do not target it for this launch.
+- **`pet-ramp-store-4`** — prototype 4, **THE LIVE WORK** (this directory,
+  pushed to `businesslocalrecords/pet-ramp-store-4`). All edits, builds and
   git commands target this directory. Verify `pwd` before any command.
 
 ## Commands
@@ -30,7 +33,8 @@ npm run shopify:discounts:dry  # preview package discount setup, no writes
 npm run shopify:discounts:apply # LIVE — creates Shopify bundle discount codes
 ```
 
-Node 22 / npm 11 (pinned in `netlify.toml` and matched to local tooling).
+Node 22 / npm 11 (matched to local tooling and the deploy workflow in
+`DEPLOYMENT.md`).
 
 ## Architecture map
 
@@ -62,7 +66,8 @@ public/
 ├── assets/product/*.svg       original renderings (white background)
 ├── assets/badges/*.svg        in-house trust badges
 └── {shipping,returns,warranty,privacy,terms,contact,about}/index.html
-    guide/how-to-choose-a-dog-car-ramp/index.html   (static, Netlify-detected)
+    guide/how-to-choose-a-dog-car-ramp/index.html   (static HTML, served as
+    files; forms are being re-pointed off Netlify — see DEPLOYMENT.md)
 
 scripts/shopify-seed.mjs       Admin API catalog seeder (idempotent)
 ```
@@ -157,10 +162,21 @@ glass header) cannot be captured this way — verify those manually.
 
 ## Deployment gotchas
 
-- `import.meta.env.VITE_*` is inlined at BUILD time — change env vars in
-  Netlify, then trigger a NEW deploy.
-- Netlify Forms: forms must exist in deployed HTML. Static pages in `public/`
-  are detected directly; the React app's forms rely on the hidden detection
-  forms in `index.html`.
-- The catch-all rewrite (`/*` → `/index.html`) applies only when no file
-  exists at the path, so the static policy pages work normally.
+Hosting is the owner's paid domain.com (cPanel) subscription via a subdomain
+of `businesslocalrecords.com` — **`DEPLOYMENT.md` is the full working
+agreement** (credentials, GitHub Actions workflow, cutover checklist). The
+short version:
+
+- `import.meta.env.VITE_*` is inlined at BUILD time — the values live as
+  GitHub Actions repository secrets/variables, and changing one means a NEW
+  deploy (push to `main` or `workflow_dispatch`).
+- Push to `main` = deploy. The workflow is GitHub Actions, not Netlify; no
+  deploy previews exist here.
+- The catch-all rewrite and the security/cache headers from `netlify.toml`
+  (retired) now live in `public/.htaccess`, which Vite copies into `dist/`.
+  Apache checks the real file first, so the static policy pages work as
+  before; note `.htaccess` only takes effect once Apache serves the site.
+- Netlify Forms is gone: the `contact` and `founding-tester` forms (and the
+  hidden detection forms in `index.html`) must be re-pointed to a replacement
+  backend before or at cutover — see DEPLOYMENT.md section 3.
+- Rollback = `git revert` and push; there is no previous-deploy switcher.

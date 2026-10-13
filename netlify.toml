@@ -1,4 +1,11 @@
-# Netlify build configuration for the PawGrip Pro storefront (prototype 2).
+# RETIRED — Netlify is no longer part of this project's workflow. Deploys go
+# to the domain.com (cPanel) subdomain via GitHub Actions; DEPLOYMENT.md is
+# the working agreement, public/.htaccess is the live equivalent of the
+# redirects and headers below. This file is kept only until the first
+# successful deploy is verified on the new host, then it should be deleted.
+#
+# ---------------------------------------------------------------------------
+# Historical reference — the original Netlify build configuration:
 #
 # Vite inlines import.meta.env.VITE_* variables at BUILD time, so the five
 # site variables must be set in Netlify's dashboard (Site configuration ->
