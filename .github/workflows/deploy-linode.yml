@@ -59,8 +59,9 @@ jobs:
           # Normalize CRLF (keys generated on Windows) so libcrypto can parse it.
           printf '%s\n' "${VPS_SSH_KEY}" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          echo "VPS_SSH_KEY first line: $(head -n1 ~/.ssh/id_ed25519)"
           if ! ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
-            echo "::error::VPS_SSH_KEY did not parse. Store the FULL private key in the secret with Unix (LF) line endings." >&2
+            echo "::error::VPS_SSH_KEY is not a usable PRIVATE key. In GitHub Settings > Secrets, set VPS_SSH_KEY to the FULL contents of the 'linode_deploy' file (its first line must be '-----BEGIN OPENSSH PRIVATE KEY-----'). A public key starts with 'ssh-ed25519' and will NOT work." >&2
             exit 1
           fi
           rsync -az --delete \
