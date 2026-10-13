@@ -105,5 +105,11 @@ jobs:
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
-          curl -sfS --retry 3 --retry-delay 10 --max-time 300 \
-            "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${DEPLOY_TOKEN}"
+          code=$(curl -sS -o /tmp/hook-body.txt -w "%{http_code}" \
+            --retry 3 --retry-delay 10 --max-time 300 \
+            "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${DEPLOY_TOKEN}" || echo 000)
+          echo "deploy hook body: $(cat /tmp/hook-body.txt 2>/dev/null)"
+          if [ "$code" != "200" ]; then
+            echo "deploy hook returned HTTP $code (site is stale until this is fixed)"
+            exit 1
+          fi
