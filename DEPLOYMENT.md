@@ -15,18 +15,18 @@
 | Domain / TLS | Cloudflare: `pawgrip.app` **A** → the Linode public IPv4, proxy ON. Cloudflare terminates public TLS. |
 | Origin | Linode VPS, **nginx** serving the static build from `/var/www/pawgrip.app` (port 80 to Cloudflare; add 443 + a Cloudflare Origin cert if the Cloudflare SSL mode is Full(strict)). |
 | CI/CD | `.github/workflows/deploy-linode.yml` — on push to `main`, build with the `VITE_*` secrets inlined, then rsync `dist/` → the VPS over SSH as the `deploy` user. |
-| Deploy key | An **ed25519** pair: PRIVATE key → GitHub secret `VPS_SSH_KEY`; PUBLIC key → the `deploy` user's `~/.ssh/authorized_keys` on the VPS (installed by the bootstrap). GitHub pushes *to* the VPS with it. |
+| Deploy key | An **ed25519** pair: PUBLIC key → the `deploy` user's `~/.ssh/authorized_keys` on the VPS (installed by the bootstrap); **private** key, base64-encoded to a single line, → GitHub secret `VPS_SSH_KEY_B64`. GitHub pushes *to* the VPS with it. |
 | One-time VPS setup | `deploy/linode-setup.sh` (run as root on the VPS) installs nginx, the webroot, the site config and the deploy public key. |
 | Auto-update | Push to `main` or `workflow_dispatch` rebuilds and redeploys in one Actions run (~3–5 min, mostly Tailwind). |
 
 ### GitHub repo settings — set once, never committed
 Settings → Secrets and variables → Actions.
-- **Secrets:** `VITE_SHOPIFY_STOREFRONT_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN`, `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_DEPLOY_PATH`, `VPS_SSH_KEY`.
+- **Secrets:** `VITE_SHOPIFY_STOREFRONT_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN`, `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_DEPLOY_PATH`, `VPS_SSH_KEY_B64` (base64 of the deploy private key — see the bootstrap below).
 - **Variables:** `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID`, `VITE_MICROSOFT_UET_TAG_ID`.
 - `VPS_HOST` is the **Linode public IP** (Cloudflare does not proxy SSH). `VPS_DEPLOY_PATH` defaults to `/var/www/pawgrip.app`.
 
 ### One-time VPS bootstrap
-1. Generate the deploy keypair locally: `ssh-keygen -t ed25519 -N "" -f linode_deploy -C github-actions`. PRIVATE key → GitHub secret `VPS_SSH_KEY`; you paste the PUBLIC key in step 2.
+1. Generate the deploy keypair locally: `ssh-keygen -t ed25519 -N "" -f linode_deploy -C github-actions`. Put the **base64 of the private key** in GitHub secret `VPS_SSH_KEY_B64` — `base64 -w0 linode_deploy` (Linux/macOS) or `[Convert]::ToBase64String([IO.File]::ReadAllBytes('linode_deploy'))` (Windows PowerShell). You paste the **public** key in step 2.
 2. Copy `deploy/linode-setup.sh` to the VPS and run, as root:
    `DEPLOY_PUBKEY="<public key from step 1>" bash linode-setup.sh`
 3. Cloudflare: add **A** `pawgrip.app` → this VPS public IPv4, proxy ON. SSL mode Flexible (origin HTTP) or Full(strict) + a Cloudflare Origin cert on the VPS.

@@ -52,16 +52,19 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}          # e.g. 'deploy'
           VPS_PORT: ${{ secrets.VPS_PORT }}          # usually 22
           VPS_PATH: ${{ secrets.VPS_DEPLOY_PATH }}   # e.g. /var/www/pawgrip.app
-          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}    # private half of the deploy ed25519 key
+          VPS_SSH_KEY_B64: ${{ secrets.VPS_SSH_KEY_B64 }}   # base64 of the private key, one line
         run: |
           set -euo pipefail
           install -m 700 -d ~/.ssh
-          # Normalize CRLF (keys generated on Windows) so libcrypto can parse it.
-          printf '%s\n' "${VPS_SSH_KEY}" | tr -d '\r' > ~/.ssh/id_ed25519
+          # VPS_SSH_KEY_B64 = base64 of the private key on ONE line. Generate it:
+          #   Linux/macOS:   base64 -w0 linode_deploy
+          #   Windows PS:    [Convert]::ToBase64String([IO.File]::ReadAllBytes('linode_deploy'))
+          # This avoids the CRLF / multi-line pitfalls of pasting a raw key.
+          printf '%s' "${VPS_SSH_KEY_B64}" | tr -d '\r\n \t' | base64 -d > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          echo "VPS_SSH_KEY first line: $(head -n1 ~/.ssh/id_ed25519)"
+          echo "key first line: $(head -n1 ~/.ssh/id_ed25519)"
           if ! ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
-            echo "::error::VPS_SSH_KEY is not a usable PRIVATE key. In GitHub Settings > Secrets, set VPS_SSH_KEY to the FULL contents of the 'linode_deploy' file (its first line must be '-----BEGIN OPENSSH PRIVATE KEY-----'). A public key starts with 'ssh-ed25519' and will NOT work." >&2
+            echo "::error::VPS_SSH_KEY_B64 did not decode to a usable PRIVATE key. Set the secret to base64 of the 'linode_deploy' private key file (see the command above)." >&2
             exit 1
           fi
           rsync -az --delete \
