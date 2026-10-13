@@ -45,7 +45,6 @@ echo "==> nginx site for ${DOMAIN} (SPA + security headers + asset caching)"
 cat > "/etc/nginx/sites-available/${DOMAIN}" <<'NGINX'
 server {
     listen 80;
-    listen [::]:80;
     server_name pawgrip.app www.pawgrip.app;
 
     root /var/www/pawgrip.app;
@@ -81,8 +80,12 @@ ufw allow 80/tcp || true
 # Keep SSH open! (do NOT run 'ufw deny 22')
 
 echo "==> nginx test + reload"
-nginx -t
-systemctl reload nginx
+if nginx -t; then
+  systemctl reload nginx || systemctl restart nginx
+else
+  echo "nginx -t FAILED — config NOT reloaded. A common cause is 'listen [::]:80' on a host without IPv6 (this script no longer adds it)."
+  exit 1
+fi
 
 cat <<EOF
 
