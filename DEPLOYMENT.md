@@ -164,11 +164,16 @@ https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish
 
 A cron job that runs **once per minute** (cPanel → Cron Jobs; 1 minute is
 the finest cPanel granularity) fetches the branch tarball and extracts it
-over the subdomain's document root. Exact command to paste into cPanel's
-Cron Jobs UI:
+over the subdomain's document root. The workflow stamps every push with a
+`deploy-version.txt` (the commit SHA); the cron compares that ~50-byte file
+against the last one it applied and only downloads the ~8 MB tarball when
+it differs — codeload ignores conditional requests, so this is what keeps
+the poll cheap (idle minutes cost one small request).
+
+Exact command to paste into cPanel's Cron Jobs UI:
 
 ```
-cd $HOME && curl -sL https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish -o /tmp/pawgrip.tgz && rm -rf /tmp/pawgrip-src && mkdir -p /tmp/pawgrip-src && tar -xzf /tmp/pawgrip.tgz -C /tmp/pawgrip-src --strip-components=1 && rsync -a --delete /tmp/pawgrip-src/ $HOME/htdocs/pawgrip/ >> $HOME/pawgrip-deploy.log 2>&1
+V=$(curl -sf https://raw.githubusercontent.com/businesslocalrecords/pet-ramp-store-4/publish/deploy-version.txt); if [ -n "$V" ] && [ -f "$HOME/.pawgrip-version" ] && [ "$V" = "$(cat $HOME/.pawgrip-version)" ]; then exit 0; fi; cd $HOME && curl -sfL https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish -o /tmp/pawgrip.tgz && rm -rf /tmp/pawgrip-src && mkdir -p /tmp/pawgrip-src && tar -xzf /tmp/pawgrip.tgz -C /tmp/pawgrip-src --strip-components=1 && rsync -a --delete /tmp/pawgrip-src/ "$HOME/htdocs/pawgrip/" && rm -f "$HOME/htdocs/pawgrip/deploy-version.txt" && if [ -n "$V" ]; then echo "$V" > "$HOME/.pawgrip-version"; fi; echo "$(date): applied v=$V" >> "$HOME/pawgrip-deploy.log" 2>&1
 ```
 
 Notes on the command:
@@ -182,6 +187,8 @@ Notes on the command:
   the site), and it is also **why the target must stay `htdocs/pawgrip`**:
   the delete applies inside that directory only, but never widen the path —
   pointing it at `htdocs` would wipe the main site.
+- `deploy-version.txt` is removed from the live copy after extraction, so
+  only the site's real files are served.
 - Schedule: `* * * * *` (every minute). Expect the publish branch to land
   first, before enabling the cron.
 

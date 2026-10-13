@@ -67,6 +67,12 @@ jobs:
           mkdir -p /tmp/publish-stage
           cp -a dist/. /tmp/publish-stage/
 
+          # deploy marker: the cron compares this (a ~50-byte fetch) against
+          # the last one it applied and only downloads the ~8 MB tarball when
+          # it differs — codeload ignores conditional requests, so this is
+          # what keeps the once-per-minute poll cheap.
+          echo "$GITHUB_SHA" > /tmp/publish-stage/deploy-version.txt
+
           # orphan branch: replace whatever publish held with this build
           git checkout --orphan publish
           git rm -r --cached --quiet . > /dev/null
