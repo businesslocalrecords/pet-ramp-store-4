@@ -110,14 +110,17 @@ jobs:
           # retry: the hook compares the version marker it actually fetched
           # against the commit that just built, so serving the previous
           # commit can never masquerade as "already up to date".
-          sleep 20   # give raw/codeload a moment to serve the fresh branch
+          # raw.githubusercontent.com has been observed lagging >80s behind a
+          # publish-branch force-push, so the window below is deliberately
+          # long: ~60s of initial settle plus five attempts 45s apart.
+          sleep 60   # give raw/codeload a moment to serve the fresh branch
           code=000
-          for attempt in 1 2 3; do
+          for attempt in 1 2 3 4 5; do
             code=$(curl -sS -o /tmp/hook-body.txt -w "%{http_code}" --max-time 300 \
               "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${DEPLOY_TOKEN}&expect=${GITHUB_SHA}" || echo 000)
             if [ "$code" = "200" ]; then break; fi
             echo "attempt $attempt returned $code: $(cat /tmp/hook-body.txt 2>/dev/null)"
-            sleep 20
+            sleep 45
           done
           echo "deploy hook body: $(cat /tmp/hook-body.txt 2>/dev/null)"
           if [ "$code" != "200" ]; then
