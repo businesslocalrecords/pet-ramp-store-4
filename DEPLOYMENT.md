@@ -13,22 +13,25 @@ Current environment facts (confirmed with the owner):
 | Temporary cPanel host | `122846c.netsolhost.com` |
 | Subdomain | `pawgrip` (created in cPanel → Domains) |
 | Document root | `htdocs/pawgrip` (as shown in the File Manager) |
-| DNS | `pawgrip.businesslocalrecords.com` is pending propagation — Network Solutions quotes up to 24 hours |
-| Credentials | owner fills `ns.env` in the repo root (gitignored, never committed); the values become GitHub Actions repository secrets |
+| DNS | **Verified resolving** on 2026-10-13: `pawgrip.businesslocalrecords.com`, `businesslocalrecords.com` and the temp host all answer from `74.91.138.133`. Network Solutions quotes up to 24 h, so remote resolvers may still catch up |
+| Credentials | **SFTP account created**: user `sftp_agent_01`, directory `/htdocs` (Network Solutions applies an up-to-10-minute activation delay). Values live in `ns.env` (gitignored) and become GitHub Actions repository secrets |
 
-Until DNS resolves, the subdomain's content is also reachable at
-`122846c.netsolhost.com/pawgrip/` — **but it will render broken there on
-purpose**: Vite builds with the default `base: '/'`, so assets are requested
-from `/assets/…`, which only exist under a dedicated document root. Do not
-"fix" that by changing `base` — it would break the real subdomain deploy.
-The correct browser check is the real domain once DNS propagates.
+DNS verification means the subdomain should serve files the moment they
+land in `htdocs/pawgrip` — the propagation wait affects visitors' resolvers,
+not the upload, so there is no reason to stage the store anywhere else. The
+temp host also mirrors the docroot at `122846c.netsolhost.com/pawgrip/`,
+**but it renders broken there on purpose**: Vite builds with the default
+`base: '/'`, so assets are requested from `/assets/…`, which only exist
+under a dedicated document root. Do not "fix" that by changing `base` — it
+would break the real subdomain deploy. The correct browser check is the real
+domain; note its HTTPS certificate is not issued yet (AutoSSL owed).
 
 ---
 
 ## 1. Credentials needed from the Network Solutions hosting account
 
-Network Solutions shared hosting is **cPanel** (Apache). It has no
-Netlify-style
+Network Solutions shared hosting is **cPanel** (Apache) fronted by an
+openresty proxy. It has no Netlify-style
 deploy API, so push-to-deploy has to be rebuilt from two halves:
 
 - the **trigger** (what Netlify's webhook did) → **GitHub Actions**, in this
@@ -40,8 +43,14 @@ Only two things are actually needed, and both come from the cPanel account:
 
 | # | Credential | Used for | Where it is found |
 |---|---|---|---|
-| 1 | **Deploy credential** — one of: an **FTP account** scoped to the subdomain's directory (`122846c_pawgrip` style username), or **SSH access** for the main cPanel user (public-key import preferred) | The GitHub Actions workflow authenticates with this on every push | cPanel → FTP Accounts, or cPanel → Security → SSH Access |
-| 2 | *(Optional)* **cPanel login** | One-time setup only | cPanel → `https://122846c.netsolhost.com` |
+| 1 | **The SFTP account** — Network Solutions issues SFTP accounts (not classic FTP): user ID, password, and the directory it may access | The GitHub Actions workflow authenticates with this on every push | The "Create SFTP Account" dialog you already used → `sftp_agent_01` |
+| 2 | *(Optional)* **cPanel login** (username `122846c` + hosting password from the Account Manager) | One-time setup only — not needed for deploys | Account Manager → hosting → Manage |
+
+**Account details that matter for the workflow:** the account was created with
+Directory `/htdocs`, which means an SFTP login lands **directly in /htdocs** —
+the live document root of `businesslocalrecords.com`. The deploy target is
+therefore the `pawgrip` subfolder *relative to the login*, never the login
+root itself (see "Do not deploy to /htdocs" below).
 
 `ns.env` in the repo root is the fill-in template for these — it is
 gitignored, holds the exact formats and the cPanel page where each value is
@@ -68,17 +77,39 @@ once the secrets exist, the workflow uses them without anyone re-sending them.
 
 1. ~~Create subdomain~~ **DONE** — `pawgrip` exists in cPanel → Domains with
    document root `htdocs/pawgrip`. The root app at `businesslocalrecords.com`
-   is untouched — that is the "fork by subdomain" split. DNS for
-   `pawgrip.businesslocalrecords.com` is propagating (up to 24 h).
-2. Create the scoped **FTP account** (cPanel → FTP Accounts, directory
-   `htdocs/pawgrip`) **or** enable **SSH Access** (cPanel → Security) and
-   import a public key. This is the only step still owed, and its result is
-   what fills `ns.env`.
+   is untouched — that is the "fork by subdomain" split. DNS was already
+   verified as resolving (see below).
+2. ~~Create the deploy account~~ **DONE** — SFTP account `sftp_agent_01`
+   (directory `/htdocs`; activation takes up to 10 minutes). Its values are
+   in `ns.env`.
 3. After DNS resolves, cPanel → **SSL/TLS Status → Run AutoSSL** so the
    subdomain gets its own certificate (required — Shopify checkout redirects
-   and Ads both reject insecure origins).
+   and Ads both reject insecure origins). HTTPS to the subdomain was not yet
+   serving during setup, so this is expected to be owed until then.
 4. Repeat this pattern per future storefront: one subdomain, one document
-   root, one set of credentials, one GitHub workflow.
+   root, one deploy account, one GitHub workflow.
+
+### Do not deploy to /htdocs — ever
+
+Deploying the store into the SFTP login root (`/htdocs`) would put it on
+`businesslocalrecords.com` itself. Evidence gathered on 2026-10-13:
+
+- `businesslocalrecords.com` → `74.91.138.133`
+- `122846c.netsolhost.com` (this account's temp host) → `74.91.138.133`
+
+…the **same server**, so `/htdocs` is the live docroot of the root domain. It
+currently answers `403` (no index file), but the moment the main app's files
+land there — or the store's do — they are the root website. The store's own
+`.htaccess` (SPA catch-all to `index.html`) would actively break whatever the
+root site serves.
+
+`pawgrip.businesslocalrecords.com` also already resolves to `74.91.138.133`
+and its vhost answers `403` (an empty directory) — the subdomain is live
+server-side and is simply waiting for files. Uploading to `htdocs/pawgrip`
+now is safe and lossless: the files sit there and the store appears at the
+subdomain the moment a visitor's DNS catches up. There is nothing to gain
+from targeting `/htdocs`, and it would defeat the entire fork-by-subdomain
+plan.
 
 ---
 
@@ -118,29 +149,33 @@ jobs:
           VITE_REQUIRE_BUSINESS_INFO: ${{ vars.VITE_REQUIRE_BUSINESS_INFO }}
 
       - name: Upload dist/ to the subdomain document root
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.14
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}   # htdocs/pawgrip/ (relative to the FTP login, not an absolute path)
-          local-dir: ./dist/
-          protocol: ftps            # change to 'ftp' only if the server lacks FTPS
-          dangerous-clean-slate: false
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_SERVER }}
+          port: ${{ secrets.SFTP_PORT }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './dist/*'
+          remote_path: ${{ secrets.SFTP_DIR }}   # `pawgrip` — relative to the SFTP login, which is /htdocs
+          sftp_only: true                         # this account has no shell access
+          sftpArgs: '-o ConnectTimeout=30'
 ```
 
-Secret names used above (adjust once the account details are real):
+The upload step is **SFTP with password auth** because that is the account
+type Network Solutions issues. It uses `wlixcc/SFTP-Deploy-Action@v1.2.6`
+(latest release; password login supported since v1.2.4). `sftp_only: true`
+matters — a sub-account has no shell, so rsync-over-SSH would fail.
+
+Secret names used above (values come from `ns.env`):
 
 | Secret | Value |
 |---|---|
-| `FTP_SERVER` | server hostname or dedicated IP |
-| `FTP_USERNAME` | the scoped FTP account's username |
-| `FTP_PASSWORD` | that account's password |
-| `FTP_SERVER_DIR` | the subdomain's base directory (ends with `/`) |
+| `SFTP_SERVER` | `122846c.netsolhost.com` |
+| `SFTP_PORT` | `2222` — SFTP rides SSH, not FTP port 21; confirm on the host if a connect fails |
+| `SFTP_USERNAME` | `sftp_agent_01` (the full generated ID, not the bare name) |
+| `SFTP_PASSWORD` | the password set in the dialog |
+| `SFTP_DIR` | `pawgrip` (relative to the SFTP login, which lands in `/htdocs`) |
 | `VITE_…` | the build-time variables from `.env.example` |
-
-If SSH is chosen instead of FTP, swap the upload step for an `rsync`/`scp`
-action using `secrets.SSH_PRIVATE_KEY` — no other change.
 
 ### netlify.toml → `.htaccess`
 
@@ -162,7 +197,7 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 | Netlify feature | Replacement / status |
 |---|---|
-| Push-to-deploy webhook | GitHub Actions workflow above **— done in code, awaiting credential.** |
+| Push-to-deploy webhook | GitHub Actions workflow above — **code complete; awaiting the four repo secrets.** |
 | `netlify.toml` redirects + headers | `public/.htaccess` **— shipped, inert until Apache serves the site.** |
 | Environment variables in dashboard | GitHub Actions secrets/variables **— user creates these once.** |
 | **Netlify Forms** (contact + founding-tester forms) | **BLOCKER — needs a decision.** The forms in `public/contact/` and `public/guide/` POST via `data-netlify="true"` and are detected through the hidden forms in `index.html`. Apache will not process them; submissions will silently die. Options: (a) small PHP mail handler on the subdomain (cPanel ships PHP), (b) third-party endpoint (Formspree, Basin, Getform). Owner picks one before cutover; AGENTS.md/README point here. |
@@ -173,12 +208,13 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 ## 4. Cutover checklist
 
-1. [x] Subdomain created: `pawgrip.businesslocalrecords.com` (DNS
-       propagating, up to 24 h — temporarily verifiable via the cPanel
-       temp host, see the caveat in the status section).
-2. [ ] Create the scoped FTP account (or enable SSH + import a public key) and
-       fill `ns.env`.
-3. [ ] Run AutoSSL once DNS resolves (cPanel → SSL/TLS Status).
+1. [x] Subdomain created: `pawgrip.businesslocalrecords.com` — DNS verified
+       resolving from the workspace (remote resolvers may lag up to 24 h).
+2. [x] Deploy account created: SFTP `sftp_agent_01` → `/htdocs`, deploy
+       target `pawgrip` relative to the login (values in `ns.env`).
+3. [ ] Run AutoSSL (cPanel → SSL/TLS Status) so the subdomain gets a
+       certificate — required before any Shopify checkout redirect or Ads
+       traffic touches it.
 4. [ ] Map the `ns.env` values to GitHub repo secrets (Settings → Secrets and
        variables → Actions) and add the `VITE_*` build variables.
 5. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
