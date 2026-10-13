@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PawPrint, ShoppingCart } from 'lucide-react';
 import { useCart } from '../lib/cart-context';
+import { CartDrawer } from './CartDrawer';
 
 /**
  * Sticky header — always visible, pinned to the top.
@@ -16,6 +17,7 @@ import { useCart } from '../lib/cart-context';
  */
 export const StickyHeader: React.FC = () => {
   const { totalQuantity } = useCart();
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 border-b border-gray-900/10 bg-white/90 backdrop-blur-xl">
@@ -30,12 +32,19 @@ export const StickyHeader: React.FC = () => {
         </a>
 
         <div className="flex items-center gap-3">
-          {totalQuantity > 0 && (
-            <span className="flex items-center gap-1.5 text-sm text-stone-700">
-              <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-              {totalQuantity}
-            </span>
-          )}
+          {/* Cart Button */}
+          <button
+            onClick={() => setCartDrawerOpen(true)}
+            className="flex items-center gap-1.5 text-sm text-stone-700 hover:text-stone-900"
+            aria-label={totalQuantity > 0 ? `View cart (${totalQuantity} items)` : 'View cart'}
+          >
+            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+            {totalQuantity > 0 && (
+              <span className="bg-indigo-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                {totalQuantity}
+              </span>
+            )}
+          </button>
 
           <span
             className="flex items-center gap-1.5 rounded-full border border-gray-200 px-2.5 py-1.5"
@@ -54,6 +63,9 @@ export const StickyHeader: React.FC = () => {
           </span>
         </div>
       </div>
+      
+      {/* Cart Drawer */}
+      {cartDrawerOpen && <CartDrawer open={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />}
     </header>
   );
 };
