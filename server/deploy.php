@@ -156,9 +156,20 @@ function extract_tar_gz_php($tgzPath, $dest) {
     return $made > 0;
 }
 
-/* --- version gate: unchanged payload => do nothing ------------------------ */
+/* --- version gate: unchanged payload => do nothing ------------------------
+   The workflow passes ?expect=<sha>. If codeload is still serving the
+   PREVIOUS commit (branch push propagation lag), a plain version check
+   would compare that stale marker, find a match, and silently no-op —
+   leaving the site a build behind. expect turns that into a loud 409 the
+   workflow retries. Manual/probe calls omit expect and behave as before. */
 $version     = fetch(VERSION_URL);
 $versionFile = $here . '/.deploy-version';
+$expect      = isset($_GET['expect']) ? trim((string) $_GET['expect']) : '';
+if ($expect !== '' && ($version === null || trim($version) !== $expect)) {
+    logline($here, 'ERROR stale payload fetched=' . var_export($version, true) . ' expected=' . $expect);
+    http_response_code(409);
+    exit('stale payload: fetched ' . var_export($version, true) . ' but expected ' . $expect);
+}
 if ($version !== null
     && is_file($versionFile)
     && trim($version) === trim((string) @file_get_contents($versionFile))) {
