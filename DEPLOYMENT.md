@@ -160,48 +160,63 @@ it. This repo is public, so the branch is anonymously downloadable at:
 https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish
 ```
 
-### Stage 2 — cPanel cron → `htdocs/pawgrip` (one-time setup by the owner)
+### Stage 2 — `deploy.php` on the host (one-time, ~30 seconds)
 
-A cron job that runs **once per minute** (cPanel → Cron Jobs; 1 minute is
-the finest cPanel granularity) fetches the branch tarball and extracts it
-over the subdomain's document root. The workflow stamps every push with a
-`deploy-version.txt` (the commit SHA); the cron compares that ~50-byte file
-against the last one it applied and only downloads the ~8 MB tarball when
-it differs — codeload ignores conditional requests, so this is what keeps
-the poll cheap (idle minutes cost one small request).
+The host accepts only ports 80/443 from datacenter IPs, so the trigger must
+be an ordinary HTTP request. `server/deploy.php` in this repo (canonical
+source) is a small, token-protected endpoint that does the pull: compare the
+`deploy-version.txt` marker on the publish branch against the last applied
+version, download the tarball if it changed, extract it, and mirror it into
+`htdocs/pawgrip`. Install it **once, by hand**:
 
-Exact command to paste into cPanel's Cron Jobs UI:
+1. File Manager → `htdocs/pawgrip` → **New File** → name it `deploy.php`
+2. Paste the contents of `server/deploy.php` **with the `TOKEN` placeholder
+   replaced** by the deploy token (also stored as this repo's `DEPLOY_TOKEN`
+   secret)
+3. Save. Done — no scheduling UI, no server configuration.
+
+The workflow's final step then calls, after every publish:
+
+```
+http://pawgrip.businesslocalrecords.com/deploy.php?token=<DEPLOY_TOKEN>
+```
+
+(retried 3×; HTTP until AutoSSL issues a certificate for the subdomain,
+then the URL flips to `https` in `deploy.yml` — one-line change).
+
+**What the endpoint does, in order:** auth via `hash_equals` (403 without
+the token) → version gate (unchanged SHA ⇒ "already up to date", no
+download) → fetch the tarball from codeload → extract (`tar` via `exec`,
+falling back to PHP's `PharData`) → mirror into its own directory (`rsync
+--delete`, falling back to a pure-PHP mirror; `deploy.php`, the logs and the
+temp dir are always excluded) → strip `deploy-version.txt` from the live
+copy, record the version in `.deploy-version` → append a line to
+`deploy.log` next to itself. It is idempotent and can be re-run at any time
+from a browser; `deploy.log` is the first thing to check when something
+looks stale. If the hosting account ever turns out to have PHP disabled,
+the fallback is the manual WinSCP upload (or the cron variant below).
+
+### Alternative: cron polling (if the panel has Cron Jobs)
+
+If you prefer a pull-based timer over the webhook, add this command as a
+once-per-minute cron job (cPanel → Cron Jobs) instead of installing
+`deploy.php`. Same payload, polled instead of triggered:
 
 ```
 V=$(curl -sf https://raw.githubusercontent.com/businesslocalrecords/pet-ramp-store-4/publish/deploy-version.txt); if [ -n "$V" ] && [ -f "$HOME/.pawgrip-version" ] && [ "$V" = "$(cat $HOME/.pawgrip-version)" ]; then exit 0; fi; cd $HOME && curl -sfL https://codeload.github.com/businesslocalrecords/pet-ramp-store-4/tar.gz/publish -o /tmp/pawgrip.tgz && rm -rf /tmp/pawgrip-src && mkdir -p /tmp/pawgrip-src && tar -xzf /tmp/pawgrip.tgz -C /tmp/pawgrip-src --strip-components=1 && rsync -a --delete /tmp/pawgrip-src/ "$HOME/htdocs/pawgrip/" && rm -f "$HOME/htdocs/pawgrip/deploy-version.txt" && if [ -n "$V" ]; then echo "$V" > "$HOME/.pawgrip-version"; fi; echo "$(date): applied v=$V" >> "$HOME/pawgrip-deploy.log" 2>&1
 ```
-
-Notes on the command:
-
-- It only uses `curl`, `tar` and `rsync` — all standard on cPanel. If
-  `rsync` turns out to be missing, replace `rsync -a --delete A/ B/` with
-  `cp -a A/. B/` (no delete; stale hashed files linger harmlessly).
-- Every run appends to `$HOME/pawgrip-deploy.log` — readable from File
-  Manager, and the first place to look when a deploy stalls.
-- `--delete` is what keeps removals in sync (a deleted page disappears from
-  the site), and it is also **why the target must stay `htdocs/pawgrip`**:
-  the delete applies inside that directory only, but never widen the path —
-  pointing it at `htdocs` would wipe the main site.
-- `deploy-version.txt` is removed from the live copy after extraction, so
-  only the site's real files are served.
-- Schedule: `* * * * *` (every minute). Expect the publish branch to land
-  first, before enabling the cron.
 
 ### Latency and semantics
 
 | Event | Delay |
 |---|---|
 | push to `main` → publish branch updated | one Actions run (~3–5 min, mostly the Tailwind build) |
-| publish branch → live on the subdomain | ≤ 1 minute (the cron tick) |
+| publish branch → live on the subdomain | **seconds** — the deploy hook fires at the end of the same run |
 
-That is Netlify-equivalent behavior ("push → live"), just with a poller
+That is Netlify-equivalent behavior ("push → live"), just with a puller
 instead of a webhook, and it survives host firewalls entirely. Manual
-redeploy of an old build = re-run the workflow, or `gh workflow run`.
+redeploy of an old build = re-run the workflow, `gh workflow run`, or hit
+the `deploy.php` URL in a browser.
 
 ### Repo secrets (fallback + build inputs)
 
@@ -210,6 +225,7 @@ redeploy of an old build = re-run the workflow, or `gh workflow run`.
 | `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | set — the live storefront values (public by design; the site cannot query products without them) |
 | `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID` | unset until the owner supplies them; an unset var behaves as empty, so the build is unaffected |
 | `SFTP_SERVER` / `SFTP_PORT` / `SFTP_USERNAME` / `SFTP_PASSWORD` / `SFTP_DIR` | set but **not used by the pipeline** — kept for the manual path (below) and so the SFTP upload step can be restored in one edit if the host ever allowlists GitHub's runner IP ranges (published at `https://api.github.com/meta`) |
+| `DEPLOY_TOKEN` | set — the shared secret in the deploy hook URL; must equal the `TOKEN` constant in the server's `deploy.php`. Rotate by changing both |
 
 The analytics `VITE_*` IDs stay unset until the owner supplies them — an
 unset variable behaves the same as an empty one, so the build is unaffected.
@@ -244,7 +260,7 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 | Netlify feature | Replacement / status |
 |---|---|
-| Push-to-deploy webhook | **Two-stage, 443-only:** Actions publishes `dist/` to the public `publish` branch; a 1-minute cPanel cron extracts it into `htdocs/pawgrip`. Direct SFTP/FTP/cPanel-API from GitHub is impossible on this host (all non-443 ports filtered from datacenter IPs — see "Why the deploy pulls instead of pushes"). |
+| Push-to-deploy webhook | **Two-stage, 443-only:** Actions publishes `dist/` to the public `publish` branch, then calls `deploy.php` on the host, which pulls the tarball and mirrors it into `htdocs/pawgrip`. Direct SFTP/FTP/cPanel-API from GitHub is impossible on this host (all non-80/443 ports filtered from datacenter IPs — see "Why the deploy pulls instead of pushes"). |
 | `netlify.toml` redirects + headers | `public/.htaccess` **— shipped, inert until Apache serves the site.** |
 | Environment variables in dashboard | GitHub Actions secrets/variables **— user creates these once.** |
 | **Netlify Forms** (contact + founding-tester forms) | **BLOCKER — needs a decision.** The forms in `public/contact/` and `public/guide/` POST via `data-netlify="true"` and are detected through the hidden forms in `index.html`. Apache will not process them; submissions will silently die. Options: (a) small PHP mail handler on the subdomain (cPanel ships PHP), (b) third-party endpoint (Formspree, Basin, Getform). Owner picks one before cutover; AGENTS.md/README point here. |
@@ -264,12 +280,15 @@ ignores it). It translates the three `netlify.toml` concerns:
        traffic touches it.
 4. [x] GitHub side built: `.github/workflows/deploy.yml` (build → publish
        branch) and repo secrets for the `VITE_*` build inputs.
-5. [ ] **Owner adds the cron job** (cPanel → Cron Jobs, `* * * * *`, exact
-       command in §2) — after the first publish branch push exists.
-6. [ ] Verify: store live at `https://pawgrip.businesslocalrecords.com`
-       (assets load — `base:'/'` requires its own docroot), static policy
-       pages work, Shopify checkout redirects land, console clean, and
-       `pawgrip-deploy.log` in the home directory shows no errors.
+5. [ ] **Owner installs `server/deploy.php`** → File Manager → `htdocs/pawgrip`
+       → New File → `deploy.php` → paste with the real TOKEN (matches the
+       `DEPLOY_TOKEN` repo secret) → Save. Then run the workflow
+       (`gh workflow run deploy.yml`) to fire the hook for the first time.
+6. [ ] Verify: `deploy.log` in `htdocs/pawgrip` shows `deployed version=…`,
+       the store loads at `http://pawgrip.businesslocalrecords.com` (assets
+       load — `base:'/'` requires its own docroot; HTTPS waits on AutoSSL),
+       static policy pages work, Shopify checkout redirects land, console
+       clean.
 7. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
        any domain allowlists (GA4 data streams, Meta pixel domains, Shopify

@@ -8,10 +8,11 @@
 #
 #   stage 1 (this workflow): build dist/ and push it to the public
 #     `publish` branch of this repo (codeload/git over 443 — allowed).
-#   stage 2 (host side, one-time setup): a cPanel cron job, once per
-#     minute, downloads the branch tarball and extracts it into
-#     htdocs/pawgrip. The server pulls FROM GitHub, so the host's inbound
-#     block does not apply.
+#   stage 2 (host side, one-time setup): a hand-installed deploy.php in
+#     htdocs/pawgrip that this workflow then calls over plain HTTP; it
+#     pulls the publish-branch tarball and extracts it in place. The server
+#     fetches FROM GitHub, and the trigger is ordinary port-80 traffic, so
+#     the host's datacenter-IP block never applies.
 #
 # Netlify's contract (push to main -> live site) is preserved: the cron
 # polls every minute, so end-to-end latency is the build time plus <=1
@@ -85,3 +86,16 @@ jobs:
               -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
               commit -m "deploy $GITHUB_SHA"
           git push -f origin publish
+
+      - name: Trigger the host's deploy hook
+        # The host accepts only 80/443 from datacenter IPs, so the trigger is
+        # an ordinary HTTP GET of deploy.php (installed by hand, once, in
+        # htdocs/pawgrip — canonical source: server/deploy.php in this repo).
+        # HTTP for now: the subdomain has no certificate until AutoSSL runs;
+        # then change the scheme here to https. Failing loudly (curl -f) is
+        # intended: a red run means the site is stale, never silently broken.
+        env:
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          curl -sfS --retry 3 --retry-delay 10 --max-time 300 \
+            "http://pawgrip.businesslocalrecords.com/deploy.php?token=${DEPLOY_TOKEN}"
