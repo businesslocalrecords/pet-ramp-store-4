@@ -69,21 +69,27 @@ const Page: React.FC = () => {
 
       <main className="mx-auto max-w-screen-lg px-4 pb-24 pt-10 sm:px-6 sm:pt-16">
         <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-12 lg:gap-x-12">
-          {/* ---------------- HERO (mobile 1 | desktop 1) ---------------- */}
-          <div className="lg:col-span-7 lg:order-1">
+          {/* ---------------- HERO (mobile 1 | desktop 1) ----------------
+              CPC prototype: headline -> photo come first on mobile so the buy
+              box below reaches the first screen. */}
+          <div className="order-1 lg:col-span-7 lg:order-1">
             <HeroSection />
           </div>
 
-          {/* ---------------- SIZE FINDER (mobile 2 | desktop 6) ---------------- */}
-          <div className="lg:col-span-7 lg:order-6">
+          {/* ---------------- SIZE FINDER (mobile 4 | desktop 6) ----------------
+              Moved below the product block; the buy box links here ("Not
+              sure? Check fit"). */}
+          <div className="order-3 lg:col-span-7 lg:order-6">
             <SizeGuide />
           </div>
 
-          {/* ---------------- RIGHT: sticky buy column (mobile 3) ---------------- */}
-          <aside className="lg:col-start-8 lg:col-span-5 lg:row-span-full">
+          {/* ---------------- RIGHT: sticky buy column (mobile 2) ----------------
+              Price + button now sit right under the hero on mobile, before the
+              size finder and the long editorial sections. */}
+          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-span-full">
             <div
               id="offer"
-              className="lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:pr-1"
+              className="lg:sticky lg:top-24"
             >
               <div className="mx-auto max-w-lg rounded-md border border-gray-300 bg-white p-6 shadow-sm">
                 <BuyBox />
@@ -96,12 +102,12 @@ const Page: React.FC = () => {
           </aside>
 
           {/* ---------------- WHY A RAMP (mobile 4 | desktop 4) ---------------- */}
-          <div className="lg:col-span-7 lg:order-4">
+          <div className="order-4 lg:col-span-7 lg:order-4">
             <Benefits />
           </div>
 
           {/* ---------------- HEAD TO HEAD (mobile 5 | desktop 5) ---------------- */}
-          <div className="lg:col-span-7 lg:order-5">
+          <div className="order-5 lg:col-span-7 lg:order-5">
             <ComparisonTable />
           </div>
 
@@ -130,17 +136,17 @@ const Page: React.FC = () => {
           )}
 
           {/* ---------------- FOUNDER NOTE (desktop 8) ---------------- */}
-          <div className="lg:col-span-7 lg:order-8">
+          <div className="order-6 lg:col-span-7 lg:order-8">
             <FounderNote />
           </div>
 
           {/* ---------------- SHIPPING (desktop 9) ---------------- */}
-          <div className="lg:col-span-7 lg:order-9">
+          <div className="order-7 lg:col-span-7 lg:order-9">
             <ShippingReturns />
           </div>
 
           {/* ---------------- FAQ (desktop 10) ---------------- */}
-          <div className="lg:col-span-7 lg:order-10">
+          <div className="order-8 lg:col-span-7 lg:order-10">
             <Faq />
           </div>
         </div>

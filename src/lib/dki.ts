@@ -29,6 +29,8 @@
  *   -> "The SUV Dog Ramp / Texas Owners Love"
  */
 
+import { RAMP_SIZES } from './offers';
+
 export interface DkiParams {
   /**
    * Headline phrase, grammatically correct with or without the param.
@@ -36,6 +38,16 @@ export interface DkiParams {
    *   (absent/unknown) -> "Dog Car Ramp"
    */
   vehiclePhrase: string;
+  /**
+   * Product-block headline — a CPC conversion title that echoes the ad's
+   * vehicle keyword and leads with the published Compact rating. The rating
+   * number is single-sourced from RAMP_SIZES, never typed here.
+   *   kw_vehicle=SUV -> "Foldable Dog Car Ramp for SUVs, Rated to 150 lb"
+   *   (absent/unknown) -> "Foldable Dog Car Ramp for SUVs, Rated to 150 lb"
+   */
+  headline: string;
+  /** The plural vehicle noun for the headline, e.g. "SUVs", "Trucks". */
+  vehicleFor: string;
   /**
    * Second headline line.
    *   loc=Texas -> "Texas Owners Love"
@@ -76,6 +88,19 @@ const VEHICLE_KEYWORDS: Record<string, { phrase: string; inline: string }> = {
   car: { phrase: 'Car Dog Ramp', inline: 'car' },
   '4x4': { phrase: '4x4 Dog Ramp', inline: '4x4' },
   '4wd': { phrase: '4x4 Dog Ramp', inline: '4x4' },
+};
+
+/** Vehicle keywords -> plural vehicle noun used in the product headline. */
+const VEHICLE_FOR: Record<string, string> = {
+  suv: 'SUVs',
+  truck: 'Trucks',
+  pickup: 'Pickup Trucks',
+  minivan: 'Minivans',
+  van: 'Vans',
+  jeep: 'Jeeps',
+  car: 'Cars',
+  '4x4': '4x4s',
+  '4wd': '4x4s',
 };
 
 /** Breed keywords -> body-copy qualifier. */
@@ -134,6 +159,7 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
   const params = new URLSearchParams(search);
 
   const vehicle = lookup(VEHICLE_KEYWORDS, params.get('kw_vehicle'));
+  const vehicleFor = lookup(VEHICLE_FOR, params.get('kw_vehicle')) ?? 'SUVs';
   const breed = lookup(BREED_KEYWORDS, params.get('kw_breed'));
 
   // Location matches the state list case-insensitively, preserving the
@@ -142,8 +168,14 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
   const location =
     LOCATION_KEYWORDS.find((name) => name.toLowerCase() === locationKey) ?? null;
 
+  // The rating in the headline is the published Compact figure — the default,
+  // most-popular size on this page. Single-sourced from offers.ts.
+  const compactRating = RAMP_SIZES[0].weightCapacityLb;
+
   return {
     vehiclePhrase: vehicle ? vehicle.phrase : 'Dog Car Ramp',
+    vehicleFor,
+    headline: `Foldable Dog Car Ramp for ${vehicleFor}, Rated to ${compactRating} lb`,
     locationPhrase: location ? `${location} Owners Love` : 'Owners Actually Love',
     locationInline: location ? `in ${location}` : 'in any vehicle',
     breedPhrase: breed ?? 'built for dogs of every size',

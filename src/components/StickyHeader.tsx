@@ -3,23 +3,16 @@ import { PawPrint, ShoppingCart } from 'lucide-react';
 import { useCart } from '../lib/cart-context';
 
 /**
- * Sticky header. Always visible and pinned to the top (owner request: the
- * previous version stayed hidden until 420px of scroll). Shows the brand plus
- * the live cart count.
+ * Sticky header — always visible, pinned to the top.
+ *
+ * The top-right carries a small "Powered by Shopify" badge with the official
+ * Shopify lockup (public/assets/brand/shopify-logo.svg — Shopify supplies this
+ * mark precisely for "Powered by Shopify" usage). Every conversion path still
+ * lives in the buy box's orange checkout button and the mobile sticky buy bar.
  *
  * It occupies flow space (position: sticky) so the static announcement bar
  * that follows it in the DOM sits under the header at rest, then scrolls away
  * beneath the pinned header on scroll.
- *
- * The header carried the offer price in previous versions (first hardcoded
- * $199 / $149, then the live tier price from the shared purchase context) —
- * removed per owner request: the price already lives in the buy box, the
- * size-finder Select buttons and the mobile sticky buy bar, and a price
- * floating over the page read as a discount popup.
- *
- * There is deliberately no CTA button in the header (removed per owner
- * request too): the buy column, the size-finder "Select" buttons and the
- * mobile sticky buy bar already carry every conversion path.
  */
 export const StickyHeader: React.FC = () => {
   const { totalQuantity } = useCart();
@@ -36,12 +29,30 @@ export const StickyHeader: React.FC = () => {
           </span>
         </a>
 
-        {totalQuantity > 0 && (
-          <span className="flex items-center gap-1.5 text-sm text-stone-700">
-            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
-            {totalQuantity}
+        <div className="flex items-center gap-3">
+          {totalQuantity > 0 && (
+            <span className="flex items-center gap-1.5 text-sm text-stone-700">
+              <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+              {totalQuantity}
+            </span>
+          )}
+
+          <span
+            className="flex items-center gap-1.5 rounded-full border border-gray-200 px-2.5 py-1.5"
+            title="Powered by Shopify"
+          >
+            <span className="text-[11px] font-medium leading-none text-stone-500">
+              Powered by
+            </span>
+            <img
+              src="/assets/brand/shopify-logo.svg"
+              alt="Shopify"
+              className="h-4 w-auto"
+              loading="eager"
+              decoding="async"
+            />
           </span>
-        )}
+        </div>
       </div>
     </header>
   );

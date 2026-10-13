@@ -112,8 +112,9 @@ export const SizeGuide: React.FC = () => {
           <span>42&Prime; (lifted truck)</span>
         </div>
         <p id="vehicle-height-help" className="mt-3 text-sm text-stone-600">
-          Slide the measure of ground-to-bumper height and we will pick auto-select the best size
-          for you.
+          Slide your ground-to-bumper height and we highlight the size that fits your
+          vehicle. Select that card to choose it &mdash; your choice appears in the offer
+          box above.
         </p>
       </div>
 
