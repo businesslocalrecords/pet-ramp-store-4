@@ -1,8 +1,14 @@
-# TEMPORARY diagnostic workflow — probes which file-transfer ports the host
-# actually accepts from GitHub's runners (the workspace sandbox only allows
-# web traffic, so this has to run on a hosted runner). Dispatch manually:
+# TEMPORARY diagnostic workflow. Two sections:
+#   1. port probe — which file-transfer ports the host accepts from GitHub's
+#      runners (the workspace sandbox is proxy-blocked, so this must run on a
+#      hosted runner)
+#   2. HTTP probe — what the web server actually serves for the deploy hook's
+#      candidate paths, with body snippets (our PHP 403 "forbidden" means the
+#      file is reachable; an openresty 404/403 means the proxy/backend never
+#      found it)
+# Dispatch manually:
 #   gh workflow run probe.yml -R businesslocalrecords/pet-ramp-store-4
-# Delete once the deploy port is confirmed and the deploy workflow succeeds.
+# Delete once the deploy chain is verified.
 name: Probe host ports
 
 on:
@@ -17,29 +23,27 @@ jobs:
           probe() {
             host=$1; port=$2
             if timeout 6 bash -c "exec 3<>/dev/tcp/$host/$port" 2>/dev/null; then
-              banner=$(timeout 5 bash -c "exec 3<>/dev/tcp/$host/$port; head -c 80 <&3" 2>/dev/null | tr -d '\0' || true)
-              echo "$host:$port OPEN   banner: $banner"
+              echo "$host:$port OPEN"
             else
               echo "$host:$port closed/filtered"
             fi
           }
-          # controls first: if these are closed, the probe itself is broken
           probe github.com 22
           probe 122846c.netsolhost.com 443
-          # the webhook design needs plain HTTP (80) from datacenter IPs:
-          # the site (and later deploy.php) must be reachable from GitHub's
-          # runners before SSL exists on the subdomain.
           probe 122846c.netsolhost.com 80
           probe pawgrip.businesslocalrecords.com 80
-          probe pawgrip.businesslocalrecords.com 443
-          # file-transfer ports on the cPanel host
-          probe 122846c.netsolhost.com 21
-          probe 122846c.netsolhost.com 22
-          probe 122846c.netsolhost.com 2222
-          # cPanel API ports (HTTPS APIs would bypass the FTP block entirely)
-          probe 122846c.netsolhost.com 2083
-          probe 122846c.netsolhost.com 2082
-          # alternate file-transfer hostnames for the domain
-          probe ftp.businesslocalrecords.com 21
-          probe ftp.businesslocalrecords.com 2222
-          probe sftp.businesslocalrecords.com 22
+
+      - name: Probe deploy hook paths over HTTP
+        run: |
+          for u in \
+            "http://pawgrip.businesslocalrecords.com/deploy.php" \
+            "http://122846c.netsolhost.com/pawgrip/deploy.php" \
+            "http://122846c.netsolhost.com/deploy.php" \
+            "http://pawgrip.businesslocalrecords.com/" \
+            "http://pawgrip.businesslocalrecords.com/index.html" \
+            "http://122846c.netsolhost.com/pawgrip/" ; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$u" || echo ERR)
+            body=$(curl -s --max-time 20 "$u" | tr -d '\n' | head -c 160 || true)
+            echo "$code  $u"
+            echo "     body: $body"
+          done
