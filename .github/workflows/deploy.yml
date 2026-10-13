@@ -1,0 +1,48 @@
+# Push-to-deploy for the pawgrip subdomain on Network Solutions (cPanel).
+# This replaces what Netlify did:
+#   trigger -> this workflow, on every push to main (Netlify's webhook role)
+#   write   -> SFTP upload of dist/ into htdocs/pawgrip (Netlify's deploy-API role)
+# DEPLOYMENT.md is the working agreement; ns.env (gitignored) holds the
+# credential values that became this repo's secrets.
+name: Deploy to Network Solutions subdomain
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:          # manual redeploy button, same as Netlify's "Trigger deploy"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22    # matches local tooling (AGENTS.md)
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build     # tsc -b && vite build -> dist/
+        env:
+          VITE_SHOPIFY_STOREFRONT_DOMAIN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_DOMAIN }}
+          VITE_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_TOKEN }}
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+          VITE_GOOGLE_ADS_CONVERSION_ID: ${{ secrets.VITE_GOOGLE_ADS_CONVERSION_ID }}
+          VITE_META_PIXEL_ID: ${{ secrets.VITE_META_PIXEL_ID }}
+          VITE_REQUIRE_BUSINESS_INFO: ${{ vars.VITE_REQUIRE_BUSINESS_INFO }}
+
+      - name: Upload dist/ to the subdomain document root
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.6
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_SERVER }}
+          port: ${{ secrets.SFTP_PORT }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './dist/*'
+          # 'pawgrip' — the account logs directly into /htdocs (the LIVE root
+          # docroot), so this MUST stay the subfolder; see "Do not deploy to
+          # /htdocs" in DEPLOYMENT.md.
+          remote_path: ${{ secrets.SFTP_DIR }}
+          sftp_only: true                        # sub-account has no shell; rsync-over-SSH would fail
+          sftpArgs: '-o ConnectTimeout=30'

@@ -115,9 +115,9 @@ plan.
 
 ## 2. The pipeline (what replaces Netlify)
 
-`.github/workflows/deploy.yml` — committed once the subdomain name and the
-deploy credential are confirmed. Until then the file lives here so it is
-reviewable. It is intentionally boring: no Netlify-specific anything.
+**`.github/workflows/deploy.yml` is committed and live** (2026-10-13). The
+snippet below is kept here as reference; the file is the source of truth. It
+is intentionally boring: no Netlify-specific anything.
 
 ```yaml
 name: Deploy to Network Solutions subdomain
@@ -166,7 +166,8 @@ type Network Solutions issues. It uses `wlixcc/SFTP-Deploy-Action@v1.2.6`
 (latest release; password login supported since v1.2.4). `sftp_only: true`
 matters — a sub-account has no shell, so rsync-over-SSH would fail.
 
-Secret names used above (values come from `ns.env`):
+Secret names used above (values come from `ns.env`) — **all six are now set
+as repository secrets** on `businesslocalrecords/pet-ramp-store-4`:
 
 | Secret | Value |
 |---|---|
@@ -175,7 +176,10 @@ Secret names used above (values come from `ns.env`):
 | `SFTP_USERNAME` | `sftp_agent_01` (the full generated ID, not the bare name) |
 | `SFTP_PASSWORD` | the password set in the dialog |
 | `SFTP_DIR` | `pawgrip` (relative to the SFTP login, which lands in `/htdocs`) |
-| `VITE_…` | the build-time variables from `.env.example` |
+| `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | the live storefront values (public by design; the site cannot query products without them) |
+
+The analytics `VITE_*` IDs stay unset until the owner supplies them — an
+unset variable behaves the same as an empty one, so the build is unaffected.
 
 ### netlify.toml → `.htaccess`
 
@@ -197,7 +201,7 @@ ignores it). It translates the three `netlify.toml` concerns:
 
 | Netlify feature | Replacement / status |
 |---|---|
-| Push-to-deploy webhook | GitHub Actions workflow above — **code complete; awaiting the four repo secrets.** |
+| Push-to-deploy webhook | **GitHub Actions workflow `.github/workflows/deploy.yml` — committed and live.** |
 | `netlify.toml` redirects + headers | `public/.htaccess` **— shipped, inert until Apache serves the site.** |
 | Environment variables in dashboard | GitHub Actions secrets/variables **— user creates these once.** |
 | **Netlify Forms** (contact + founding-tester forms) | **BLOCKER — needs a decision.** The forms in `public/contact/` and `public/guide/` POST via `data-netlify="true"` and are detected through the hidden forms in `index.html`. Apache will not process them; submissions will silently die. Options: (a) small PHP mail handler on the subdomain (cPanel ships PHP), (b) third-party endpoint (Formspree, Basin, Getform). Owner picks one before cutover; AGENTS.md/README point here. |
@@ -215,14 +219,16 @@ ignores it). It translates the three `netlify.toml` concerns:
 3. [ ] Run AutoSSL (cPanel → SSL/TLS Status) so the subdomain gets a
        certificate — required before any Shopify checkout redirect or Ads
        traffic touches it.
-4. [ ] Map the `ns.env` values to GitHub repo secrets (Settings → Secrets and
-       variables → Actions) and add the `VITE_*` build variables.
+4. [x] Repository secrets created: `SFTP_SERVER`, `SFTP_PORT`, `SFTP_USERNAME`,
+       `SFTP_PASSWORD`, `SFTP_DIR` and the two Shopify `VITE_*` storefront
+       values (via `gh secret set`; `ns.env` is the source).
 5. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
-6. [ ] Commit `.github/workflows/deploy.yml`, delete `netlify.toml` after the
-       first successful deploy, push to `main`.
+6. [x] Commit `.github/workflows/deploy.yml` — done. Still to do after the
+       first successful deploy: delete `netlify.toml`.
 7. [ ] Verify: site loads on `https://pawgrip.businesslocalrecords.com`,
        static policy pages work, Shopify checkout redirects land, console is
-       clean.
+       clean. First workflow run doubles as the connectivity test for the
+       SFTP account (activation can lag the creation dialog by ~10 minutes).
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
        any domain allowlists (GA4 data streams, Meta pixel domains, Shopify
        customer-events pixel, Merchant Center claim).
