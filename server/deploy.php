@@ -24,8 +24,9 @@
  *   - Every deploy appends a line to deploy.log next to it; check that
  *     file first whenever a deploy misbehaves.
  *   - Server-side state files (this file, deploy.log, clicks.txt written by
- *     track.php, and the .deploy-version marker) are excluded from the
- *     mirror's delete pass — they are not part of the payload and must
+ *     track.php, the optional clicks-view-token.txt that guards the log's
+ *     read-back endpoint, and the .deploy-version marker) are excluded from
+ *     the mirror's delete pass — they are not part of the payload and must
  *     survive every deploy. Anything else the site does not know about
  *     SHOULD be deleted: that is what keeps removals in sync.
  */
@@ -232,7 +233,7 @@ if (!$ok) {
 /* --- mirror into place: rsync via exec, pure PHP as the fallback ---------- */
 $ok = false;
 if (function_exists('exec')) {
-    exec('rsync -a --delete --exclude=deploy.php --exclude=deploy.log --exclude=clicks.txt --exclude=.deploy-tmp '
+    exec('rsync -a --delete --exclude=deploy.php --exclude=deploy.log --exclude=clicks.txt --exclude=clicks-view-token.txt --exclude=.deploy-tmp '
          . escapeshellarg($tmp . '/src/') . ' ' . escapeshellarg($here . '/') . ' 2>&1',
          $out2, $code2);
     $ok = ($code2 === 0);
@@ -254,7 +255,7 @@ echo 'deployed ' . trim((string) $version) . ' via ' . $how;
 
 /* --- pure-PHP mirror (used only when exec/rsync are unavailable) ---------- */
 function mirror($src, $dst) {
-    $keep = ['deploy.php', 'deploy.log', 'clicks.txt', '.deploy-version', '.deploy-tmp'];
+    $keep = ['deploy.php', 'deploy.log', 'clicks.txt', 'clicks-view-token.txt', '.deploy-version', '.deploy-tmp'];
     $made = [];
     $failed = false;
 

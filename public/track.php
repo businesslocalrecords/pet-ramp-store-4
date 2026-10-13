@@ -12,7 +12,28 @@
  *
  * Deploy note: clicks.txt is server-side state. deploy.php excludes it from
  * the mirror's delete pass so tracked visits survive every deploy.
+ *
+ * Read-back note: this host answers 403 for .txt over HTTP (the file is
+ * there - the SPA catch-all in .htaccess would otherwise have served
+ * index.html for it). File Manager reads clicks.txt directly, and this
+ * endpoint also serves it when called as /track.php?view=1&token=... with
+ * the token from clicks-view-token.txt (a file the owner creates by hand,
+ * once, next to this one; absent means the read path stays closed).
  */
+
+if (isset($_GET["view"])) {
+    // owner-only read path; the token file is hand-created and never in the
+    // repo (never in the deployed payload either)
+    $tokenFile = __DIR__ . "/clicks-view-token.txt";
+    $expected = is_file($tokenFile) ? trim((string) @file_get_contents($tokenFile)) : "";
+    if ($expected === "" || !isset($_GET["token"]) || !hash_equals($expected, (string) $_GET["token"])) {
+        http_response_code(403);
+        exit("forbidden");
+    }
+    header("Content-Type: text/plain; charset=utf-8");
+    readfile(__DIR__ . "/clicks.txt");
+    exit;
+}
 
 if (($_SERVER["REQUEST_METHOD"] ?? "") !== "POST") {
     http_response_code(405);
