@@ -7,8 +7,8 @@
     <title>How to Choose a Dog Car Ramp — PawGrip Pro</title>
     <meta name="description" content="A practical guide to choosing a dog car ramp: measure your vehicle, match ramp length to slope, check the weight rating, traction, rails and feet. Includes the slope table and a founding-tester signup." />
     <!--
-      Netlify Forms: the founding-tester form below is static HTML, detected at
-      deploy time; the matching hidden form lives in index.html.
+      Formspree: the founding-tester form below is static HTML, works on any
+      static host — no server-side forms processor needed.
       Slope numbers on this page are computed from the published ramp lengths
       (62" and 70") exactly as the product page's size finder computes them:
       slope = asin(height / length), because the ramp is the hypotenuse.
@@ -154,7 +154,7 @@
       </p>
 
       <div class="formcard">
-        <form name="founding-tester" method="POST" data-netlify="true">
+        <form name="founding-tester" method="POST" action="https://formspree.io/f/mrpeyavj">
           <input type="hidden" name="form-name" value="founding-tester" />
           <p class="honeypot">
             <label>Leave this field empty: <input type="text" name="bot-field" /></label>
@@ -206,18 +206,22 @@
     </footer>
 
     <script>
-      // Same progressive-enhancement pattern as the contact page.
+      // Progressive enhancement: submit without leaving the page when JS is
+      // available; falls back to a normal POST (Formspree handles both).
       (function () {
-        var form = document.querySelector('form[data-netlify="true"]');
+        var form = document.querySelector('form[name="founding-tester"]');
         if (!form) return;
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          fetch('/', {
+
+          // Submit to Formspree
+          fetch(form.action, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(new FormData(form)).toString(),
+            body: new FormData(form),
+            mode: 'no-cors'  // Prevents CORS issues
           })
             .then(function () {
+              // Fire analytics event on success
               if (window.dataLayer) window.dataLayer.push({ event: 'tester_apply' });
               var card = form.closest('.formcard');
               card.innerHTML =

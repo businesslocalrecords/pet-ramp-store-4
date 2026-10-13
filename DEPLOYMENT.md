@@ -338,7 +338,7 @@ ignores it). It translates the three `netlify.toml` concerns:
 | Push-to-deploy webhook | **Two-stage, 443-only:** Actions publishes `dist/` to the public `publish` branch, then calls `deploy.php` on the host, which pulls the tarball and mirrors it into `htdocs/pawgrip`. Direct SFTP/FTP/cPanel-API from GitHub is impossible on this host (all non-80/443 ports filtered from datacenter IPs — see "Why the deploy pulls instead of pushes"). |
 | `netlify.toml` redirects + headers | `public/.htaccess` **— shipped, inert until Apache serves the site.** |
 | Environment variables in dashboard | GitHub Actions secrets/variables **— user creates these once.** |
-| **Netlify Forms** (contact + founding-tester forms) | **BLOCKER — needs a decision.** The forms in `public/contact/` and `public/guide/` POST via `data-netlify="true"` and are detected through the hidden forms in `index.html`. Apache will not process them; submissions will silently die. Options: (a) small PHP mail handler on the subdomain (cPanel ships PHP), (b) third-party endpoint (Formspree, Basin, Getform). Owner picks one before cutover; AGENTS.md/README point here. |
+| **Forms** | **DONE — Formspree.** `contact` → `https://formspree.io/f/mljgpwkd`, `founding-tester` → `https://formspree.io/f/mrpeyavj`. Removed `data-netlify` attributes + hidden detection forms. |
 | Deploy previews / branch previews | None. Optionally add a PR workflow that runs `npm ci && npm run build` (no secrets) so pull requests still get build signal. |
 | Instant rollback | None — no previous-deploy switcher. Rollback = revert the commit and push; the pipeline redeploys automatically. Keep the last known-good commit handy. |
 
@@ -373,7 +373,7 @@ ignores it). It translates the three `netlify.toml` concerns:
        the directory, flip the hook URL in `deploy.yml` from the temp host's
        `/pawgrip/` path to the subdomain, then `https` once AutoSSL has
        issued its certificate (probe.yml verifies both).
-7. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
+7. [x] Decide the forms replacement (Netlify Forms, §3) and implement it.
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
        any domain allowlists (GA4 data streams, Meta pixel domains, Shopify
        customer-events pixel, Merchant Center claim).

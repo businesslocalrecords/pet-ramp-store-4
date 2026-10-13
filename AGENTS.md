@@ -178,7 +178,9 @@ route is archived there). The short version:
   file is **Apache-only** — under the Linode nginx host it is inert; the
   equivalent SPA / headers / cache behavior is installed by
   `deploy/linode-setup.sh` (see DEPLOYMENT.md).
-- Netlify Forms is gone: the `contact` and `founding-tester` forms (and the
-  hidden detection forms in `index.html`) must be re-pointed to a replacement
-  backend before or at cutover — see DEPLOYMENT.md section 3.
+- Forms (contact + founding-tester) → re-pointed to Formspree
+  (`public/contact/index.html` → `https://formspree.io/f/mljgpwkd`,
+  `public/guide/how-to-choose-a-dog-car-ramp/index.html` →
+  `https://formspree.io/f/mrpeyavj`). The static `data-netlify` attributes
+  and hidden detection forms in index.html were removed.
 - Rollback = `git revert` and push; there is no previous-deploy switcher.

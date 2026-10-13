@@ -7,8 +7,8 @@
     <title>Contact Us — PawGrip Pro</title>
     <meta name="description" content="Contact PawGrip Pro: sizing help before you order, order questions, and warranty claims. We reply within one business day." />
     <!--
-      Netlify Forms: this form is static HTML, so Netlify detects it at deploy
-      time. The matching hidden detection form lives in index.html.
+      Formspree: this form is static HTML, so it works on any static host —
+      no server-side forms processor needed.
       Event tracking: pushes a `lead_submit` dataLayer event on success when an
       analytics ID is configured.
     -->
@@ -66,7 +66,7 @@
       </p>
 
       <div id="form-wrap">
-        <form name="contact" method="POST" data-netlify="true">
+        <form name="contact" method="POST" action="https://formspree.io/f/mljgpwkd">
           <input type="hidden" name="form-name" value="contact" />
           <p class="honeypot">
             <label>Leave this field empty: <input type="text" name="bot-field" /></label>
@@ -113,21 +113,23 @@
 
     <script>
       // Progressive enhancement: submit without leaving the page when JS is
-      // available; falls back to a normal POST (Netlify handles both).
+      // available; falls back to a normal POST (Formspree handles both).
       (function () {
-        var form = document.querySelector('form[data-netlify="true"]');
+        var form = document.querySelector('form[name="contact"]');
         if (!form) return;
         form.addEventListener('submit', function (e) {
           e.preventDefault();
-          fetch('/', {
+
+          // Submit to Formspree
+          fetch(form.action, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams(new FormData(form)).toString(),
+            body: new FormData(form),
+            mode: 'no-cors'  // Prevents CORS issues
           })
             .then(function () {
               if (window.dataLayer) window.dataLayer.push({ event: 'lead_submit' });
               document.getElementById('form-wrap').innerHTML =
-                '<div class="ok"><h2>Message received.</h2><p>We reply within one business day — check your spam folder just in case.</p></div>';
+                '<div class="ok"><h2>Message received.</h2><p>We reply within one business day.</p></div>';
             })
             .catch(function () {
               form.submit();

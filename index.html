@@ -96,24 +96,7 @@
       }
     </script>
 
-    <!--
-      Netlify Forms detection.
-
-      Netlify only recognizes forms that exist in the HTML it deploys. The
-      React app renders its forms client-side, so these hidden shells register
-      the "contact" and "founding-tester" form names for JS-injected forms.
-      The static pages in public/ (contact, guide) render real <form> markup
-      that Netlify detects directly.
-    -->
-    <form name="contact" netlify netlify-honeypot="bot-field" hidden aria-hidden="true">
-      <input type="text" name="bot-field" />
-      <input type="hidden" name="form-name" value="contact" />
-    </form>
-    <form name="founding-tester" netlify netlify-honeypot="bot-field" hidden aria-hidden="true">
-      <input type="text" name="bot-field" />
-      <input type="hidden" name="form-name" value="founding-tester" />
-    </form>
-  </head>
+      </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
