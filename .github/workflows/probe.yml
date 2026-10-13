@@ -75,5 +75,12 @@ jobs:
           echo "--- deploy hook's version gate (should say already up to date now)"
           curl -s --max-time 30 "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${{ secrets.DEPLOY_TOKEN }}"
           echo ""
+          echo "--- deploy hook version-gate and race guard"
+          curl -s -o /tmp/hook.txt -w "HTTP %{http_code}  " --max-time 30 \
+            "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${{ secrets.DEPLOY_TOKEN }}&expect=0000000000000000000000000000000000000000"
+          echo "bogus expect: $(cat /tmp/hook.txt 2>/dev/null)"
+          curl -s -o /tmp/hook.txt -w "HTTP %{http_code}  " --max-time 30 \
+            "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${{ secrets.DEPLOY_TOKEN }}"
+          echo "no expect:    $(cat /tmp/hook.txt 2>/dev/null)"
           echo "--- subdomain host routing (host-side; may still be pending)"
           curl -s -o /dev/null -w "HTTP %{http_code}  http://pawgrip.businesslocalrecords.com/\n" --max-time 30 "http://pawgrip.businesslocalrecords.com/"
