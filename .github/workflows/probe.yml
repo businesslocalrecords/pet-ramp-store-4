@@ -26,6 +26,12 @@ jobs:
           # controls first: if these are closed, the probe itself is broken
           probe github.com 22
           probe 122846c.netsolhost.com 443
+          # the webhook design needs plain HTTP (80) from datacenter IPs:
+          # the site (and later deploy.php) must be reachable from GitHub's
+          # runners before SSL exists on the subdomain.
+          probe 122846c.netsolhost.com 80
+          probe pawgrip.businesslocalrecords.com 80
+          probe pawgrip.businesslocalrecords.com 443
           # file-transfer ports on the cPanel host
           probe 122846c.netsolhost.com 21
           probe 122846c.netsolhost.com 22
