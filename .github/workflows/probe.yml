@@ -57,6 +57,10 @@ jobs:
           else
             echo "no asset reference found in index.html"
           fi
+          echo "--- UET loader ships to visitors (bat.bing.net + tag id in the bundle)"
+          curl -s --max-time 30 "$base$asset" -o /tmp/bundle.js
+          echo "bat.bing.net occurrences: $(grep -c 'bat\.bing\.net' /tmp/bundle.js || true)"
+          echo "tag id 343278405 present: $(grep -c '343278405' /tmp/bundle.js || true)"
           echo "--- SPA catch-all: a bogus path must return the app (200), not a 404"
           curl -s -o /dev/null -w "HTTP %{http_code}  $base/this-page-does-not-exist\n" --max-time 30 "$base/this-page-does-not-exist"
           echo "--- static policy page"
