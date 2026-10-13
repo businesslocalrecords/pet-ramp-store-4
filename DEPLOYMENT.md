@@ -249,6 +249,7 @@ the `deploy.php` URL in a browser.
 | Secret | Value / status |
 |---|---|
 | `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | set — the live storefront values (public by design; the site cannot query products without them) |
+| `VITE_MICROSOFT_UET_TAG_ID` | set — the Microsoft UET tag (`343278405`), passed into the build step in `deploy.yml`; on this account UET alone activates Microsoft Clarity (owner-verified on the Clarity dashboard) |
 | `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID` | unset until the owner supplies them; an unset var behaves as empty, so the build is unaffected |
 | `SFTP_SERVER` / `SFTP_PORT` / `SFTP_USERNAME` / `SFTP_PASSWORD` / `SFTP_DIR` | set but **not used by the pipeline** — kept for the manual path (below) and so the SFTP upload step can be restored in one edit if the host ever allowlists GitHub's runner IP ranges (published at `https://api.github.com/meta`) |
 | `DEPLOY_TOKEN` | set — the shared secret in the deploy hook URL; must equal the `TOKEN` constant in the server's `deploy.php`. Rotate by changing both |
