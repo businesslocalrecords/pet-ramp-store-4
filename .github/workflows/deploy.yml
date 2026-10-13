@@ -91,11 +91,19 @@ jobs:
         # The host accepts only 80/443 from datacenter IPs, so the trigger is
         # an ordinary HTTP GET of deploy.php (installed by hand, once, in
         # htdocs/pawgrip — canonical source: server/deploy.php in this repo).
-        # HTTP for now: the subdomain has no certificate until AutoSSL runs;
-        # then change the scheme here to https. Failing loudly (curl -f) is
-        # intended: a red run means the site is stale, never silently broken.
+        #
+        # URL note: the subdomain (pawgrip.businesslocalrecords.com) does not
+        # yet route to the subdomain's document root — the host's proxy 403s
+        # every path on it until its vhost catches up (DNS quotes up to 24 h).
+        # The temp host exposes the SAME directory one path deeper, at
+        # /pawgrip/, so the hook goes there. Flip this URL back to the
+        # subdomain once it serves the directory (probe.yml verifies it).
+        # HTTP for now either way: the subdomain has no certificate until
+        # AutoSSL runs; then change the scheme to https.
+        # Failing loudly (curl -f) is intended: a red run means the site is
+        # stale, never silently broken.
         env:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           curl -sfS --retry 3 --retry-delay 10 --max-time 300 \
-            "http://pawgrip.businesslocalrecords.com/deploy.php?token=${DEPLOY_TOKEN}"
+            "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${DEPLOY_TOKEN}"
