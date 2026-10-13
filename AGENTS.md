@@ -162,21 +162,22 @@ glass header) cannot be captured this way — verify those manually.
 
 ## Deployment gotchas
 
-Hosting is the owner's paid Network Solutions (cPanel) subscription via a
-subdomain
-of `businesslocalrecords.com` — **`DEPLOYMENT.md` is the full working
-agreement** (credentials, GitHub Actions workflow, cutover checklist). The
-short version:
+Hosting is now the dedicated domain **pawgrip.app** (Cloudflare DNS + TLS)
+served from a **Linode VPS** running nginx — **`DEPLOYMENT.md` is the full
+working agreement** (the old Network Solutions / `businesslocalrecords.com`
+route is archived there). The short version:
 
 - `import.meta.env.VITE_*` is inlined at BUILD time — the values live as
   GitHub Actions repository secrets/variables, and changing one means a NEW
   deploy (push to `main` or `workflow_dispatch`).
-- Push to `main` = deploy. The workflow is GitHub Actions, not Netlify; no
-  deploy previews exist here.
+- Push to `main` = deploy. `.github/workflows/deploy-linode.yml` builds and
+  rsyncs `dist/` to the VPS over SSH (`deploy` user). GitHub Actions, not
+  Netlify; no deploy previews here.
 - The catch-all rewrite and the security/cache headers from `netlify.toml`
-  (retired) now live in `public/.htaccess`, which Vite copies into `dist/`.
-  Apache checks the real file first, so the static policy pages work as
-  before; note `.htaccess` only takes effect once Apache serves the site.
+  (retired) live in `public/.htaccess`, which Vite copies into `dist/`. That
+  file is **Apache-only** — under the Linode nginx host it is inert; the
+  equivalent SPA / headers / cache behavior is installed by
+  `deploy/linode-setup.sh` (see DEPLOYMENT.md).
 - Netlify Forms is gone: the `contact` and `founding-tester` forms (and the
   hidden detection forms in `index.html`) must be re-pointed to a replacement
   backend before or at cutover — see DEPLOYMENT.md section 3.

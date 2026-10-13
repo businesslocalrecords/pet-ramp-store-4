@@ -1,9 +1,55 @@
+# Deployment — pawgrip.app on a Linode VPS (Cloudflare-fronted)
+
+> **UPDATE 2026-10-13 — migration off Network Solutions.** The storefront now
+> runs on the dedicated domain **pawgrip.app** (Cloudflare DNS + SSL) served
+> from a **Linode VPS** (nginx, static Vite build). Deploys are
+> **GitHub Actions → build → rsync `dist/` to the VPS**; a push to `main`
+> auto-deploys. Everything after the *Archived* marker below is the previous
+> `pawgrip.businesslocalrecords.com` (Network Solutions) pipeline, kept for
+> history and rollback only.
+
+## Current architecture (pawgrip.app → Linode)
+
+| Piece | Setup |
+|---|---|
+| Domain / TLS | Cloudflare: `pawgrip.app` **A** → the Linode public IPv4, proxy ON. Cloudflare terminates public TLS. |
+| Origin | Linode VPS, **nginx** serving the static build from `/var/www/pawgrip.app` (port 80 to Cloudflare; add 443 + a Cloudflare Origin cert if the Cloudflare SSL mode is Full(strict)). |
+| CI/CD | `.github/workflows/deploy-linode.yml` — on push to `main`, build with the `VITE_*` secrets inlined, then rsync `dist/` → the VPS over SSH as the `deploy` user. |
+| Deploy key | An **ed25519** pair: PRIVATE key → GitHub secret `VPS_SSH_KEY`; PUBLIC key → the `deploy` user's `~/.ssh/authorized_keys` on the VPS (installed by the bootstrap). GitHub pushes *to* the VPS with it. |
+| One-time VPS setup | `deploy/linode-setup.sh` (run as root on the VPS) installs nginx, the webroot, the site config and the deploy public key. |
+| Auto-update | Push to `main` or `workflow_dispatch` rebuilds and redeploys in one Actions run (~3–5 min, mostly Tailwind). |
+
+### GitHub repo settings — set once, never committed
+Settings → Secrets and variables → Actions.
+- **Secrets:** `VITE_SHOPIFY_STOREFRONT_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN`, `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_DEPLOY_PATH`, `VPS_SSH_KEY`.
+- **Variables:** `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID`, `VITE_MICROSOFT_UET_TAG_ID`.
+- `VPS_HOST` is the **Linode public IP** (Cloudflare does not proxy SSH). `VPS_DEPLOY_PATH` defaults to `/var/www/pawgrip.app`.
+
+### One-time VPS bootstrap
+1. Generate the deploy keypair locally: `ssh-keygen -t ed25519 -N "" -f linode_deploy -C github-actions`. PRIVATE key → GitHub secret `VPS_SSH_KEY`; you paste the PUBLIC key in step 2.
+2. Copy `deploy/linode-setup.sh` to the VPS and run, as root:
+   `DEPLOY_PUBKEY="<public key from step 1>" bash linode-setup.sh`
+3. Cloudflare: add **A** `pawgrip.app` → this VPS public IPv4, proxy ON. SSL mode Flexible (origin HTTP) or Full(strict) + a Cloudflare Origin cert on the VPS.
+4. Push to `main` (or Run the workflow). Verify `curl -I https://pawgrip.app/` → `200`.
+
+### Notes / follow-ups
+- The **visit log** (`public/track.php` → `clicks.txt`) is inert on static nginx — it needs php-fpm. Add php-fpm + a `location ~ \.php$` block if you want it; until then `click-tracker.ts` fails harmlessly.
+- `public/.htaccess` still ships in `dist/` but nginx ignores it — the SPA / security / cache behavior is mirrored in `deploy/linode-setup.sh`.
+- No `base` change: the build keeps Vite's default `base: '/'`, correct for a domain-root docroot.
+- Point the **ad-platform allowlists** (Google Ads/Meta landing page, GA4 stream, Shopify Customer Events pixel, Merchant Center claim) at `https://pawgrip.app`. `index.html` `canonical`/`og:*`/JSON-LD now point at `https://pawgrip.app/`. The support email `support@pawgrippro.com` was left unchanged — forward/spin it up on `pawgrip.app` separately if you switch contact addresses.
+- **Rollback** = revert the commit on `main` and push; the workflow redeploys. There is no artifact history — keep known-good commit hashes.
+
+---
+
+> **_Archived — the previous Network Solutions (cPanel) pipeline that served
+> `pawgrip.businesslocalrecords.com`. Kept for history / rollback only; it is no
+> longer the live path._**
+
 # Deployment — Network Solutions (cPanel) subdomain hosting
 
-**Status:** Netlify is retired from this project's workflow. Deploys now
-target the owner's paid **Network Solutions cPanel** subscription under the
-**`pawgrip.businesslocalrecords.com`** subdomain. The root of the account
-keeps serving the main application; nothing here touches it.
+**Status:** Netlify is retired from this project's workflow. The NetSol route
+below was **superseded on 2026-10-13** by the Linode/`pawgrip.app` pipeline
+described at the top of this file.
 
 Current environment facts (confirmed with the owner):
 
