@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us — PawGrip Pro</title>
+    <meta name="description" content="Contact PawGrip Pro: sizing help before you order, order questions, and warranty claims. We reply within one business day." />
+    <!--
+      Netlify Forms: this form is static HTML, so Netlify detects it at deploy
+      time. The matching hidden detection form lives in index.html.
+      Event tracking: pushes a `lead_submit` dataLayer event on success when an
+      analytics ID is configured.
+    -->
+    <style>
+      :root { color-scheme: light; }
+      body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #ffffff; color: #1c1917; margin: 0; line-height: 1.7; }
+      .bar { border-bottom: 1px solid #e7e5e4; background: #fafaf9; }
+      .bar-inner { max-width: 720px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+      .brand { font-weight: 800; color: #1c1917; text-decoration: none; letter-spacing: -0.02em; }
+      .cta { background: #f37021; color: #fff; font-weight: 700; font-size: 14px; padding: 10px 18px; border-radius: 6px; text-decoration: none; }
+      main { max-width: 720px; margin: 0 auto; padding: 48px 20px 64px; }
+      h1 { font-size: 2rem; letter-spacing: -0.03em; margin: 0 0 8px; }
+      h2 { font-size: 1.15rem; margin: 36px 0 8px; }
+      p, li, label { color: #44403c; }
+      .updated { color: #78716c; font-size: 14px; margin: 0 0 32px; }
+      .field { margin-bottom: 16px; }
+      label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 6px; color: #1c1917; }
+      input[type="text"], input[type="email"], textarea {
+        width: 100%; box-sizing: border-box; border: 1px solid #d6d3d1; border-radius: 6px;
+        padding: 10px 12px; font: inherit; font-size: 15px; color: #1c1917; background: #fff;
+      }
+      input:focus, textarea:focus { outline: 2px solid #1d4ed8; outline-offset: 1px; border-color: #1d4ed8; }
+      textarea { min-height: 130px; resize: vertical; }
+      .honeypot { position: absolute; left: -9999px; }
+      button[type="submit"] {
+        background: #f37021; color: #fff; border: 0; border-radius: 6px; padding: 12px 26px;
+        font: inherit; font-weight: 700; cursor: pointer;
+      }
+      button[type="submit"]:hover { background: #d95e1a; }
+      .note { font-size: 13px; color: #78716c; margin-top: 8px; }
+      .ok { border: 1px solid #a7f3d0; background: #ecfdf5; border-radius: 10px; padding: 18px 20px; }
+      .ok h2 { margin: 0 0 6px; color: #065f46; }
+      footer { border-top: 1px solid #e7e5e4; background: #fafaf9; }
+      .foot-inner { max-width: 720px; margin: 0 auto; padding: 28px 20px; display: flex; flex-wrap: wrap; gap: 12px 24px; font-size: 13px; }
+      footer a { color: #57534e; text-decoration: none; }
+      footer a:hover { color: #1c1917; text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar-inner">
+        <a class="brand" href="/">PawGrip Pro</a>
+        <a class="cta" href="/#offer">Get the ramp</a>
+      </div>
+    </header>
+
+    <main>
+      <h1>Contact Us</h1>
+      <p class="updated">A real person replies within one business day.</p>
+
+      <p>
+        Not sure which size fits your vehicle? Send a photo of your car or truck with your
+        message and we will size it for you before you order. Order questions, warranty claims
+        and returns all reach the same team through this form.
+      </p>
+
+      <div id="form-wrap">
+        <form name="contact" method="POST" data-netlify="true">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="honeypot">
+            <label>Leave this field empty: <input type="text" name="bot-field" /></label>
+          </p>
+
+          <div class="field">
+            <label for="name">Your name</label>
+            <input id="name" type="text" name="name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input id="email" type="email" name="email" required autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="order">Order number (optional)</label>
+            <input id="order" type="text" name="order" placeholder="e.g. #1024" />
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required placeholder="Tell us about your vehicle and your dog, or your question…"></textarea>
+          </div>
+
+          <button type="submit">Send message</button>
+          <p class="note">
+            Prefer email? Write to
+            <a href="mailto:support@pawgrippro.com">support@pawgrippro.com</a> — same response time.
+          </p>
+        </form>
+      </div>
+    </main>
+
+    <footer>
+      <div class="foot-inner">
+        <a href="/">Home</a>
+        <a href="/shipping/">Shipping</a>
+        <a href="/returns/">Returns</a>
+        <a href="/warranty/">Warranty</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+        <a href="/contact/">Contact</a>
+        <a href="/about/">About</a>
+      </div>
+    </footer>
+
+    <script>
+      // Progressive enhancement: submit without leaving the page when JS is
+      // available; falls back to a normal POST (Netlify handles both).
+      (function () {
+        var form = document.querySelector('form[data-netlify="true"]');
+        if (!form) return;
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(new FormData(form)).toString(),
+          })
+            .then(function () {
+              if (window.dataLayer) window.dataLayer.push({ event: 'lead_submit' });
+              document.getElementById('form-wrap').innerHTML =
+                '<div class="ok"><h2>Message received.</h2><p>We reply within one business day — check your spam folder just in case.</p></div>';
+            })
+            .catch(function () {
+              form.submit();
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>

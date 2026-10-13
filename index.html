@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Font: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+
+    <!-- Core Web Vitals: prioritize the LCP hero image (first hero gallery frame — see ASSETS.heroPhotos) -->
+    <link rel="preload" as="image" href="/assets/product/revised/ramp-scene-dog-walking-up.jpg" fetchpriority="high" />
+
+    <!-- Primary SEO -->
+    <title>PawGrip Pro — The Foldable Dog Car Ramp for Senior &amp; Large Dogs | 150–250 lb Rated</title>
+    <meta
+      name="description"
+      content="Protect your dog's joints and your back. The PawGrip Pro telescoping dog car ramp is rated to 150 lb (Compact) or 250 lb (Extended), folds flat, and ships free with a 30-day money-back guarantee."
+    />
+    <meta
+      name="keywords"
+      content="dog car ramp, foldable dog ramp, pet ramp for SUV, dog ramp for large dogs, senior dog ramp, telescoping dog ramp"
+    />
+    <link rel="canonical" href="https://pawgrippro.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="product" />
+    <meta property="og:site_name" content="PawGrip Pro" />
+    <meta property="og:title" content="PawGrip Pro — The Foldable Dog Car Ramp for Senior &amp; Large Dogs" />
+    <meta
+      property="og:description"
+      content="Rated to 150 lb (Compact) or 250 lb (Extended), folds flat in seconds. Free insured shipping and a 30-day money-back guarantee on every order."
+    />
+    <meta property="og:image" content="https://pawgrippro.com/assets/product/revised/ramp-scene-dog-walking-up.jpg" />
+    <meta property="og:url" content="https://pawgrippro.com/" />
+    <meta property="product:price:amount" content="79.99" />
+    <meta property="product:price:currency" content="USD" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PawGrip Pro — The Foldable Dog Car Ramp for Senior &amp; Large Dogs" />
+    <meta
+      name="twitter:description"
+      content="Rated to 150 lb (Compact) or 250 lb (Extended), folds flat in seconds. Free insured shipping and a 30-day money-back guarantee."
+    />
+    <meta name="twitter:image" content="https://pawgrippro.com/assets/product/revised/ramp-scene-dog-walking-up.jpg" />
+
+    <!--
+      Product structured data.
+
+      V3 fixes — the previous markup hardcoded price "149", a fabricated
+      4.9 / 2,847-review aggregateRating, "vet-approved" and "fits any
+      vehicle". Aggregate ratings must come from a real review source (none
+      exists yet — see LAUNCH_BLOCKERS.md), so it is removed rather than
+      faked; Google Merchant Center and rich-result policy both reject
+      invented review markup. The price matches the default tier in
+      src/lib/offers.ts ($79.99, 1 ramp).
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "PawGrip Pro Foldable Dog Car Ramp",
+        "image": "https://pawgrippro.com/assets/product/revised/ramp-scene-dog-walking-up.jpg",
+        "description": "Telescoping foldable dog car ramp rated to 150 lb (Compact) or 250 lb (Extended), with a textured traction deck and side rails. Folds flat for storage. Free insured shipping and a 30-day money-back guarantee.",
+        "brand": { "@type": "Brand", "name": "PawGrip Pro" },
+        "offers": {
+          "@type": "Offer",
+          "url": "https://pawgrippro.com/",
+          "priceCurrency": "USD",
+          "price": "79.99",
+          "availability": "https://schema.org/InStock",
+          "shippingDetails": {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "USD" }
+          },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "merchantReturnDays": 30,
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow"
+          }
+        }
+      }
+    </script>
+
+    <!--
+      Netlify Forms detection.
+
+      Netlify only recognizes forms that exist in the HTML it deploys. The
+      React app renders its forms client-side, so these hidden shells register
+      the "contact" and "founding-tester" form names for JS-injected forms.
+      The static pages in public/ (contact, guide) render real <form> markup
+      that Netlify detects directly.
+    -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden aria-hidden="true">
+      <input type="text" name="bot-field" />
+      <input type="hidden" name="form-name" value="contact" />
+    </form>
+    <form name="founding-tester" netlify netlify-honeypot="bot-field" hidden aria-hidden="true">
+      <input type="text" name="bot-field" />
+      <input type="hidden" name="form-name" value="founding-tester" />
+    </form>
+    <script type="module" crossorigin src="/assets/index-CDY3-DXQ.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DXC7Jcj5.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
