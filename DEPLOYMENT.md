@@ -13,7 +13,7 @@ Current environment facts (confirmed with the owner):
 | Temporary cPanel host | `122846c.netsolhost.com` |
 | Subdomain | `pawgrip` (created in cPanel → Domains) |
 | Document root | `htdocs/pawgrip` (as shown in the File Manager) |
-| DNS | **Verified resolving** on 2026-10-13: `pawgrip.businesslocalrecords.com`, `businesslocalrecords.com` and the temp host all answer from `74.91.138.133`. Network Solutions quotes up to 24 h, so remote resolvers may still catch up |
+| DNS | **Verified resolving** on 2026-10-13: `pawgrip.businesslocalrecords.com`, `businesslocalrecords.com` and the temp host all answer from `74.91.138.133`. The subdomain's *vhost* was still not mapped to its docroot that day (404 from the wrong backend) — Network Solutions quotes up to 24 h |
 | Deploy account | SFTP account `sftp_agent_01`, directory `/htdocs` — usable from ordinary (home) connections only; see "Why the deploy pulls instead of pushes" below |
 | Pipeline shape | **Two-stage, 443-only:** GitHub Actions builds and pushes to the public `publish` branch; a 1-minute cPanel cron on the host pulls and extracts it into `htdocs/pawgrip` |
 
@@ -284,11 +284,20 @@ ignores it). It translates the three `netlify.toml` concerns:
        → New File → `deploy.php` → paste with the real TOKEN (matches the
        `DEPLOY_TOKEN` repo secret) → Save. Then run the workflow
        (`gh workflow run deploy.yml`) to fire the hook for the first time.
-6. [ ] Verify: `deploy.log` in `htdocs/pawgrip` shows `deployed version=…`,
-       the store loads at `http://pawgrip.businesslocalrecords.com` (assets
-       load — `base:'/'` requires its own docroot; HTTPS waits on AutoSSL),
-       static policy pages work, Shopify checkout redirects land, console
-       clean.
+6. [x] Deploy chain **verified end-to-end on 2026-10-13**: `deploy.log` shows
+       the applied version, the hook body reports `deployed 08eb7da… via php`
+       (pure-PHP extractor — this host has `exec` disabled and no `phar`), and
+       from GitHub's network: `index.html` 200, hashed asset 200, bogus path
+       200 (SPA catch-all via `.htaccess`), `/shipping/` 200, repeat trigger
+       "already up to date". The site is live at
+       `http://122846c.netsolhost.com/pawgrip/` meanwhile.
+7. [ ] **Subdomain routing** — `pawgrip.businesslocalrecords.com` still
+       answers 404 from a backend that is not the subdomain's docroot (it
+       moved from a proxy-wide 403 to a 404, so propagation is progressing).
+       Host-side, quoted "up to 24 h" by Network Solutions. When it serves
+       the directory, flip the hook URL in `deploy.yml` from the temp host's
+       `/pawgrip/` path to the subdomain, then `https` once AutoSSL has
+       issued its certificate (probe.yml verifies both).
 7. [ ] Decide the forms replacement (Netlify Forms, §3) and implement it.
 8. [ ] Repoint Google Ads / Meta landing-page URLs to the new domain; update
        any domain allowlists (GA4 data streams, Meta pixel domains, Shopify
