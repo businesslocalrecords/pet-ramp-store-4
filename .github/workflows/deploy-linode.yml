@@ -56,8 +56,13 @@ jobs:
         run: |
           set -euo pipefail
           install -m 700 -d ~/.ssh
-          printf '%s\n' "${VPS_SSH_KEY}" > ~/.ssh/id_ed25519
+          # Normalize CRLF (keys generated on Windows) so libcrypto can parse it.
+          printf '%s\n' "${VPS_SSH_KEY}" | tr -d '\r' > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          if ! ssh-keygen -y -f ~/.ssh/id_ed25519 >/dev/null 2>&1; then
+            echo "::error::VPS_SSH_KEY did not parse. Store the FULL private key in the secret with Unix (LF) line endings." >&2
+            exit 1
+          fi
           rsync -az --delete \
             -e "ssh -i ~/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new -p ${VPS_PORT:-22}" \
             dist/ "${VPS_USER}@${VPS_HOST}:${VPS_PATH:-/var/www/pawgrip.app}/"
