@@ -1,4 +1,4 @@
-# TEMPORARY diagnostic workflow. Two sections:
+# TEMPORARY diagnostic/verification workflow.
 #   1. port probe — which file-transfer ports the host accepts from GitHub's
 #      runners (the workspace sandbox is proxy-blocked, so this must run on a
 #      hosted runner)
@@ -6,6 +6,9 @@
 #      candidate paths, with body snippets (our PHP 403 "forbidden" means the
 #      file is reachable; an openresty 404/403 means the proxy/backend never
 #      found it)
+#   3. deploy verification — the /pawgrip/ site paths, one hashed asset
+#      pulled out of index.html, the SPA catch-all (a bogus path must return
+#      index.html, proving .htaccess works) and the subdomain's status
 # Dispatch manually:
 #   gh workflow run probe.yml -R businesslocalrecords/pet-ramp-store-4
 # Delete once the deploy chain is verified.
@@ -36,14 +39,30 @@ jobs:
       - name: Probe deploy hook paths over HTTP
         run: |
           for u in \
-            "http://pawgrip.businesslocalrecords.com/deploy.php" \
             "http://122846c.netsolhost.com/pawgrip/deploy.php" \
-            "http://122846c.netsolhost.com/deploy.php" \
-            "http://pawgrip.businesslocalrecords.com/" \
-            "http://pawgrip.businesslocalrecords.com/index.html" \
-            "http://122846c.netsolhost.com/pawgrip/" ; do
+            "http://pawgrip.businesslocalrecords.com/deploy.php" ; do
             code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$u" || echo ERR)
-            body=$(curl -s --max-time 20 "$u" | tr -d '\n' | head -c 160 || true)
             echo "$code  $u"
-            echo "     body: $body"
           done
+
+      - name: Verify the deployed site
+        run: |
+          base="http://122846c.netsolhost.com/pawgrip"
+          echo "--- index.html"
+          curl -s -o /tmp/index.html -w "HTTP %{http_code}, %{size_download} bytes\n" --max-time 30 "$base/index.html"
+          echo "--- one hashed asset referenced by index.html"
+          asset=$(grep -o '/assets/index-[^"]*\.\(css\|js\)' /tmp/index.html | head -1)
+          if [ -n "$asset" ]; then
+            curl -s -o /dev/null -w "HTTP %{http_code}  $base$asset\n" --max-time 30 "$base$asset"
+          else
+            echo "no asset reference found in index.html"
+          fi
+          echo "--- SPA catch-all: a bogus path must return the app (200), not a 404"
+          curl -s -o /dev/null -w "HTTP %{http_code}  $base/this-page-does-not-exist\n" --max-time 30 "$base/this-page-does-not-exist"
+          echo "--- static policy page"
+          curl -s -o /dev/null -w "HTTP %{http_code}  $base/shipping/\n" --max-time 30 "$base/shipping/"
+          echo "--- deploy hook's version gate (should say already up to date now)"
+          curl -s --max-time 30 "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${{ secrets.DEPLOY_TOKEN }}"
+          echo ""
+          echo "--- subdomain host routing (host-side; may still be pending)"
+          curl -s -o /dev/null -w "HTTP %{http_code}  http://pawgrip.businesslocalrecords.com/\n" --max-time 30 "http://pawgrip.businesslocalrecords.com/"
