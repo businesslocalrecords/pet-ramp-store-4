@@ -61,6 +61,13 @@ jobs:
           curl -s -o /dev/null -w "HTTP %{http_code}  $base/this-page-does-not-exist\n" --max-time 30 "$base/this-page-does-not-exist"
           echo "--- static policy page"
           curl -s -o /dev/null -w "HTTP %{http_code}  $base/shipping/\n" --max-time 30 "$base/shipping/"
+          echo "--- click tracker: GET must be refused (405, POST-only)"
+          curl -s -o /dev/null -D /tmp/track-headers.txt -w "HTTP %{http_code}  GET $base/track.php\n" --max-time 20 "$base/track.php"
+          grep -i '^allow:' /tmp/track-headers.txt || echo "(no Allow header seen)"
+          echo "--- click tracker end-to-end: POST a probe line, then read it back"
+          curl -s -o /dev/null -w "HTTP %{http_code}  POST $base/track.php\n" --max-time 20 \
+            -X POST -d "path=/__deploy-probe" "$base/track.php"
+          curl -s --max-time 20 "$base/clicks.txt" | tail -1
           echo "--- deploy hook's version gate (should say already up to date now)"
           curl -s --max-time 30 "http://122846c.netsolhost.com/pawgrip/deploy.php?token=${{ secrets.DEPLOY_TOKEN }}"
           echo ""

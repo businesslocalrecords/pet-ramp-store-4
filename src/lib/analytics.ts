@@ -23,6 +23,10 @@ declare global {
     gtag: (...args: unknown[]) => void;
     fbq: (...args: unknown[]) => void;
     dataLayer: unknown[];
+    uetq?: unknown[] | { push: (...args: unknown[]) => void };
+    UET?: new (config: { ti: string; q?: unknown; ts?: number; enableAutoSpaTracking?: boolean }) => {
+      push: (...args: unknown[]) => void;
+    };
   }
 }
 
@@ -34,10 +38,11 @@ export function initAnalytics(config: {
   gaMeasurementId?: string;      // G-XXXXXXXXXX
   googleAdsConversionId?: string; // AW-XXXXXXXXX
   metaPixelId?: string;           // 123456789012345
+  microsoftUetTagId?: string;     // 343278405 — Microsoft Advertising (Bing) UET
 }) {
   if (typeof window === 'undefined') return;
 
-  const { gaMeasurementId, googleAdsConversionId, metaPixelId } = config;
+  const { gaMeasurementId, googleAdsConversionId, metaPixelId, microsoftUetTagId } = config;
 
   // Google Analytics 4 + Google Ads (via gtag)
   if (gaMeasurementId || googleAdsConversionId) {
@@ -81,6 +86,45 @@ export function initAnalytics(config: {
     script.async = true;
     script.src = 'https://connect.facebook.net/en_US/fbevents.js';
     document.head.appendChild(script);
+  }
+
+  // Microsoft UET (the bat.js tag Microsoft Advertising/Bing provides).
+  // Faithful port of the official snippet, so it behaves exactly like the
+  // one pasted into the root domain: queue first, swap in the UET instance
+  // once bat.js loads, push pageLoad. Auto-SPA tracking stays on because
+  // this app has no router.
+  if (microsoftUetTagId) {
+    window.uetq = window.uetq || [];
+    const uetConfig = {
+      ti: microsoftUetTagId,
+      q: window.uetq,
+      ts: Date.now(),
+      enableAutoSpaTracking: true,
+    };
+    // the legacy readyState pair is not on TS's HTMLScriptElement
+    const uetScript = document.createElement('script') as HTMLScriptElement & {
+      onreadystatechange?: (() => void) | null;
+      readyState?: string;
+    };
+    uetScript.async = true;
+    uetScript.src = `https://bat.bing.net/bat.js?ti=${encodeURIComponent(microsoftUetTagId)}`;
+    const swapInUet = () => {
+      const UET = window.UET;
+      if (UET) {
+        const instance = new UET(uetConfig);
+        window.uetq = instance;
+        instance.push('pageLoad');
+      }
+      uetScript.onload = null;
+      uetScript.onreadystatechange = null;
+    };
+    uetScript.onload = swapInUet;
+    uetScript.onreadystatechange = () => {
+      const readyState = uetScript.readyState;
+      if (readyState && readyState !== 'loaded' && readyState !== 'complete') return;
+      swapInUet();
+    };
+    document.head.appendChild(uetScript);
   }
 }
 
