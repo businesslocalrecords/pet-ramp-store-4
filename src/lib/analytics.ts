@@ -330,20 +330,33 @@ export function pushBeginCheckoutDataLayer(
 
   const value = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
-  window.dataLayer.push({
-    event: 'begin_checkout',
-    ecommerce: {
-      currency,
-      value: Number(value.toFixed(2)),
-      items: items.map((item) => ({
-        item_id: item.item_id,
-        item_name: item.item_name,
-        price: item.price,
-        quantity: item.quantity,
-        item_category: 'Pet Ramp',
-      })),
-    },
-  });
+  // ANALYTICS MUST NEVER BLOCK A SALE.
+  // `window.dataLayer` is only created by initAnalytics() when a GA/Ads ID is
+  // configured. When the deploy omits those IDs, dataLayer is undefined here and
+  // `window.dataLayer.push(...)` threw "Cannot read properties of undefined
+  // (reading 'push')" — and because this call sits BEFORE the checkout redirect
+  // in buy(), that single throw silently killed checkout on the live site.
+  // Ensure the array exists and swallow any error so a tracking tag can never
+  // prevent the shopper from reaching Shopify's checkout.
+  try {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'begin_checkout',
+      ecommerce: {
+        currency,
+        value: Number(value.toFixed(2)),
+        items: items.map((item) => ({
+          item_id: item.item_id,
+          item_name: item.item_name,
+          price: item.price,
+          quantity: item.quantity,
+          item_category: 'Pet Ramp',
+        })),
+      },
+    });
+  } catch {
+    // Swallow any analytics failure — never let tracking break checkout.
+  }
 
   console.debug('[Analytics] dataLayer begin_checkout pushed', { value, itemCount: items.length });
 }

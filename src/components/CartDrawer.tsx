@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Lock, Minus, Plus, ShoppingCart, Trash2, X } from 'lucide-react';
 import { useCart } from '../lib/cart-context';
 import { formatMoney } from '../lib/offers';
@@ -90,7 +91,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     );
   };
 
-  return (
+  // Portal to <body> so the drawer escapes the header's `backdrop-blur` stacking
+  // context. Rendered inside the header, the `fixed inset-0 z-50` overlay was
+  // trapped in the header's z-40 / backdrop-filter context and page content
+  // bled through the panel (the "glitchy" drawer). Portalling restores a clean,
+  // full-viewport slide-over above the whole page.
+  return createPortal(
     <div
       className="fixed inset-0 z-50"
       role="dialog"
@@ -228,6 +234,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
         </div>
 
       </aside>
-    </div>
+    </div>,
+    document.body
   );
 };
