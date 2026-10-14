@@ -13,24 +13,28 @@ interface CartDrawerProps {
 /**
  * Cart drawer — a right-side slide-over.
  *
- * FIXED (2026-10-13). Two bugs made clicking the cart "do something random":
+ * FIXED (2026-10-13). The previous version had two bugs that made clicking the
+ * cart "do something random":
  *
  *  1. LAYOUT: the wrapper was `fixed inset-0 flex items-end` (a bottom-sheet)
- *     while the panel was `h-full max-w-xs` inside a nested centered row — a
- *     bottom anchor fighting a full-height side panel, rendering full-height
- *     and misaligned. Now a single, predictable right-side slide-over.
+ *     while the panel itself was `h-full max-w-xs` inside a nested centered row
+ *     — a bottom-anchored container fighting a full-height side panel, so it
+ *     rendered full-height and misaligned. This is now a single, predictable
+ *     right-side slide-over: one absolute panel, no conflicting flex anchors.
  *
  *  2. CHECKOUT TARGET: the footer button called `buy()`, which ignores the
- *     drawer and rebuilds a cart from the buy box's current selection, so it
- *     could check out a different cart than the one shown. It now checks out
- *     THIS cart's real Shopify `checkoutUrl` (attribution forwarded the same
- *     way the buy box does), so what you see is exactly what gets paid for.
+ *     drawer and rebuilds a fresh cart from the buy box's current tier/size/
+ *     add-on state. If the drawer showed one item while the buy box was on a
+ *     different selection, "Checkout" sent a different cart than the one shown.
+ *     It now checks out THIS cart's real Shopify `checkoutUrl` (attribution
+ *     forwarded, same as the buy box), so what you see is what gets paid for.
  *
  * Dismiss: backdrop click, the X button, or the Escape key.
  */
 export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   const { cart, loading, error, updateQuantity, removeItem } = useCart();
 
+  // Escape closes the drawer. Registered only while open.
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -50,7 +54,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     try {
       await updateQuantity(lineId, next);
     } catch {
-      // Surfaced via the cart's `error` state below.
+      // The cart's own `error` state surfaces inline; nothing else to do.
     }
   };
 
@@ -58,10 +62,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
     try {
       await removeItem(lineId);
     } catch {
-      // Surfaced via the cart's `error` state below.
+      // The cart's own `error` state surfaces inline; nothing else to do.
     }
   };
 
+  /**
+   * Check out the cart that is actually shown, via its real Shopify checkout
+   * link. Attribution (gclid/utm/…) is forwarded exactly as the buy box does,
+   * then we redirect. We deliberately do NOT call `buy()` here (see header).
+   */
   const handleCheckout = () => {
     if (!cart || !hasItems || !cart.checkoutUrl) return;
 
@@ -82,9 +91,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Shopping cart">
+    <div
+      className="fixed inset-0 z-50"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Shopping cart"
+    >
+      {/* Backdrop — click to close */}
       <div className="absolute inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
+
+      {/* Slide-over panel: single right-side anchor, no conflicting flex */}
       <aside className="absolute right-0 top-0 flex h-full w-full max-w-sm flex-col bg-white shadow-2xl">
+        {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
           <h2 className="flex items-center gap-2 text-base font-bold text-gray-900">
             <ShoppingCart className="h-4 w-4 text-gray-500" aria-hidden="true" />
@@ -99,6 +117,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
             <X className="h-5 w-5" />
           </button>
         </div>
+        {/* Body */}
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {loading ? (
             <p className="py-8 text-center text-sm text-gray-500">Loading cart…</p>
@@ -111,7 +130,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
           ) : (
             <ul className="space-y-4">
               {lines.map(({ node }) => {
-                const each = parseFloat(node.cost.totalAmount.amount) / node.quantity;
+                const lineTotal = parseFloat(node.cost.totalAmount.amount);
+                const each = lineTotal / node.quantity;
                 return (
                   <li
                     key={node.id}
@@ -124,6 +144,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                       {node.merchandise.title !== 'Default Title' && (
                         <p className="text-xs text-gray-500">{node.merchandise.title}</p>
                       )}
+
                       <div className="mt-2 flex items-center gap-2">
                         <button
                           type="button"
@@ -156,6 +177,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                         </button>
                       </div>
                     </div>
+
                     <div className="shrink-0 text-right">
                       <p className="text-sm font-bold text-gray-900">${formatMoney(each)}</p>
                       <p className="text-[11px] text-gray-500">each</p>
@@ -166,6 +188,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
             </ul>
           )}
         </div>
+
+        {/* Footer */}
         <div className="border-t border-gray-200 px-4 py-4">
           {hasItems && cart ? (
             <>
@@ -202,6 +226,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
             </button>
           )}
         </div>
+
       </aside>
     </div>
   );
