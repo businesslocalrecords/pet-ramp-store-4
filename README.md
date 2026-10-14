@@ -68,14 +68,19 @@ Admin token sent to the Storefront API returns `401`, which breaks every product
 query on the site. Storefront tokens are hex, public by design, and safe to ship
 in browser JS.
 
-Currently in use for `vynils-galor.myshopify.com`:
+Currently in use for the PawGrip store (`bkhvxg-d7.myshopify.com`):
 
 | Variable | Value |
 |----------|-------|
-| `VITE_SHOPIFY_STOREFRONT_DOMAIN` | `vynils-galor.myshopify.com` |
-| `VITE_SHOPIFY_STOREFRONT_TOKEN` | `055c1ac160fae23c3f43f80b9bfceee6` |
-| `SHOPIFY_CLIENT_ID` | `7a3868cb0531481a4d1c51356b478e8b` |
+| `VITE_SHOPIFY_STOREFRONT_DOMAIN` | `bkhvxg-d7.myshopify.com` |
+| `VITE_SHOPIFY_STOREFRONT_TOKEN` | `4c7f63ac8ebcfac2184ac2bddad85cb7` |
+| `SHOPIFY_CLIENT_ID` | *(the new store's custom-app client ID — in `.env.local` only)* |
 | `SHOPIFY_CLIENT_SECRET` | *(secret — in `.env.local` only)* |
+
+> The old `vynils-galor` store (domain `vynils-galor.myshopify.com`, token
+> `055c1ac1…`, client `7a3868cb…`) is retired. The live site is built against
+> `bkhvxg-d7`; its Storefront creds are read from repo **variables** in
+> `.github/workflows/deploy-linode.yml`.
 
 The storefront app must also grant `unauthenticated_read_product_inventory`
 for live stock counts; without it the site still works, and stock messaging

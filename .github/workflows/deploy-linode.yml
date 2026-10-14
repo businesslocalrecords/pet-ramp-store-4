@@ -1,9 +1,12 @@
 name: Deploy -> Linode (pawgrip.app)
 
 # Auto-deploy the storefront to the Linode VPS that serves pawgrip.app
-# (Cloudflare-fronted). On push to main: build here with the VITE_* secrets
-# inlined, then rsync the built dist/ to the VPS webroot over SSH. No secrets
-# are ever written to disk in the repo — set them in Settings > Secrets.
+# (Cloudflare-fronted). On push to main: build here with the VITE_* values
+# inlined, then rsync the built dist/ to the VPS webroot over SSH. The two
+# Shopify Storefront creds (VITE_SHOPIFY_STOREFRONT_DOMAIN / _TOKEN) are read
+# from repo *variables* (public-by-design); the rest come from *secrets*. No
+# secrets are ever written to disk in the repo — set them in Settings >
+# Secrets and variables > Actions.
 on:
   push:
     branches: [main]
@@ -25,8 +28,8 @@ jobs:
       - run: npm ci
       - name: Build (VITE_* inlined at build time)
         env:
-          VITE_SHOPIFY_STOREFRONT_DOMAIN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_DOMAIN }}
-          VITE_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.VITE_SHOPIFY_STOREFRONT_TOKEN }}
+          VITE_SHOPIFY_STOREFRONT_DOMAIN: ${{ vars.VITE_SHOPIFY_STOREFRONT_DOMAIN }}
+          VITE_SHOPIFY_STOREFRONT_TOKEN: ${{ vars.VITE_SHOPIFY_STOREFRONT_TOKEN }}
           VITE_GA_MEASUREMENT_ID: ${{ vars.VITE_GA_MEASUREMENT_ID }}
           VITE_GOOGLE_ADS_CONVERSION_ID: ${{ vars.VITE_GOOGLE_ADS_CONVERSION_ID }}
           VITE_META_PIXEL_ID: ${{ vars.VITE_META_PIXEL_ID }}

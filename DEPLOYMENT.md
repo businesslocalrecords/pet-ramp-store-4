@@ -23,8 +23,8 @@
 
 ### GitHub repo settings — set once, never committed
 Settings → Secrets and variables → Actions.
-- **Secrets:** `VITE_SHOPIFY_STOREFRONT_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN`, `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_DEPLOY_PATH`, `VPS_SSH_KEY_B64` (base64 of the deploy private key — see the bootstrap below).
-- **Variables:** `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID`, `VITE_MICROSOFT_UET_TAG_ID`.
+- **Secrets:** `VPS_HOST`, `VPS_USER`, `VPS_PORT`, `VPS_DEPLOY_PATH`, `VPS_SSH_KEY_B64` (base64 of the deploy private key — see the bootstrap below).
+- **Variables:** `VITE_SHOPIFY_STOREFRONT_DOMAIN`, `VITE_SHOPIFY_STOREFRONT_TOKEN` (the live store is `bkhvxg-d7.myshopify.com`; the deploy build step reads these two from variables, **not** secrets), `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID`, `VITE_MICROSOFT_UET_TAG_ID`.
 - `VPS_HOST` is the **Linode public IP** (Cloudflare does not proxy SSH). `VPS_DEPLOY_PATH` defaults to `/var/www/pawgrip.app`.
 
 ### One-time VPS bootstrap
@@ -296,7 +296,7 @@ the `deploy.php` URL in a browser.
 
 | Secret | Value / status |
 |---|---|
-| `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | set — the live storefront values (public by design; the site cannot query products without them) |
+| `VITE_SHOPIFY_STOREFRONT_DOMAIN` / `VITE_SHOPIFY_STOREFRONT_TOKEN` | set as repo **variables** for `bkhvxg-d7.myshopify.com` (public by design; the site cannot query products without them). The same-named *secrets* still hold the old `vynils-galor` store and are ignored by the pipeline |
 | `VITE_MICROSOFT_UET_TAG_ID` | set — the Microsoft UET tag (`343278405`), passed into the build step in `deploy.yml`; on this account UET alone activates Microsoft Clarity (owner-verified on the Clarity dashboard) |
 | `VITE_GA_MEASUREMENT_ID`, `VITE_GOOGLE_ADS_CONVERSION_ID`, `VITE_META_PIXEL_ID` | unset until the owner supplies them; an unset var behaves as empty, so the build is unaffected |
 | `SFTP_SERVER` / `SFTP_PORT` / `SFTP_USERNAME` / `SFTP_PASSWORD` / `SFTP_DIR` | set but **not used by the pipeline** — kept for the manual path (below) and so the SFTP upload step can be restored in one edit if the host ever allowlists GitHub's runner IP ranges (published at `https://api.github.com/meta`) |

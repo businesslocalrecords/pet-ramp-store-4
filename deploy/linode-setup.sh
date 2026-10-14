@@ -92,10 +92,10 @@ cat <<EOF
 Done. Next:
   1. Cloudflare: A record '${DOMAIN}' -> this server's public IPv4, proxy ON.
   2. GitHub repo Settings > Secrets and variables > Actions:
-       Secrets: VITE_SHOPIFY_STOREFRONT_DOMAIN, VITE_SHOPIFY_STOREFRONT_TOKEN,
-                VPS_HOST, VPS_USER=${DEPLOY_USER}, VPS_PORT=22,
+       Secrets: VPS_HOST, VPS_USER=${DEPLOY_USER}, VPS_PORT=22,
                 VPS_DEPLOY_PATH=${WEBROOT}, VPS_SSH_KEY (the PRIVATE key half).
-       Variables: VITE_GA_MEASUREMENT_ID, VITE_GOOGLE_ADS_CONVERSION_ID,
+       Variables: VITE_SHOPIFY_STOREFRONT_DOMAIN, VITE_SHOPIFY_STOREFRONT_TOKEN,
+                  VITE_GA_MEASUREMENT_ID, VITE_GOOGLE_ADS_CONVERSION_ID,
                   VITE_META_PIXEL_ID, VITE_MICROSOFT_UET_TAG_ID.
   3. Push to main (or Actions > Deploy -> Linode > Run) and check
      curl -I https://${DOMAIN}/  -> 200.
