@@ -8,6 +8,10 @@ Static media served from `public/assets/` (referenced as absolute paths, e.g. `/
 |------|---------|-------------|
 | `product/ramp-compact.svg` | Compact (62″) product rendering, white background | Registered fallback only — the hero gallery uses `product/revised/` (see above); still replace with a real photo for the Merchant Center feed |
 | `product/ramp-extended.svg` | Extended (70″) product rendering, white background | Registered fallback only — same as above |
+| `product/mat-traction-2pack.svg` | Traction Mat 2-Pack illustration (rasterized to PNG for the Shopify catalog) | Placeholder rendering — swap for a real photo when one exists |
+| `product/tether-adjustable.svg` | Adjustable Car Safety Tether illustration (rasterized to PNG) | Placeholder rendering — swap for a real photo when one exists |
+| `product/chews-soft-chew.svg` | Hip & Joint Soft Chews illustration (rasterized to PNG) | Placeholder rendering — swap for a real photo when one exists |
+| `product/bed-steps-foam.svg` | Orthopedic Foam Bed Steps illustration (rasterized to PNG) | Placeholder rendering — swap for a real photo when one exists |
 | `badges/30-day-guarantee.svg` | Guarantee badge (matches `POLICY.returnDays`) | Optional custom badge |
 | `badges/free-shipping.svg` | Shipping badge | Optional custom badge |
 | `badges/secure-checkout.svg` | Security badge | Optional custom badge |

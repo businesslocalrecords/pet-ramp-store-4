@@ -13,7 +13,9 @@
     "shopify:verify": "node scripts/shopify-seed.mjs --verify",
     "shopify:purge": "node scripts/shopify-seed.mjs --purge",
     "shopify:discounts:dry": "node scripts/shopify-bundle-discounts.mjs --dry-run",
-    "shopify:discounts:apply": "node scripts/shopify-bundle-discounts.mjs --apply"
+    "shopify:discounts:apply": "node scripts/shopify-bundle-discounts.mjs --apply",
+    "shopify:images:dry": "node scripts/shopify-product-images.mjs",
+    "shopify:images:apply": "node scripts/shopify-product-images.mjs --apply"
   },
   "dependencies": {
     "lucide-react": "^1.55.0",

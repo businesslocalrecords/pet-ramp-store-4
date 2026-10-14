@@ -154,3 +154,27 @@ unit is still owed before a Merchant Center image submit (LAUNCH_BLOCKERS #2).
 | Size-finder slider help text | "Slide the measure of ground-to-bumper height and we will pick auto-select the best size for you." — owner wording replaces the height verdict in prose; the matching card is highlighted live (border + dog icon) and both Select buttons write the shared purchase context |
 | "rubber, non-slip feet", "textured deck", "side rails" | Published product features |
 | "Ships within 1 business day (before 2pm), 2–5 business day delivery" | Store policy in `policy.ts`; confirm operationally (LAUNCH_BLOCKERS) |
+
+## Product catalog imagery (Shopify) — provenance & honesty
+
+Uploaded to the store's catalog by `scripts/shopify-product-images.mjs`
+(`npm run shopify:images:apply`). Two tiers, deliberately distinguished:
+
+- **Hero ramp** (`premium-foldable-dog-car-ramp`) uses the owner's **real**
+  white-background photos from `public/assets/product/revised/`. Real beats
+  invented, so the flagship product shows real imagery.
+- **Mat, tether, soft chews, foam bed steps** have no owner photo in the repo,
+  so each gets an **original SVG illustration** (`public/assets/product/*.svg`),
+  rasterized to PNG at upload time because Shopify product media must be raster
+  (SVG is rejected). These are **placeholder renderings, not photographs of real
+  inventory** — alt text describes only the depicted form, and no image asserts
+  ownership, review counts, or veterinary endorsement.
+
+**Not Merchant-Center-submittable.** The invented renderings (and the ramp's
+scene photos, unless the owner confirms they photograph the shipped unit) are
+still owed white-background photography of the actual product before a Google
+Merchant Center image submit — this tracks the existing open item in
+LAUNCH_BLOCKERS. Adding catalog images here is a storefront/UX fix; it does not
+close the Merchant Center imagery blocker. No new textual claim is introduced by
+the imagery.
+

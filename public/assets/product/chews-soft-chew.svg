@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none" role="img" aria-label="A pouch of hip and joint soft chews with several soft-chew pieces in front, shown on a white background">
+  <defs>
+    <linearGradient id="cw-pouch" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#D6D3D1"/>
+      <stop offset="45%" stop-color="#E7E5E4"/>
+      <stop offset="100%" stop-color="#A8A29E"/>
+    </linearGradient>
+    <linearGradient id="cw-chew" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#B08968"/>
+      <stop offset="100%" stop-color="#7F5539"/>
+    </linearGradient>
+    <filter id="cw-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1C1917" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="#FFFFFF"/>
+  <line x1="80" y1="646" x2="1120" y2="646" stroke="#E7E5E4" stroke-width="2"/>
+
+  <!-- Stand-up pouch -->
+  <g filter="url(#cw-shadow)">
+    <path d="M470 250 L760 250 L778 600 L452 600 Z" fill="url(#cw-pouch)"/>
+    <!-- top seal -->
+    <path d="M462 250 L768 250 L764 286 L466 286 Z" fill="#A8A29E"/>
+    <rect x="466" y="262" width="298" height="6" fill="#78716C" opacity="0.5"/>
+    <!-- side gusset highlight -->
+    <path d="M742 250 L760 250 L778 600 L760 600 Z" fill="#78716C" opacity="0.35"/>
+    <!-- neutral label panel (no text / no claims) -->
+    <rect x="500" y="330" width="200" height="180" rx="12" fill="#FFFFFF" opacity="0.85"/>
+    <!-- simple paw mark on the label -->
+    <g fill="#57534E" opacity="0.8">
+      <ellipse cx="600" cy="404" rx="30" ry="24"/>
+      <circle cx="556" cy="368" r="11"/>
+      <circle cx="584" cy="356" r="11"/>
+      <circle cx="616" cy="356" r="11"/>
+      <circle cx="644" cy="368" r="11"/>
+    </g>
+  </g>
+
+  <!-- Soft-chew pieces in front -->
+  <g filter="url(#cw-shadow)">
+    <path d="M300 560 q-34 -18 -28 -54 q6 -34 40 -40 q34 -6 52 20 q16 26 2 52 q-14 26 -46 32 q-12 2 -20 -10 Z" fill="url(#cw-chew)"/>
+    <path d="M430 588 q-30 -16 -26 -48 q6 -30 36 -36 q30 -6 46 18 q14 24 2 46 q-12 24 -40 30 q-10 0 -18 -10 Z" fill="url(#cw-chew)"/>
+    <path d="M760 566 q-32 -16 -26 -50 q6 -32 38 -38 q32 -6 48 18 q16 24 2 48 q-14 24 -44 30 q-10 0 -18 -8 Z" fill="url(#cw-chew)"/>
+    <!-- subtle highlight on each chew -->
+    <ellipse cx="316" cy="528" rx="12" ry="7" fill="#FFFFFF" opacity="0.18"/>
+    <ellipse cx="444" cy="558" rx="11" ry="6" fill="#FFFFFF" opacity="0.18"/>
+    <ellipse cx="774" cy="536" rx="11" ry="6" fill="#FFFFFF" opacity="0.18"/>
+  </g>
+
+  <text x="600" y="700" font-family="system-ui, sans-serif" font-size="26" font-weight="700" fill="#57534E" text-anchor="middle">Hip &amp; Joint Soft Chews</text>
+</svg>

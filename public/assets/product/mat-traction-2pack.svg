@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none" role="img" aria-label="Two heavy-duty traction mats with a textured non-slip surface, shown on a white background">
+  <defs>
+    <linearGradient id="mt-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3F3F46"/>
+      <stop offset="100%" stop-color="#27272A"/>
+    </linearGradient>
+    <linearGradient id="mt-side" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#18181B"/>
+      <stop offset="100%" stop-color="#09090B"/>
+    </linearGradient>
+    <pattern id="mt-grip" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="none"/>
+      <path d="M0 40 L40 0" stroke="#52525B" stroke-width="3" opacity="0.55"/>
+      <path d="M0 0 L40 40" stroke="#52525B" stroke-width="3" opacity="0.35"/>
+    </pattern>
+    <filter id="mt-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#1C1917" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="800" fill="#FFFFFF"/>
+  <line x1="80" y1="646" x2="1120" y2="646" stroke="#E7E5E4" stroke-width="2"/>
+
+  <!-- Back mat, standing on edge -->
+  <g filter="url(#mt-shadow)">
+    <rect x="704" y="250" width="308" height="180" rx="10" fill="url(#mt-top)"/>
+    <rect x="704" y="250" width="308" height="180" rx="10" fill="url(#mt-grip)"/>
+    <rect x="704" y="250" width="308" height="16" rx="8" fill="#3F3F46"/>
+    <rect x="704" y="414" width="308" height="16" rx="6" fill="url(#mt-side)"/>
+  </g>
+
+  <!-- Front mat, laid flat in slight perspective -->
+  <g filter="url(#mt-shadow)">
+    <!-- top surface -->
+    <path d="M180 470 L900 470 L962 620 L242 620 Z" fill="url(#mt-top)"/>
+    <!-- traction texture clipped to the surface -->
+    <path d="M180 470 L900 470 L962 620 L242 620 Z" fill="url(#mt-grip)"/>
+    <!-- raised lip along the top edge -->
+    <path d="M180 470 L900 470 L906 486 L186 486 Z" fill="#3F3F46"/>
+    <!-- front thickness -->
+    <path d="M242 620 L962 620 L952 646 L252 646 Z" fill="url(#mt-side)"/>
+    <!-- side thickness -->
+    <path d="M900 470 L962 620 L952 646 L890 496 Z" fill="#1F1F23"/>
+  </g>
+
+  <text x="600" y="716" font-family="system-ui, sans-serif" font-size="26" font-weight="700" fill="#57534E" text-anchor="middle">Traction Mat &#183; 2-Pack</text>
+</svg>
