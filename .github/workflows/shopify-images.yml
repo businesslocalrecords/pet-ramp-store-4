@@ -1,0 +1,27 @@
+name: Shopify Product Images
+
+# Upload product images to Shopify via Admin API.
+# Trigger manually after adding new products or updating image assets.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upload-images:
+    runs-on: ubuntu-latest
+    env:
+      VITE_SHOPIFY_STOREFRONT_DOMAIN: ${{ vars.VITE_SHOPIFY_STOREFRONT_DOMAIN }}
+      SHOPIFY_CLIENT_ID: ${{ secrets.SHOPIFY_CLIENT_ID }}
+      SHOPIFY_CLIENT_SECRET: ${{ secrets.SHOPIFY_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Upload product images to Shopify (LIVE)
+        run: npm run shopify:images:apply
