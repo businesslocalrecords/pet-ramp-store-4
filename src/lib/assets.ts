@@ -47,11 +47,12 @@ export const ASSETS = {
    *
    * Order: dogs walking into vehicles first (the ad's promise), then the
    * Paw-Grip deck close-up, other vehicles, the fold, the spec sheet, the
-   * studio shots, the brand poster.
+   * studio shots. The brand poster (grit/pawgrip-pro-poster.jpg) is kept for
+   * social ads only: it shows a house pet door, not a car.
    *
    * The gallery frame is 5:3. Scene photos (1.5–1.84:1) fill it with a light
    * crop steered by `position`; `fit: 'contain'` frames are never cropped
-   * (spec sheet text, portrait poster) and letterbox onto `bg`, sampled from
+   * (spec sheet text, studio shots) and letterbox onto `bg`, sampled from
    * the photo's own edge so the bands read as part of the image.
    *
    * `vehicles` lists the whitelisted kw_vehicle keys (lib/dki.ts) a photo
@@ -127,14 +128,6 @@ export const ASSETS = {
       label: 'Folded · 31″',
       fit: 'contain',
     },
-    {
-      src: '/assets/product/grit/pawgrip-pro-poster.jpg',
-      alt:
-        'PawGrip Pro premium ramp poster: a golden retriever puppy walking down the ramp from a home pet door',
-      label: 'Paw-Grip Pro',
-      fit: 'contain',
-      bg: '#ebe5dc',
-    },
   ] as readonly HeroPhoto[],
 } as const;
 
@@ -153,14 +146,6 @@ export interface HeroPhoto {
   /** kw_vehicle keys this photo matches — moved to the front for that ad. */
   vehicles?: readonly string[];
 }
-
-/** The owner's brand poster, also shown full-size in its own section. */
-export const BRAND_POSTER = {
-  src: '/assets/product/grit/pawgrip-pro-poster.jpg',
-  alt: 'PawGrip Pro premium ramp system: a golden retriever puppy walking down the ramp from a home pet door',
-  width: 768,
-  height: 1024,
-} as const;
 
 /* --------------------------------------------------------------------------
    Content gates — all OFF until real, verified material exists.

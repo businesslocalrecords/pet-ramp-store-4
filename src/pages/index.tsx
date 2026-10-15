@@ -15,7 +15,7 @@ import { Footer } from '../components/Footer';
 import { StickyMobileBuyBar } from '../components/StickyMobileBuyBar';
 import { FounderNote } from '../components/FounderNote';
 import { PurchaseProvider } from '../lib/purchase-provider';
-import { BRAND_POSTER, GATES } from '../lib/assets';
+import { GATES } from '../lib/assets';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL } from '../lib/policy';
 
 /* --------------------------------------------------------------------------
@@ -114,6 +114,9 @@ const Page: React.FC = () => {
               mobile, under the gallery on desktop. */}
           <div className="order-3 lg:col-span-7 lg:order-1">
             <AboutItem />
+            <div className="mt-6">
+              <QuickAnswers />
+            </div>
           </div>
 
           {/* ---------------- SIZE FINDER (mobile 4 | desktop 6) ----------------
@@ -141,11 +144,6 @@ const Page: React.FC = () => {
               <p className="mt-4 text-center text-xs text-stone-500">
                 Free insured shipping &middot; {GUARANTEE_LABEL} &middot; {WARRANTY_PRODUCT_LABEL}
               </p>
-
-              {/* Top three buyer objections — their own card, under the box */}
-              <div className="mx-auto mt-4 max-w-lg">
-                <QuickAnswers />
-              </div>
             </div>
           </aside>
 
@@ -153,21 +151,6 @@ const Page: React.FC = () => {
           <div className="order-4 lg:col-span-7 lg:order-4">
             <Benefits />
           </div>
-
-          {/* ---------------- BRAND POSTER (after benefits) ----------------
-              Shown whole at its native portrait shape; the hero gallery's
-              5:3 frame can only show it small. */}
-          <figure className="order-4 lg:col-span-7 lg:order-4">
-            <img
-              src={BRAND_POSTER.src}
-              alt={BRAND_POSTER.alt}
-              width={BRAND_POSTER.width}
-              height={BRAND_POSTER.height}
-              loading="lazy"
-              decoding="async"
-              className="mx-auto w-full max-w-md rounded-2xl ring-1 ring-stone-900/10"
-            />
-          </figure>
 
           {/* ---------------- HEAD TO HEAD (mobile 5 | desktop 5) ---------------- */}
           <div className="order-5 lg:col-span-7 lg:order-5">
