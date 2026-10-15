@@ -17,6 +17,11 @@ export interface PurchaseContextValue {
   rampPrice: number;
   /** The Shopify variant that fulfils the selected size, once loaded. */
   rampVariant: Variant | null;
+  /** Number of ramps (add-ons stay at one each). */
+  quantity: number;
+  setQuantity: (next: number) => void;
+  /** Highest selectable quantity — capped by Shopify stock. */
+  maxQuantity: number;
   /** Order bump state (traction mat). */
   bumpEnabled: boolean;
   setBumpEnabled: (next: boolean) => void;

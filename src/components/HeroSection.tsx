@@ -25,6 +25,38 @@ const FALLBACK_FRAMES: HeroPhoto[] = [
 ];
 
 /**
+ * The gallery's "Specs" frame — real text from offers.ts, readable at any
+ * size (the owner's spec-sheet image prints its numbers too small to read
+ * inside the gallery).
+ */
+const SpecsCard: React.FC = () => {
+  const compact = RAMP_SIZES[0];
+  const rows: [string, string][] = [
+    ['Open', `${compact.lengthIn}\u2033 L \u00d7 ${compact.widthIn}\u2033 W \u00d7 ${compact.deckHeightIn}\u2033 H`],
+    ['Folded', `${compact.foldedIn}\u2033 L \u00d7 ${compact.widthIn}\u2033 W`],
+    ['Weight capacity', `${compact.weightCapacityLb} lb`],
+    ['Ramp weight', `${compact.rampWeightLb} lb`],
+    ['Deck', 'Paw-Grip grit surface, raised side rails'],
+    ['Storage', 'Folds in half, safety latch'],
+  ];
+  return (
+    <div className="flex h-full w-full flex-col justify-center bg-stone-50 px-5 sm:px-8">
+      <p className="text-[11px] font-bold uppercase tracking-widest text-stone-500">
+        {compact.name} &middot; specifications
+      </p>
+      <dl className="mt-2 divide-y divide-stone-200 text-[0.8125rem] sm:mt-3 sm:text-[0.9375rem]">
+        {rows.map(([term, value]) => (
+          <div key={term} className="flex justify-between gap-4 py-1 sm:py-1.5">
+            <dt className="text-stone-500">{term}</dt>
+            <dd className="text-right font-bold text-stone-900">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+};
+
+/**
  * Photos matching the ad's vehicle keyword move to the front; the rest keep
  * their order. Nothing is filtered out — every visitor can see every photo.
  */
@@ -85,7 +117,7 @@ export const HeroSection: React.FC = () => {
 
       {/* One short supporting line — values single-sourced from offers.ts. */}
       <p className="mt-3 text-[1rem] text-stone-600 sm:text-[1.0625rem]">
-        Stop lifting your dog into the {dki.vehicleInline}. The grit-grip deck gives
+        Stop lifting your dog into the {dki.vehicleInline}. The Paw-Grip deck gives
         paws real traction, and the {compact.rampWeightLb}&nbsp;lb ramp folds in half
         to {compact.foldedIn}&Prime; for the trunk.
       </p>
@@ -106,6 +138,9 @@ export const HeroSection: React.FC = () => {
                 style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
                 aria-hidden={idx !== activeIndex}
               >
+                {frame.kind === 'specs' ? (
+                  <SpecsCard />
+                ) : (
                 <img
                   src={frame.src}
                   alt={frame.alt}
@@ -118,6 +153,7 @@ export const HeroSection: React.FC = () => {
                   className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
                   style={frame.position ? { objectPosition: frame.position } : undefined}
                 />
+                )}
               </div>
             ))}
           </div>
@@ -150,15 +186,21 @@ export const HeroSection: React.FC = () => {
               }`}
               style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
             >
-              <img
-                src={frame.src}
-                alt=""
-                width={128}
-                height={128}
-                loading="lazy"
-                decoding="async"
-                className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-              />
+              {frame.kind === 'specs' ? (
+                <span className="flex h-full w-full items-center justify-center bg-stone-900 text-[10px] font-bold uppercase tracking-wider text-white">
+                  Specs
+                </span>
+              ) : (
+                <img
+                  src={frame.src}
+                  alt=""
+                  width={128}
+                  height={128}
+                  loading="lazy"
+                  decoding="async"
+                  className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+                />
+              )}
             </button>
           ))}
         </div>

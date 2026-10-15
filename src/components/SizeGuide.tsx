@@ -87,7 +87,7 @@ export const SizeGuide: React.FC = () => {
               Vehicle cargo height
             </label>
             <p className="mt-1 text-xs text-stone-500">
-              Ground to the bumper or cargo floor your dog steps onto.
+              Measure from ground to the bumper/cargo floor
             </p>
           </div>
           <div className="text-right">

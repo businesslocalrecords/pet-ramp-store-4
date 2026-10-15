@@ -18,6 +18,9 @@ import { PurchaseContext, type PurchaseContextValue } from './purchase-context';
 
 const BUMP_PRICE = ADDON_PRICES.tractionMat;
 
+/** Highest ramp quantity offered in the buy box's quantity picker. */
+const MAX_QUANTITY = 5;
+
 type Variant = ProductVariantEdge['node'];
 
 /**
@@ -41,6 +44,7 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
 
   const [selectedId, setSelectedId] = useState(DEFAULT_TIER_ID);
   const [rampSizeId, setRampSizeId] = useState(DEFAULT_RAMP_SIZE_ID);
+  const [quantity, setQuantityState] = useState(1);
   const [bumpEnabled, setBumpEnabled] = useState(false);
   const [tetherUpsell, setTetherUpsell] = useState(false);
 
@@ -95,9 +99,19 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
     return rampVariants.find((v) => matcher.test(v.title) && v.availableForSale) ?? null;
   }, [rampVariants, rampSize.id]);
 
-  /** Ramp line price for the selected bundle + size. */
-  const rampUnits = tier.id === 'three' ? 2 : 1;
-  const rampPrice = money(tier.price + rampSize.priceDelta * rampUnits);
+  /** Never offer more ramps than Shopify reports in stock. */
+  const maxQuantity = Math.max(1, Math.min(MAX_QUANTITY, stock ?? MAX_QUANTITY));
+  const setQuantity = useCallback(
+    (next: number) => setQuantityState(Math.min(maxQuantity, Math.max(1, Math.round(next)))),
+    [maxQuantity]
+  );
+  const safeQuantity = Math.min(quantity, maxQuantity);
+
+  /** Ramp line price for the selected bundle + size, times the quantity. */
+  const rampUnits = (tier.id === 'three' ? 2 : 1) * safeQuantity;
+  const rampPrice = money(
+    (tier.price + rampSize.priceDelta * (tier.id === 'three' ? 2 : 1)) * safeQuantity
+  );
 
   /**
    * Whether an exact available variant for the selected size has loaded.
@@ -242,6 +256,9 @@ export function PurchaseProvider({ children }: { children: ReactNode }) {
     setRampSize: setRampSizeId,
     rampPrice,
     rampVariant,
+    quantity: safeQuantity,
+    setQuantity,
+    maxQuantity,
     bumpEnabled,
     setBumpEnabled,
     bumpPrice: BUMP_PRICE,

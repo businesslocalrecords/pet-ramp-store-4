@@ -43,7 +43,7 @@ export interface DkiParams {
    * vehicle keyword and leads with the published Compact rating. The rating
    * number is single-sourced from RAMP_SIZES, never typed here.
    *   kw_vehicle=SUV -> "Foldable Dog Car Ramp for SUVs, Rated to 150 lb"
-   *   (absent/unknown) -> "Foldable Dog Car Ramp with a Grit-Grip Deck, Rated to 150 lb"
+   *   (absent/unknown) -> "Foldable Dog Car Ramp with a Paw-Grip Deck, Rated to 150 lb"
    *   (no vehicle is assumed, so sedan and truck owners are not told "SUVs")
    */
   headline: string;
@@ -181,7 +181,7 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
     vehicleFor: vehicleFor ?? 'Cars, SUVs & Trucks',
     headline: vehicleFor
       ? `Foldable Dog Car Ramp for ${vehicleFor}, Rated to ${compactRating} lb`
-      : `Foldable Dog Car Ramp with a Grit-Grip Deck, Rated to ${compactRating} lb`,
+      : `Foldable Dog Car Ramp with a Paw-Grip Deck, Rated to ${compactRating} lb`,
     locationPhrase: location ? `${location} Owners Love` : 'Owners Actually Love',
     locationInline: location ? `in ${location}` : 'in any vehicle',
     breedPhrase: breed ?? 'built for dogs of every size',

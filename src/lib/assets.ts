@@ -42,11 +42,12 @@ export const ASSETS = {
   /**
    * Owner-supplied photography for the hero gallery — the grit-deck set from
    * more-pics-for-site/ (1–8), installed under public/assets/product/grit/.
-   * This set REPLACES the smooth-deck revised/ set, which shows the wrong
-   * walking surface; revised/ stays on disk only for the Shopify image script.
+   * Three frames come from the earlier revised/ set by owner choice: the man
+   * carrying the folded ramp and the two white-background studio shots.
    *
-   * Order: dogs walking into vehicles first (the ad's promise), then the grit
-   * deck close-up, other vehicles, the fold, the spec sheet, the brand poster.
+   * Order: dogs walking into vehicles first (the ad's promise), then the
+   * Paw-Grip deck close-up, other vehicles, the fold, the spec sheet, the
+   * studio shots, the brand poster.
    *
    * The gallery frame is 5:3. Scene photos (1.5–1.84:1) fill it with a light
    * crop steered by `position`; `fit: 'contain'` frames are never cropped
@@ -75,7 +76,7 @@ export const ASSETS = {
       src: '/assets/product/grit/ramp-grit-deck-tailgate.jpg',
       alt:
         'Close view of the PawGrip Pro ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge',
-      label: 'Grit-grip deck',
+      label: 'Paw-Grip deck',
     },
     {
       src: '/assets/product/grit/ramp-boxer-hatchback.jpg',
@@ -92,26 +93,45 @@ export const ASSETS = {
       vehicles: ['truck', 'pickup'],
     },
     {
-      src: '/assets/product/grit/ramp-folded-sedan.jpg',
+      src: '/assets/product/revised/ramp-scene-carrying-folded.jpg',
       alt:
-        'The PawGrip Pro ramp folded in half on the ground beside a blue sedan with open doors and a dog in the back seat',
+        'A man carrying the folded PawGrip Pro ramp beside a white SUV while a white dog waits in the cargo area',
       label: 'Folds in half',
-      vehicles: ['car'],
-      position: 'center 70%',
+      position: 'center 25%',
+    },
+    {
+      src: '',
+      kind: 'specs',
+      alt: 'Specifications of the Paw-Grip Pro ramp',
+      label: 'Specs',
     },
     {
       src: '/assets/product/grit/ramp-grit-spec-sheet.jpg',
       alt:
-        'Specification sheet: 62 by 16 by 4 inches open, 31 by 16 by 8 inches folded, 150 lb weight capacity, 10 lb ramp weight, grit walking surface',
-      label: 'Specs',
+        'Specification sheet with close-ups of the fold, the carry handle and the grit walking surface under a hand and a paw',
+      label: 'Close-ups',
       fit: 'contain',
       bg: '#e9e7e3',
+    },
+    {
+      src: '/assets/product/revised/ramp-studio-three-quarter.jpg',
+      alt:
+        'Studio view of the PawGrip Pro foldable dog car ramp at a three-quarter angle on a white background, marked 62 inches long and 16 inches wide',
+      label: '62″ long · 16″ wide',
+      fit: 'contain',
+    },
+    {
+      src: '/assets/product/revised/ramp-folded-studio.jpg',
+      alt:
+        'Studio view of the PawGrip Pro foldable dog car ramp folded in half on a white background',
+      label: 'Folded · 31″',
+      fit: 'contain',
     },
     {
       src: '/assets/product/grit/pawgrip-pro-poster.jpg',
       alt:
         'PawGrip Pro premium ramp poster: a golden retriever puppy walking down the ramp from a home pet door',
-      label: 'PawGrip Pro',
+      label: 'Paw-Grip Pro',
       fit: 'contain',
       bg: '#ebe5dc',
     },
@@ -119,7 +139,10 @@ export const ASSETS = {
 } as const;
 
 export interface HeroPhoto {
+  /** Empty for the `specs` frame, which renders text instead of an image. */
   src: string;
+  /** 'specs' renders a readable spec card built from offers.ts. */
+  kind?: 'photo' | 'specs';
   alt: string;
   label: string;
   fit?: 'cover' | 'contain';

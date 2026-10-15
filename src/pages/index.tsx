@@ -4,6 +4,8 @@ import { AnnouncementBar } from '../components/AnnouncementBar';
 import { StickyHeader } from '../components/StickyHeader';
 import { HeroSection } from '../components/HeroSection';
 import { BuyBox } from '../components/BuyBox';
+import { QuickAnswers } from '../components/QuickAnswers';
+import { AboutItem } from '../components/AboutItem';
 import { Benefits } from '../components/Benefits';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { SizeGuide } from '../components/SizeGuide';
@@ -107,6 +109,13 @@ const Page: React.FC = () => {
             <HeroSection />
           </div>
 
+          {/* ---------------- ABOUT THIS ITEM (mobile 3 | desktop 1) ----------------
+              Retail product-detail panels: right after the buy area on
+              mobile, under the gallery on desktop. */}
+          <div className="order-3 lg:col-span-7 lg:order-1">
+            <AboutItem />
+          </div>
+
           {/* ---------------- SIZE FINDER (mobile 4 | desktop 6) ----------------
               Moved below the product block; the buy box links here ("Not
               sure? Check fit"). */}
@@ -116,8 +125,10 @@ const Page: React.FC = () => {
 
           {/* ---------------- RIGHT: sticky buy column (mobile 2) ----------------
               Price + button now sit right under the hero on mobile, before the
-              size finder and the long editorial sections. */}
-          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-span-full">
+              size finder and the long editorial sections. On desktop it spans
+              the left column's rows (row-span-full only covers explicit rows,
+              of which there are none) so the left sections stack beside it. */}
+          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-9">
             <div
               id="offer"
               ref={offerRef}
@@ -130,6 +141,11 @@ const Page: React.FC = () => {
               <p className="mt-4 text-center text-xs text-stone-500">
                 Free insured shipping &middot; {GUARANTEE_LABEL} &middot; {WARRANTY_PRODUCT_LABEL}
               </p>
+
+              {/* Top three buyer objections — their own card, under the box */}
+              <div className="mx-auto mt-4 max-w-lg">
+                <QuickAnswers />
+              </div>
             </div>
           </aside>
 

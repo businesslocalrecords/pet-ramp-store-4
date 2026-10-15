@@ -4,10 +4,11 @@ import { FEATURED_FAQS } from '../lib/faqs';
 import { trackFaqOpen } from '../lib/analytics';
 
 /**
- * Quick answers under the checkout button — the FAQs flagged with a `short`
- * answer in lib/faqs.ts, so the wording has one source.
+ * Quick answers — a small card directly under the checkout box. Shows the
+ * FAQs flagged with a `short` answer in lib/faqs.ts, so the wording has one
+ * source.
  *
- * Opens and closes instantly, with no height animation: this sits inside the
+ * Opens and closes instantly, with no height animation: this sits in the
  * sticky buy column, where an animating height makes the column re-pin every
  * frame and visibly jitter. One answer is open at a time; state lives only
  * in React (no <details>, whose native toggle fights a controlled `open`).
@@ -21,7 +22,7 @@ export const QuickAnswers: React.FC = () => {
   };
 
   return (
-    <div className="mt-4 divide-y divide-gray-200 border-y border-gray-200 [overflow-anchor:none]">
+    <div className="divide-y divide-gray-200 rounded-md border border-gray-300 bg-white px-5 [overflow-anchor:none]">
       {FEATURED_FAQS.map((faq, idx) => {
         const isOpen = openIndex === idx;
         const panelId = `quick-answer-${idx}`;

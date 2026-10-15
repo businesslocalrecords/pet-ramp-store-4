@@ -10,7 +10,6 @@ import {
 } from '../lib/offers';
 import { GUARANTEE_LABEL, RETURN_WINDOW_LABEL, POLICY } from '../lib/policy';
 import { OrderBump } from './OrderBump';
-import { QuickAnswers } from './QuickAnswers';
 import { TetherUpsell } from './TetherUpsell';
 import { FlatBuyButton } from './FlatBuyButton';
 
@@ -49,6 +48,9 @@ export const BuyBox: React.FC = () => {
     rampSize,
     setRampSize,
     rampVariants,
+    quantity,
+    setQuantity,
+    maxQuantity,
     bumpEnabled,
     setBumpEnabled,
     bumpPrice,
@@ -75,7 +77,7 @@ export const BuyBox: React.FC = () => {
   const saveAmount = money(tier.compareAt - tier.price);
 
   const bullets = [
-    `Rated to ${compact.weightCapacityLb} lb, with a grit-grip deck and raised side rails`,
+    `Rated to ${compact.weightCapacityLb} lb, with a Paw-Grip deck and raised side rails`,
     `${compact.rampWeightLb} lb, folds in half to ${compact.foldedIn}\u2033 and latches shut for the trunk`,
     `${GUARANTEE_LABEL} — a full refund if your dog won't use it`,
   ];
@@ -228,6 +230,28 @@ export const BuyBox: React.FC = () => {
             )}
           </fieldset>
 
+          {/* Quantity (ramps only; add-ons stay at one each) */}
+          <div className="flex items-center gap-3">
+            <label
+              htmlFor="ramp-quantity"
+              className="text-xs font-bold uppercase tracking-wide text-gray-500"
+            >
+              Quantity
+            </label>
+            <select
+              id="ramp-quantity"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              className="min-h-11 rounded-md border border-gray-300 bg-white px-3 text-sm font-bold text-gray-900"
+            >
+              {Array.from({ length: maxQuantity }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Real checkout button */}
           <FlatBuyButton
             price={total}
@@ -275,9 +299,6 @@ export const BuyBox: React.FC = () => {
             Secure checkout &middot; {POLICY.freeShipping ? 'Free insured shipping' : 'Shipping at checkout'} &middot;{' '}
             {RETURN_WINDOW_LABEL} returns
           </p>
-
-          {/* Top three buyer objections, answered right under the button */}
-          <QuickAnswers />
         </div>
       )}
     </div>
