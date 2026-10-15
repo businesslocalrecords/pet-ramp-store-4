@@ -1,69 +1,79 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { readDkiParams } from '../lib/dki';
-import { ASSETS } from '../lib/assets';
+import { ASSETS, type HeroPhoto } from '../lib/assets';
 import { RAMP_SIZES } from '../lib/offers';
-
-interface GalleryFrame {
-  src: string;
-  alt: string;
-  label: string;
-  /** 'contain' shows the whole image (no crop) — see ASSETS.heroPhotos. */
-  fit?: 'cover' | 'contain';
-}
 
 /**
  * Fallback gallery frames — the original SVG renderings from
  * public/assets/product/ (white background — Merchant Center friendly).
- * Used only when ASSETS.heroPhotos is empty; it currently carries the
- * owner's revised six-photo set. Provenance per frame is recorded in
- * claims.md.
+ * Used only when ASSETS.heroPhotos is empty. Provenance per frame is
+ * recorded in claims.md.
  */
-const FALLBACK_FRAMES: GalleryFrame[] = [
+const FALLBACK_FRAMES: HeroPhoto[] = [
   {
     src: ASSETS.product.standard,
     alt: 'Compact 62-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
     label: 'Compact \u00b7 62\u2033',
+    fit: 'contain',
   },
   {
     src: ASSETS.product.extended,
     alt: 'Extended 70-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
     label: 'Extended \u00b7 70\u2033',
+    fit: 'contain',
   },
 ];
 
 /**
- * Hero "product block" top — CPC-conversion prototype (informed by
- * elements.html). Changes from the editorial V3 hero:
+ * Photos matching the ad's vehicle keyword move to the front; the rest keep
+ * their order. Nothing is filtered out — every visitor can see every photo.
+ */
+function orderForVehicle(frames: readonly HeroPhoto[], vehicleKey: string | null): HeroPhoto[] {
+  if (!vehicleKey) return [...frames];
+  const matches = frames.filter((f) => f.vehicles?.includes(vehicleKey));
+  return [...matches, ...frames.filter((f) => !matches.includes(f))];
+}
+
+/**
+ * Hero "product block" top — CPC-conversion layout:
  *
- *  - The blog byline ("By the PawGrip Pro team · Last updated: …") is gone.
- *    It pushed the headline down and meant nothing to a paid buyer.
- *  - The headline is now the keyword-matched product title the ad was
- *    clicked on (lib/dki.ts — whitelisted values only, never raw URL input)
- *    and leads with the published Compact rating.
- *  - The four-line paragraph is replaced by ONE short supporting line.
- *  - The in-image assurance strip was removed: it repeated the trust claims
- *    already carried once by the announcement bar at the top of the page.
+ *  - The headline is the keyword-matched product title the ad was clicked on
+ *    (lib/dki.ts — whitelisted values only, never raw URL input).
+ *  - ONE supporting line: the pain solved (lifting), the differentiator
+ *    (grit deck) and the fold. Specs beyond that live in the buy box.
+ *  - Gallery: a 5:3 swipeable strip. Phones swipe; thumbnails jump. The
+ *    label sits under the photo so it never covers baked-in text.
  *
- * Order on mobile is headline -> photo -> (price/button in BuyBox), so the
- * buy box sits as high as possible above the fold.
+ * Nothing else lives here: on mobile the buy box follows directly, so every
+ * line added to the hero pushes "Proceed to Checkout" further down.
  */
 export const HeroSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   // Read once on mount. This is a client-only SPA, so there is no hydration
   // mismatch to guard against.
   const [dki] = useState(() => readDkiParams());
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const compact = RAMP_SIZES[0];
 
-  const ownerFrames: GalleryFrame[] = ASSETS.heroPhotos.map((photo) => ({
-    src: photo.src,
-    alt: photo.alt,
-    label: photo.label,
-    fit: photo.fit,
-  }));
-  const frames: GalleryFrame[] =
-    ownerFrames.length > 0 ? ownerFrames : FALLBACK_FRAMES;
+  const frames = orderForVehicle(
+    ASSETS.heroPhotos.length > 0 ? ASSETS.heroPhotos : FALLBACK_FRAMES,
+    dki.vehicleKey
+  );
   const active = frames[Math.min(activeIndex, frames.length - 1)];
+
+  const onTrackScroll = () => {
+    const el = trackRef.current;
+    if (!el || el.clientWidth === 0) return;
+    const idx = Math.round(el.scrollLeft / el.clientWidth);
+    if (idx !== activeIndex) setActiveIndex(idx);
+  };
+
+  const goTo = (idx: number) => {
+    const el = trackRef.current;
+    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'smooth' });
+    setActiveIndex(idx);
+  };
 
   return (
     <section id="hero" className="scroll-mt-24">
@@ -75,62 +85,79 @@ export const HeroSection: React.FC = () => {
 
       {/* One short supporting line — values single-sourced from offers.ts. */}
       <p className="mt-3 text-[1rem] text-stone-600 sm:text-[1.0625rem]">
-        Telescopes open in seconds and folds to {compact.foldedIn}&Prime; &mdash; walk
-        your dog up instead of lifting.{' '}
-        {dki.breedPhrase.charAt(0).toUpperCase() + dki.breedPhrase.slice(1)}.
+        Stop lifting your dog into the {dki.vehicleInline}. The grit-grip deck gives
+        paws real traction, and the {compact.rampWeightLb}&nbsp;lb ramp folds in half
+        to {compact.foldedIn}&Prime; for the trunk.
       </p>
 
       {/* Gallery */}
       <div className="mt-3 sm:mt-4">
-        {/* Main frame */}
         <div className="relative overflow-hidden rounded-xl bg-white ring-1 ring-stone-900/10 sm:rounded-2xl">
-          <div className="aspect-[3/2] sm:aspect-[4/3]">
-            <img
-              key={active.src}
-              src={active.src}
-              alt={active.alt}
-              width={1200}
-              height={800}
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-              className={`h-full w-full bg-white ${
-                active.fit === 'contain' ? 'object-contain' : 'object-cover'
-              }`}
-            />
+          <div
+            ref={trackRef}
+            onScroll={onTrackScroll}
+            className="hide-scrollbar flex snap-x snap-mandatory overflow-x-auto"
+            aria-live="polite"
+          >
+            {frames.map((frame, idx) => (
+              <div
+                key={frame.src}
+                className="aspect-[5/3] w-full shrink-0 snap-center"
+                style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
+                aria-hidden={idx !== activeIndex}
+              >
+                <img
+                  src={frame.src}
+                  alt={frame.alt}
+                  width={1000}
+                  height={600}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={idx === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                  draggable={false}
+                  className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+                  style={frame.position ? { objectPosition: frame.position } : undefined}
+                />
+              </div>
+            ))}
           </div>
+        </div>
 
-          {/* Frame label */}
-          <span className="absolute left-3 top-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-stone-700 ring-1 ring-stone-900/10 sm:left-4 sm:top-4">
-            {active.label}
+        {/* Caption + position — tells phone visitors there is more to swipe */}
+        <div className="mt-1.5 flex items-center justify-between px-0.5 text-[11px] font-bold uppercase tracking-wider text-stone-500">
+          <span>{active.label}</span>
+          <span className="tabular-nums font-medium normal-case tracking-normal">
+            {activeIndex + 1} / {frames.length}
           </span>
         </div>
 
         {/* Thumbnails */}
         <div
-          className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto pb-1 sm:mt-3 sm:gap-3"
+          className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto pb-1"
           role="tablist"
           aria-label="Product images"
         >
           {frames.map((frame, idx) => (
             <button
-              key={frame.src + idx}
+              key={frame.src}
+              type="button"
               role="tab"
               aria-selected={idx === activeIndex}
               aria-label={frame.alt}
-              onClick={() => setActiveIndex(idx)}
-              className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 transition-all duration-200 sm:h-20 sm:w-20 sm:rounded-xl ${
+              onClick={() => goTo(idx)}
+              className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 transition-shadow duration-200 sm:h-14 sm:w-14 sm:rounded-xl ${
                 idx === activeIndex ? 'ring-2 ring-blue-600' : 'ring-stone-900/10 hover:ring-stone-900/20'
               }`}
+              style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
             >
               <img
                 src={frame.src}
                 alt=""
-                width={160}
-                height={160}
+                width={128}
+                height={128}
                 loading="lazy"
                 decoding="async"
-                className="h-full w-full bg-white object-cover"
+                className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
               />
             </button>
           ))}

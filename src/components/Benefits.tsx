@@ -39,7 +39,7 @@ const benefits: Benefit[] = [
   {
     icon: Feather,
     title: 'One-hand carry',
-    body: `The Compact weighs ${compact.rampWeightLb} lb, telescopes open in seconds and folds to ${compact.foldedIn}\u2033 \u2014 small enough to store behind a seat.`,
+    body: `The Compact weighs ${compact.rampWeightLb} lb, folds in half to ${compact.foldedIn}\u2033 and latches shut \u2014 small enough to store behind a seat.`,
   },
 ];
 

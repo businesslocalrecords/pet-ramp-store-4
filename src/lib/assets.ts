@@ -40,60 +40,103 @@ export const ASSETS = {
     secureCheckout: '/assets/badges/secure-checkout.svg',
   },
   /**
-   * Owner-supplied photography for the hero gallery — the revised set in
-   * public/assets/product/revised/ (converted .jfif → .jpg). Ordered as a
-   * narrative: the dog walking up the ramp, the ramp deployed at the tailgate,
-   * the product itself, folded and carried, then the spec sheet. Provenance
-   * per file is recorded in claims.md.
+   * Owner-supplied photography for the hero gallery — the grit-deck set from
+   * more-pics-for-site/ (1–8), installed under public/assets/product/grit/.
+   * This set REPLACES the smooth-deck revised/ set, which shows the wrong
+   * walking surface; revised/ stays on disk only for the Shopify image script.
    *
-   * `fit: 'contain'` shows the whole image with no cropping — used by the two
-   * white-background studio shots (the fixed 3:2 frame would otherwise slice
-   * ~28% off their top and bottom — they are 1024×955) and by the spec
-   * collage, whose baked-in text runs to the frame edge. Their backgrounds
-   * match the white frame, so contain shows no letterbox bars. The scene
-   * photos keep the default fill-crop. Every other frame crops to fill.
+   * Order: dogs walking into vehicles first (the ad's promise), then the grit
+   * deck close-up, other vehicles, the fold, the spec sheet, the brand poster.
+   *
+   * The gallery frame is 5:3. Scene photos (1.5–1.84:1) fill it with a light
+   * crop steered by `position`; `fit: 'contain'` frames are never cropped
+   * (spec sheet text, portrait poster) and letterbox onto `bg`, sampled from
+   * the photo's own edge so the bands read as part of the image.
+   *
+   * `vehicles` lists the whitelisted kw_vehicle keys (lib/dki.ts) a photo
+   * matches; a matching photo is moved to the front, nothing is hidden.
    */
   heroPhotos: [
     {
-      src: '/assets/product/revised/ramp-scene-dog-walking-up.jpg',
+      src: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
       alt:
-        'A man guiding a large white dog as it walks up the PawGrip Pro foldable dog ramp into the cargo area of a white SUV',
-      label: 'Effortless Walk',
+        'A German Shepherd walking up the PawGrip Pro grit-deck ramp into the cargo area of a blue SUV while its owner encourages it',
+      label: 'Walks right in',
+      vehicles: ['suv', 'jeep', '4x4', '4wd'],
     },
     {
-      src: '/assets/product/revised/ramp-scene-deployed-tailgate.jpg',
+      src: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
       alt:
-        'The PawGrip Pro foldable dog ramp deployed from the tailgate of a white SUV with a dog waiting in the cargo area',
-      label: 'Sturdy Grip',
+        'A large white dog walking up the PawGrip Pro grit-deck ramp into a white SUV, guided by its owner',
+      label: 'No more lifting',
+      vehicles: ['suv'],
     },
     {
-      src: '/assets/product/revised/ramp-studio-three-quarter.jpg',
+      src: '/assets/product/grit/ramp-grit-deck-tailgate.jpg',
       alt:
-        'Studio view of the PawGrip Pro foldable dog car ramp at a three-quarter angle on a white background',
-      label: 'Quality Build',
-      fit: 'contain',
+        'Close view of the PawGrip Pro ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge',
+      label: 'Grit-grip deck',
     },
     {
-      src: '/assets/product/revised/ramp-folded-studio.jpg',
+      src: '/assets/product/grit/ramp-boxer-hatchback.jpg',
       alt:
-        'Top-down studio view of the PawGrip Pro foldable dog car ramp folded in half on a white background',
-      label: 'Compact Fold',
-      fit: 'contain',
+        'A brindle Boxer stepping onto the PawGrip Pro ramp at the hatch of a blue hatchback while its owner watches',
+      label: 'Hatchbacks too',
+      vehicles: ['car'],
     },
     {
-      src: '/assets/product/revised/ramp-scene-carrying-folded.jpg',
+      src: '/assets/product/grit/ramp-pickup-truck-rear-door.jpg',
       alt:
-        'A man carrying the folded PawGrip Pro ramp beside a white SUV while a dog waits in the cargo area',
-      label: 'easy to store',
+        'The PawGrip Pro ramp set up at the open rear door of a brown pickup truck cab',
+      label: 'Pickup cabs',
+      vehicles: ['truck', 'pickup'],
     },
     {
-      src: '/assets/product/revised/ramp-spec-collage.jpg',
+      src: '/assets/product/grit/ramp-folded-sedan.jpg',
       alt:
-        'Specifications collage for the A-frame folding ramp: 62 inches unfolded, 31 inches folded, 150 lb weight capacity, 10 lb ramp weight, and a textured polymer grip deck',
+        'The PawGrip Pro ramp folded in half on the ground beside a blue sedan with open doors and a dog in the back seat',
+      label: 'Folds in half',
+      vehicles: ['car'],
+      position: 'center 70%',
+    },
+    {
+      src: '/assets/product/grit/ramp-grit-spec-sheet.jpg',
+      alt:
+        'Specification sheet: 62 by 16 by 4 inches open, 31 by 16 by 8 inches folded, 150 lb weight capacity, 10 lb ramp weight, grit walking surface',
       label: 'Specs',
       fit: 'contain',
+      bg: '#e9e7e3',
     },
-  ] as readonly { src: string; alt: string; label: string; fit?: 'cover' | 'contain' }[],
+    {
+      src: '/assets/product/grit/pawgrip-pro-poster.jpg',
+      alt:
+        'PawGrip Pro premium ramp poster: a golden retriever puppy walking down the ramp from a home pet door',
+      label: 'PawGrip Pro',
+      fit: 'contain',
+      bg: '#ebe5dc',
+    },
+  ] as readonly HeroPhoto[],
+} as const;
+
+export interface HeroPhoto {
+  src: string;
+  alt: string;
+  label: string;
+  fit?: 'cover' | 'contain';
+  /** CSS object-position for cover frames (default center). */
+  position?: string;
+  /** Letterbox colour for contain frames. */
+  bg?: string;
+  /** kw_vehicle keys this photo matches — moved to the front for that ad. */
+  vehicles?: readonly string[];
+}
+
+/** The owner's brand poster, also shown full-size in its own section. */
+export const BRAND_POSTER = {
+  src: '/assets/product/grit/pawgrip-pro-poster.jpg',
+  alt: 'PawGrip Pro premium ramp system: a golden retriever puppy walking down the ramp from a home pet door',
+  width: 768,
+  height: 1024,
 } as const;
 
 /* --------------------------------------------------------------------------

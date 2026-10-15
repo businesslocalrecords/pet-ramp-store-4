@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Lock } from 'lucide-react';
 import { usePurchase } from '../lib/purchase-context';
 import {
@@ -9,8 +9,8 @@ import {
   RAMP_VARIANT_MATCHERS,
 } from '../lib/offers';
 import { GUARANTEE_LABEL, RETURN_WINDOW_LABEL, POLICY } from '../lib/policy';
-import { readDkiParams } from '../lib/dki';
 import { OrderBump } from './OrderBump';
+import { QuickAnswers } from './QuickAnswers';
 import { TetherUpsell } from './TetherUpsell';
 import { FlatBuyButton } from './FlatBuyButton';
 
@@ -68,8 +68,6 @@ export const BuyBox: React.FC = () => {
     buy,
   } = usePurchase();
 
-  const [dki] = useState(() => readDkiParams());
-
   const compact = RAMP_SIZES[0];
   const extended = RAMP_SIZES[1];
   // The single-ramp saving is exactly the strikethrough gap — honest and
@@ -77,8 +75,8 @@ export const BuyBox: React.FC = () => {
   const saveAmount = money(tier.compareAt - tier.price);
 
   const bullets = [
-    `Rated to ${compact.weightCapacityLb} lb, with side rails and a high-traction deck`,
-    `${compact.rampWeightLb} lb, telescopes open in seconds and folds to ${compact.foldedIn}\u2033`,
+    `Rated to ${compact.weightCapacityLb} lb, with a grit-grip deck and raised side rails`,
+    `${compact.rampWeightLb} lb, folds in half to ${compact.foldedIn}\u2033 and latches shut for the trunk`,
     `${GUARANTEE_LABEL} — a full refund if your dog won't use it`,
   ];
 
@@ -100,11 +98,7 @@ export const BuyBox: React.FC = () => {
 
   return (
     <div>
-      {/* Keyword-matched title (echoes the ad) — the block's item heading. */}
-      <p className="text-[11px] font-bold uppercase tracking-wide text-stone-500">
-        {dki.vehiclePhrase}
-      </p>
-      <h2 className="mt-0.5 text-lg font-bold leading-tight text-gray-900">
+      <h2 className="text-lg font-bold leading-tight text-gray-900">
         {PRODUCT_NAMES.ramp}
       </h2>
 
@@ -281,6 +275,9 @@ export const BuyBox: React.FC = () => {
             Secure checkout &middot; {POLICY.freeShipping ? 'Free insured shipping' : 'Shipping at checkout'} &middot;{' '}
             {RETURN_WINDOW_LABEL} returns
           </p>
+
+          {/* Top three buyer objections, answered right under the button */}
+          <QuickAnswers />
         </div>
       )}
     </div>

@@ -43,10 +43,11 @@ export interface DkiParams {
    * vehicle keyword and leads with the published Compact rating. The rating
    * number is single-sourced from RAMP_SIZES, never typed here.
    *   kw_vehicle=SUV -> "Foldable Dog Car Ramp for SUVs, Rated to 150 lb"
-   *   (absent/unknown) -> "Foldable Dog Car Ramp for SUVs, Rated to 150 lb"
+   *   (absent/unknown) -> "Foldable Dog Car Ramp with a Grit-Grip Deck, Rated to 150 lb"
+   *   (no vehicle is assumed, so sedan and truck owners are not told "SUVs")
    */
   headline: string;
-  /** The plural vehicle noun for the headline, e.g. "SUVs", "Trucks". */
+  /** The plural vehicle noun, e.g. "SUVs", "Trucks"; "Cars, SUVs & Trucks" when absent. */
   vehicleFor: string;
   /**
    * Second headline line.
@@ -68,6 +69,8 @@ export interface DkiParams {
   breedPhrase: string;
   /** Vehicle noun for mid-sentence use, e.g. "SUV" or "car or SUV". */
   vehicleInline: string;
+  /** Matched whitelist key for kw_vehicle (e.g. "suv"), or null. */
+  vehicleKey: string | null;
   /** True when at least one campaign param produced a personalized phrase. */
   isPersonalized: boolean;
 }
@@ -159,7 +162,8 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
   const params = new URLSearchParams(search);
 
   const vehicle = lookup(VEHICLE_KEYWORDS, params.get('kw_vehicle'));
-  const vehicleFor = lookup(VEHICLE_FOR, params.get('kw_vehicle')) ?? 'SUVs';
+  const vehicleFor = lookup(VEHICLE_FOR, params.get('kw_vehicle'));
+  const vehicleKey = vehicle ? normalize(params.get('kw_vehicle')) : null;
   const breed = lookup(BREED_KEYWORDS, params.get('kw_breed'));
 
   // Location matches the state list case-insensitively, preserving the
@@ -174,12 +178,15 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
 
   return {
     vehiclePhrase: vehicle ? vehicle.phrase : 'Dog Car Ramp',
-    vehicleFor,
-    headline: `Foldable Dog Car Ramp for ${vehicleFor}, Rated to ${compactRating} lb`,
+    vehicleFor: vehicleFor ?? 'Cars, SUVs & Trucks',
+    headline: vehicleFor
+      ? `Foldable Dog Car Ramp for ${vehicleFor}, Rated to ${compactRating} lb`
+      : `Foldable Dog Car Ramp with a Grit-Grip Deck, Rated to ${compactRating} lb`,
     locationPhrase: location ? `${location} Owners Love` : 'Owners Actually Love',
     locationInline: location ? `in ${location}` : 'in any vehicle',
     breedPhrase: breed ?? 'built for dogs of every size',
     vehicleInline: vehicle ? vehicle.inline : 'car or SUV',
+    vehicleKey,
     isPersonalized: Boolean(vehicle || location || breed),
   };
 }

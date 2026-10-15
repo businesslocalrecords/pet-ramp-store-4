@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { AnnouncementBar } from '../components/AnnouncementBar';
 import { StickyHeader } from '../components/StickyHeader';
@@ -13,7 +13,7 @@ import { Footer } from '../components/Footer';
 import { StickyMobileBuyBar } from '../components/StickyMobileBuyBar';
 import { FounderNote } from '../components/FounderNote';
 import { PurchaseProvider } from '../lib/purchase-provider';
-import { GATES } from '../lib/assets';
+import { BRAND_POSTER, GATES } from '../lib/assets';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL } from '../lib/policy';
 
 /* --------------------------------------------------------------------------
@@ -39,6 +39,35 @@ const SectionFallback: React.FC<{ label: string }> = ({ label }) => (
   </div>
 );
 
+/** Space kept clear above the pinned buy column (lg:top-24 = 6rem). */
+const STICKY_TOP_PX = 96;
+
+/**
+ * The desktop buy column pins only while it fits in the viewport. A sticky
+ * box taller than the screen hides its own bottom (the quick answers) and
+ * re-pins on every height change, which reads as jitter.
+ */
+function useFitsViewport<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+  const [fits, setFits] = useState(true);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setFits(el.offsetHeight + STICKY_TOP_PX + 16 <= window.innerHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    window.addEventListener('resize', measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  return [ref, fits] as const;
+}
+
 /**
  * Single-product landing page — 12-column split-screen layout.
  *
@@ -58,6 +87,8 @@ const SectionFallback: React.FC<{ label: string }> = ({ label }) => (
  * the full page.
  */
 const Page: React.FC = () => {
+  const [offerRef, offerFits] = useFitsViewport<HTMLDivElement>();
+
   return (
     <div className="min-h-screen bg-white text-stone-900 antialiased selection:bg-blue-200 selection:text-stone-900">
       {/* Glass header — pinned to the top, always visible, follows the scroll */}
@@ -89,7 +120,8 @@ const Page: React.FC = () => {
           <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-span-full">
             <div
               id="offer"
-              className="lg:sticky lg:top-24"
+              ref={offerRef}
+              className={offerFits ? 'lg:sticky lg:top-24' : undefined}
             >
               <div className="mx-auto max-w-lg rounded-md border border-gray-300 bg-white p-6 shadow-sm">
                 <BuyBox />
@@ -105,6 +137,21 @@ const Page: React.FC = () => {
           <div className="order-4 lg:col-span-7 lg:order-4">
             <Benefits />
           </div>
+
+          {/* ---------------- BRAND POSTER (after benefits) ----------------
+              Shown whole at its native portrait shape; the hero gallery's
+              5:3 frame can only show it small. */}
+          <figure className="order-4 lg:col-span-7 lg:order-4">
+            <img
+              src={BRAND_POSTER.src}
+              alt={BRAND_POSTER.alt}
+              width={BRAND_POSTER.width}
+              height={BRAND_POSTER.height}
+              loading="lazy"
+              decoding="async"
+              className="mx-auto w-full max-w-md rounded-2xl ring-1 ring-stone-900/10"
+            />
+          </figure>
 
           {/* ---------------- HEAD TO HEAD (mobile 5 | desktop 5) ---------------- */}
           <div className="order-5 lg:col-span-7 lg:order-5">

@@ -436,7 +436,7 @@ const CATALOG = [
       { option: 'Extended (70")', price: 119.99, compareAt: 179.99, sku: 'PGR-RAMP-EXT', inventory: 25 },
     ],
     excerpt:
-      'A 150 lb-rated, 10 lb-light telescoping ramp with PawGrip\u2122 Anti-Slip Tread and high side rails. Extended configuration rated to 250 lb.',
+      'A 150 lb-rated, 10 lb-light bi-fold ramp with PawGrip\u2122 Anti-Slip Tread and high side rails. Extended configuration rated to 250 lb.',
     description: `
 <h2>Don't Wait Until They Can't Jump Anymore</h2>
 <p>Every time your dog launches out of an SUV, the landing loads their front
