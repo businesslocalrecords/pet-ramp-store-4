@@ -12,13 +12,13 @@ import { RAMP_SIZES } from '../lib/offers';
 const FALLBACK_FRAMES: HeroPhoto[] = [
   {
     src: ASSETS.product.standard,
-    alt: 'Compact 62-inch configuration of the Paw-Grip foldable dog car ramp, side view',
+    alt: 'Compact 62-inch configuration of the Paw Grip foldable dog car ramp, side view',
     label: 'Compact \u00b7 62\u2033',
     fit: 'contain',
   },
   {
     src: ASSETS.product.extended,
-    alt: 'Extended 70-inch configuration of the Paw-Grip foldable dog car ramp, side view',
+    alt: 'Extended 70-inch configuration of the Paw Grip foldable dog car ramp, side view',
     label: 'Extended \u00b7 70\u2033',
     fit: 'contain',
   },
@@ -36,7 +36,7 @@ const SpecsCard: React.FC = () => {
     ['Folded', `${compact.foldedIn}\u2033 L \u00d7 ${compact.widthIn}\u2033 W`],
     ['Weight capacity', `${compact.weightCapacityLb} lb`],
     ['Ramp weight', `${compact.rampWeightLb} lb`],
-    ['Deck', 'Paw-Grip grit surface, raised side rails'],
+    ['Deck', 'Paw Grip grit surface, raised side rails'],
     ['Storage', 'Folds in half, safety latch'],
   ];
   return (

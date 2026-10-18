@@ -111,7 +111,7 @@ export const CatalogProductPage: React.FC = () => {
         </div>
 
         <div className="lg:sticky lg:top-28">
-          <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Paw-Grip</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Paw Grip</p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{product.name}</h1>
           <div className="mt-3">
             <Stars value={product.rating} count={product.ratingCount} />

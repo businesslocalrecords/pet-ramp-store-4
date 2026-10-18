@@ -44,13 +44,9 @@ export const HomePage: React.FC = () => {
         >
           <img
             src="/assets/product/grit/ramp-boxer-hatchback.jpg"
-            alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
-            className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-16rem))] lg:w-auto"
+            alt="A brindle Boxer stepping onto the Paw Grip ramp at the hatch of a blue hatchback while its owner watches"
+            className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
           />
-          <span className="mt-3 block text-sm leading-snug">
-            <span className="font-bold text-[#14202B]">Foldable dog car ramp.</span>{' '}
-            <span className="text-[#5C6B73]">A Boxer takes the grit deck into a hatchback. This photo opens that ramp.</span>
-          </span>
         </Link>
         <div className="order-1 lg:order-2">
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>

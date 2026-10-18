@@ -17,7 +17,7 @@ export interface CatalogProduct {
   /** Shopify handle. Matches scripts/shopify-seed.mjs. */
   shopifyHandle: string;
   name: string;
-  /** Caption under the photograph. This is the Paw-Grip line, not a repaint of the file. */
+  /** Caption under the photograph. This is the Paw Grip line, not a repaint of the file. */
   caption: string;
   summary: string;
   price: number;
@@ -41,7 +41,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'foldable-dog-car-ramp',
     shopifyHandle: PRODUCT_HANDLES.heroRamp,
-    name: 'Paw-Grip Foldable Dog Car Ramp',
+    name: 'Paw Grip Foldable Dog Car Ramp',
     caption: 'The walk into the cargo area',
     summary: 'A bi-fold ramp with a grit deck and raised rails. Compact is rated to 150 lb and folds to 31″. Extended reaches 70″ and is rated to 250 lb.',
     price: TIERS[0].price,
@@ -49,7 +49,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 214,
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     imageHover: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
-    imageAlt: 'A German Shepherd walking up the Paw-Grip ramp into an SUV',
+    imageAlt: 'A German Shepherd walking up the Paw Grip ramp into an SUV',
     photos: [],
     use: 'car',
     kind: 'ramp',
@@ -64,7 +64,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'side-door-pet-steps',
     shopifyHandle: PRODUCT_HANDLES.sideDoorSteps,
-    name: 'Paw-Grip Side Door Pet Steps',
+    name: 'Paw Grip Side Door Pet Steps',
     caption: 'The climb into the back seat',
     summary: 'Steps that meet a side-door sill, with a platform at the top, so a dog walks into the back seat instead of being lifted over it.',
     price: 149.95,
@@ -92,7 +92,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'bed-ramp',
     shopifyHandle: PRODUCT_HANDLES.bedRamp,
-    name: 'Paw-Grip Bed Ramp',
+    name: 'Paw Grip Bed Ramp',
     caption: 'From the floor to the mattress',
     summary: 'A carpeted ramp that stays beside the bed, for a dog who has started hesitating before the jump up.',
     price: 129.95,
@@ -130,7 +130,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'extra-long-telescoping-dog-ramp',
     shopifyHandle: PRODUCT_HANDLES.extraLongRamp,
-    name: 'Paw-Grip Extra Long Telescoping Ramp',
+    name: 'Paw Grip Extra Long Telescoping Ramp',
     caption: 'When the truck bed is too high',
     summary: 'Slides out from 47″ to 87″, so a tall cargo floor gets a longer, gentler slope, then collapses for the garage.',
     price: 189,
@@ -153,7 +153,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'compact-telescoping-dog-ramp',
     shopifyHandle: PRODUCT_HANDLES.compactTelescoping,
-    name: 'Paw-Grip Compact Telescoping Ramp',
+    name: 'Paw Grip Compact Telescoping Ramp',
     caption: 'Length when you need it',
     summary: 'Three sections that open from 28″ to 70″. Long enough for the cargo floor, short enough to live in a smaller trunk.',
     price: 159.99,
@@ -176,7 +176,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'orthopedic-foam-bed-steps',
     shopifyHandle: PRODUCT_HANDLES.bedSteps,
-    name: 'Paw-Grip Foam Bed Steps',
+    name: 'Paw Grip Foam Bed Steps',
     caption: 'The short climb to the couch',
     summary: 'Foam steps you can carry from the couch to a low bed. Two sizes, rated to 80 lb, for the jump that happens all day inside the house.',
     price: 65,
@@ -209,7 +209,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'dog-hitch-step',
     shopifyHandle: PRODUCT_HANDLES.hitchStep,
-    name: 'Paw-Grip Hitch Step',
+    name: 'Paw Grip Hitch Step',
     caption: 'One step at the tailgate',
     summary: 'Mounts on the hitch and folds up for the drive. For the dog who plants a paw on a step more willingly than on a long ramp.',
     price: 89.95,
@@ -252,7 +252,7 @@ export const CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'folding-pet-steps',
     shopifyHandle: PRODUCT_HANDLES.foldingSteps,
-    name: 'Paw-Grip Folding Pet Steps',
+    name: 'Paw Grip Folding Pet Steps',
     caption: 'Up for the evening, flat by morning',
     summary: 'Folding steps for the couch or a low bed. They stand for the climb, then flatten when the room needs its floor back.',
     price: 74.95,

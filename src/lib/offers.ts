@@ -130,7 +130,7 @@ export function formatMoney(value: number): string {
    -------------------------------------------------------------------------- */
 
 export const PRODUCT_NAMES = {
-  ramp: 'Paw-Grip Foldable Dog Car Ramp',
+  ramp: 'Paw Grip Foldable Dog Car Ramp',
   mat: 'Heavy-Duty Traction Mat (2-Pack)',
   /** Renamed per owner decision; the Shopify handle is unchanged. */
   tether: 'Adjustable Car Safety Tether',

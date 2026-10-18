@@ -190,7 +190,11 @@ Uploaded to Shopify by `scripts/shopify-product-images.mjs`
 
 Homepage, catalog summaries, the car-ramp supporting line, About, the buyer's guide opening, the category lede, and the footer call to action were rewritten for a more specific voice. No new specification, rating, medical outcome, or customer-count claim was added. "A hard landing" describes the jump itself, not a diagnosis. Policy numbers still come from `policy.ts`.
 
-The homepage hero photo is a link to the foldable car ramp, with a caption that names the product in the picture.
+The homepage hero photo is a link to the foldable car ramp. The caption under that photo was removed; the link stays.
+
+## Brand spelling (October 2026)
+
+The storefront brand is **Paw Grip**, with a space. Product titles, the footer legal name, page titles, and alt text no longer use “Paw-Grip”. Shopify handles are unchanged. Older rows in this file still quote the hyphenated spelling because they record the wording at the time. Shopify checkout will keep the previous product titles until those titles are updated in Shopify. The seeder titles that used the hyphen now say Paw Grip. That seeder was not run.
 
 Four lifestyle frames (shepherd SUV, boxer hatchback, white dog, folded ramp at the hatch) were replaced with the owner's newer photographs, cover-cropped to the same 1400×1400 JPEG canvas, metadata stripped.
 

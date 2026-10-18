@@ -13,10 +13,10 @@ const prose = 'mx-auto max-w-3xl px-4 py-12 text-[#444] sm:px-6 [&_h1]:text-3xl 
 
 export const AboutPage: React.FC = () => (
   <main className={prose}>
-    <h1>About Paw-Grip</h1>
+    <h1>About Paw Grip</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
     <p>
-      Paw-Grip is the shop for the moment a dog stops making the jump: into the cargo area, onto the bed, or up to the back seat.
+      Paw Grip is the shop for the moment a dog stops making the jump: into the cargo area, onto the bed, or up to the back seat.
       The foldable car ramp is the one we size down to the inch. Everything else is here so the ramp matches the job, not a guess.
     </p>
     <h2>Why this exists</h2>
@@ -47,7 +47,7 @@ export const ShippingPage: React.FC = () => (
   <main className={prose}>
     <h1>Shipping Policy</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
-    <p>Every Paw-Grip order ships free and insured. The same numbers are on the product pages.</p>
+    <p>Every Paw Grip order ships free and insured. The same numbers are on the product pages.</p>
     <h2>Where we ship</h2>
     <p>
       We ship to all 50 US states. Shipping outside the US? Email{' '}
@@ -100,7 +100,7 @@ export const WarrantyPage: React.FC = () => (
     <h1>Hardware warranty</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
     <p>
-      Every Paw-Grip ramp is covered against manufacturing defects for {POLICY.warrantyMonths} months from delivery — the frame, the walking surface, and the hardware. This sits on top of the <Link to="/returns">{GUARANTEE_LABEL}</Link>.
+      Every Paw Grip ramp is covered against manufacturing defects for {POLICY.warrantyMonths} months from delivery — the frame, the walking surface, and the hardware. This sits on top of the <Link to="/returns">{GUARANTEE_LABEL}</Link>.
     </p>
     <h2>What is covered</h2>
     <ul>
@@ -125,7 +125,7 @@ export const PrivacyPage: React.FC = () => (
   <main className={prose}>
     <h1>Privacy Policy</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
-    <p>This policy explains what Paw-Grip collects when you use this website, and what we do with it.</p>
+    <p>This policy explains what Paw Grip collects when you use this website, and what we do with it.</p>
     <h2>What we collect</h2>
     <ul>
       <li>
@@ -155,7 +155,7 @@ export const TermsPage: React.FC = () => (
   <main className={prose}>
     <h1>Terms of Service</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
-    <p>These terms govern your use of pawgrip.app and any order you place with Paw-Grip. By ordering, you accept them.</p>
+    <p>These terms govern your use of pawgrip.app and any order you place with Paw Grip. By ordering, you accept them.</p>
     <h2>Orders and pricing</h2>
     <p>
       All prices are in US dollars. Where a price is shown crossed out, it is a price this store has charged for that item. The price charged is the one at checkout, plus tax Shopify calculates.
@@ -168,7 +168,7 @@ export const TermsPage: React.FC = () => (
     <p>Use the site lawfully and do not attempt to disrupt it.</p>
     <h2>Limitation of liability</h2>
     <p>
-      To the maximum extent permitted by law, Paw-Grip&apos;s liability for a claim from an order is limited to the amount you paid for that order.
+      To the maximum extent permitted by law, Paw Grip&apos;s liability for a claim from an order is limited to the amount you paid for that order.
     </p>
     <h2>Governing law</h2>
     <p>These terms are governed by the laws of the United States and the state in which the business is registered.</p>

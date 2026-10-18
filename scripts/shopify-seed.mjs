@@ -622,7 +622,7 @@ before the jump.</p>
   {
     key: 'sideDoorSteps',
     handle: PRODUCT_HANDLES.sideDoorSteps,
-    title: 'Paw-Grip Side Door Pet Steps',
+    title: 'Paw Grip Side Door Pet Steps',
     productType: 'Pet Steps',
     tags: ['Car Mobility', 'test-catalog'],
     price: 149.95,
@@ -641,7 +641,7 @@ before the jump.</p>
   {
     key: 'bedRamp',
     handle: PRODUCT_HANDLES.bedRamp,
-    title: 'Paw-Grip Bed Ramp',
+    title: 'Paw Grip Bed Ramp',
     productType: 'Pet Ramp',
     tags: ['Home Mobility', 'test-catalog'],
     price: 129.95,
@@ -660,7 +660,7 @@ before the jump.</p>
   {
     key: 'extraLongRamp',
     handle: PRODUCT_HANDLES.extraLongRamp,
-    title: 'Paw-Grip Extra Long Telescoping Ramp',
+    title: 'Paw Grip Extra Long Telescoping Ramp',
     productType: 'Dog Car Ramp',
     tags: ['Car Mobility', 'test-catalog'],
     price: 189.0,
@@ -679,7 +679,7 @@ before the jump.</p>
   {
     key: 'compactTelescoping',
     handle: PRODUCT_HANDLES.compactTelescoping,
-    title: 'Paw-Grip Compact Telescoping Ramp',
+    title: 'Paw Grip Compact Telescoping Ramp',
     productType: 'Dog Car Ramp',
     tags: ['Car Mobility', 'test-catalog'],
     price: 159.99,
@@ -698,7 +698,7 @@ before the jump.</p>
   {
     key: 'hitchStep',
     handle: PRODUCT_HANDLES.hitchStep,
-    title: 'Paw-Grip Hitch Step',
+    title: 'Paw Grip Hitch Step',
     productType: 'Pet Steps',
     tags: ['Car Mobility', 'test-catalog'],
     price: 89.95,
@@ -717,7 +717,7 @@ before the jump.</p>
   {
     key: 'foldingSteps',
     handle: PRODUCT_HANDLES.foldingSteps,
-    title: 'Paw-Grip Folding Pet Steps',
+    title: 'Paw Grip Folding Pet Steps',
     productType: 'Pet Steps',
     tags: ['Home Mobility', 'test-catalog'],
     price: 74.95,

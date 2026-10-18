@@ -77,7 +77,7 @@ export const BuyBox: React.FC = () => {
   const saveAmount = money(tier.compareAt - tier.price);
 
   const bullets = [
-    `Rated to ${compact.weightCapacityLb} lb, with a Paw-Grip deck and raised side rails`,
+    `Rated to ${compact.weightCapacityLb} lb, with a Paw Grip deck and raised side rails`,
     `${compact.rampWeightLb} lb, folds in half to ${compact.foldedIn}\u2033 and latches shut for the trunk`,
     `${GUARANTEE_LABEL} — a full refund if your dog won't use it`,
   ];

@@ -16,7 +16,7 @@ const extended = RAMP_SIZES[1];
  */
 const DETAILS = [
   `Helps dogs up to ${compact.weightCapacityLb} lb walk into the car instead of being lifted or jumping.`,
-  'Paw-Grip grit deck that paws and nails can grip, with raised side rails along the full length.',
+  'Paw Grip grit deck that paws and nails can grip, with raised side rails along the full length.',
   `Weighs ${compact.rampWeightLb} lb and folds in half to ${compact.foldedIn}\u2033 with a safety latch, so it stores behind a seat or in the trunk.`,
   `The ${compact.lengthIn}\u2033 Compact suits ${compact.vehicleType.charAt(0).toLowerCase()}${compact.vehicleType.slice(1)}; the size finder checks the slope for your exact height.`,
   `${GUARANTEE_LABEL} and ${WARRANTY_PRODUCT_LABEL}.`,
