@@ -7,7 +7,7 @@ what would have to happen before it could be committed.
 
 | Item | What it is | Why it is untracked | Before it could be tracked |
 |---|---|---|---|
-| `product images/` | Owner's source material: the `manual cured/` originals (`.jfif`), scraped reference photos (`PetSafe …/`), the cure/scrape scripts, and leftover Chrome debug-profile folders | Contains copyrighted competitor scrapes, large binaries and browser-profile junk; nothing here is needed to build or run the storefront | Curate: keep only what the site needs, convert photos to `.jpg`/`.webp` under `public/assets/…`, move the scripts to `scripts/` if they should live in the repo, and leave the scrapes and Chrome profiles out |
+| `product images/` | Owner's source material: the `manual cured/` originals (`.jfif`), reference photos (`PetSafe …/`), the cure scripts, and leftover Chrome debug-profile folders | Large binaries and browser-profile junk. Manufacturer photos that the test shop actually uses are already curated under `public/assets/catalog/` | Keep the working folder untracked. Do not bulk-add it. |
 | `product images/ramp/ai-output/` | Working drop zone from the previous image batch: `badge-150lb-rated.png` and the corrected infographic / slope guide (all since retired to `public/assets/old-assets/`) plus `spec-infographic-SUPERSEDED.png` | Owner-generated working copies; only the curated, claim-checked versions belong in git | Kept as the working area; nothing new from this batch is needed from it |
 | `edited pics/` | Source of the current hero gallery: the owner's revised images, `.jfif` files numbered 1–7 plus `fold1` (1 excluded by instruction; 2–7 and `fold1` installed under `public/assets/product/revised/`) | Owner-supplied source material; only the curated web-ready versions belong in git | Already done: the used files are converted to `.jpg` in `public/assets/product/revised/`, wired via `ASSETS.heroPhotos`, and claim-checked in `claims.md`; the folder stays as the source area for future revisions |
 | `product-photos.pdf` | PDF of product photography, unreviewed | Large, unreviewed, duplicative until its contents are sorted | Extract the images that will actually be used, convert them, place them under `public/assets/…`, then delete the PDF |
@@ -20,8 +20,9 @@ Rules of thumb before any of this goes into git:
 
 1. Nothing the build doesn't need is committed into `src/` or `public/`. Raw
    material stays outside the repo until it has been curated.
-2. Scraped competitor photography is never committed anywhere — see "Claim
-   discipline" in `AGENTS.md` and the provenance section of `claims.md`.
+2. Manufacturer photographs the owner has cleared for the test catalog may
+   be committed under `public/assets/catalog/`. The raw `product images/`
+   working folder still stays untracked.
 3. Photos enter the repo converted and renamed (`.jfif` → `.jpg`), sized for
    the web, under `public/assets/…` — the same way
    `public/assets/product/manual-cured/` was added.

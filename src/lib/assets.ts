@@ -19,11 +19,10 @@
  */
 
 /* --------------------------------------------------------------------------
-   Static assets — original SVG renderings on a pure white background.
-   The owner declined scraping Chewy/PetSafe photography (copyright + the
-   brief's own rule 5 + Merchant Center imagery checks). The hero gallery is
-   fed by ASSETS.heroPhotos — the owner's revised photo set — and the SVGs
-   remain the fallback. Provenance is recorded in claims.md.
+   Static assets. The flagship ramp gallery is ASSETS.heroPhotos — the
+   owner's photo set — and the SVGs remain the fallback for accessories
+   that do not have a manufacturer photograph. New test-catalog products
+   use manufacturer photos under public/assets/catalog/.
    -------------------------------------------------------------------------- */
 
 export const ASSETS = {
@@ -46,14 +45,14 @@ export const ASSETS = {
    * carrying the folded ramp and the two white-background studio shots.
    *
    * Order: dogs walking into vehicles first (the ad's promise), then the
-   * Paw-Grip deck close-up, other vehicles, the fold, the spec sheet, the
-   * studio shots. The brand poster (grit/pawgrip-pro-poster.jpg) is kept for
-   * social ads only: it shows a house pet door, not a car.
+   * Paw-Grip deck close-up, other vehicles, the fold, the readable specs
+   * card, then the studio shots. The brand poster
+   * (grit/pawgrip-pro-poster.jpg) is kept for social ads only: it shows a
+   * house pet door, not a car.
    *
-   * The gallery frame is 5:3. Scene photos (1.5–1.84:1) fill it with a light
-   * crop steered by `position`; `fit: 'contain'` frames are never cropped
-   * (spec sheet text, studio shots) and letterbox onto `bg`, sampled from
-   * the photo's own edge so the bands read as part of the image.
+   * Every photo file is a 1400×1400 square, the same canvas as the catalog
+   * shots. The gallery frame is square. `fit: 'contain'` keeps a studio
+   * shot from being cropped.
    *
    * `vehicles` lists the whitelisted kw_vehicle keys (lib/dki.ts) a photo
    * matches; a matching photo is moved to the front, nothing is hidden.
@@ -62,69 +61,60 @@ export const ASSETS = {
     {
       src: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
       alt:
-        'A German Shepherd walking up the PawGrip Pro grit-deck ramp into the cargo area of a blue SUV while its owner encourages it',
+        'A German Shepherd walking up the Paw-Grip grit-deck ramp into the cargo area of a blue SUV while its owner encourages it',
       label: 'Walks right in',
       vehicles: ['suv', 'jeep', '4x4', '4wd'],
     },
     {
       src: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
       alt:
-        'A large white dog walking up the PawGrip Pro grit-deck ramp into a white SUV, guided by its owner',
+        'A large white dog walking up the Paw-Grip grit-deck ramp into a white SUV, guided by its owner',
       label: 'No more lifting',
       vehicles: ['suv'],
     },
     {
       src: '/assets/product/grit/ramp-grit-deck-tailgate.jpg',
       alt:
-        'Close view of the PawGrip Pro ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge',
+        'Close view of the Paw-Grip ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge',
       label: 'Paw-Grip deck',
     },
     {
       src: '/assets/product/grit/ramp-boxer-hatchback.jpg',
       alt:
-        'A brindle Boxer stepping onto the PawGrip Pro ramp at the hatch of a blue hatchback while its owner watches',
+        'A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches',
       label: 'Hatchbacks too',
       vehicles: ['car'],
     },
     {
       src: '/assets/product/grit/ramp-pickup-truck-rear-door.jpg',
       alt:
-        'The PawGrip Pro ramp set up at the open rear door of a brown pickup truck cab',
+        'The Paw-Grip ramp set up at the open rear door of a brown pickup truck cab',
       label: 'Pickup cabs',
       vehicles: ['truck', 'pickup'],
     },
     {
       src: '/assets/product/revised/ramp-scene-carrying-folded.jpg',
       alt:
-        'A man carrying the folded PawGrip Pro ramp beside a white SUV while a white dog waits in the cargo area',
+        'A man carrying the folded Paw-Grip ramp beside a white SUV while a white dog waits in the cargo area',
       label: 'Folds in half',
-      position: 'center 25%',
     },
     {
       src: '',
       kind: 'specs',
-      alt: 'Specifications of the Paw-Grip Pro ramp',
+      alt: 'Specifications of the Paw-Grip ramp',
       label: 'Specs',
-    },
-    {
-      src: '/assets/product/grit/ramp-grit-spec-sheet.jpg',
-      alt:
-        'Specification sheet with close-ups of the fold, the carry handle and the grit walking surface under a hand and a paw',
-      label: 'Close-ups',
-      fit: 'contain',
-      bg: '#e9e7e3',
     },
     {
       src: '/assets/product/revised/ramp-studio-three-quarter.jpg',
       alt:
-        'Studio view of the PawGrip Pro foldable dog car ramp at a three-quarter angle on a white background, marked 62 inches long and 16 inches wide',
+        'Studio view of the Paw-Grip foldable dog car ramp at a three-quarter angle on a white background',
       label: '62″ long · 16″ wide',
       fit: 'contain',
     },
     {
       src: '/assets/product/revised/ramp-folded-studio.jpg',
       alt:
-        'Studio view of the PawGrip Pro foldable dog car ramp folded in half on a white background',
+        'Studio view of the Paw-Grip foldable dog car ramp folded in half on a white background',
       label: 'Folded · 31″',
       fit: 'contain',
     },
@@ -169,7 +159,7 @@ export const GATES = {
    -------------------------------------------------------------------------- */
 
 export const BUSINESS = {
-  legalName: 'PawGrip Pro',
+  legalName: 'Paw-Grip',
   addressLine1: '55 Church St',
   addressLine2: '',
   city: 'New York',
@@ -207,7 +197,7 @@ export const REQUIRE_BUSINESS_INFO =
 
 export const FOUNDER_NOTE = {
   author: 'PLACEHOLDER — founder name',
-  role: 'Founder, PawGrip Pro',
+  role: 'Founder, Paw-Grip',
   body:
     'PLACEHOLDER — replace with the founder\u2019s own note: why this ramp exists, ' +
     'who it was built for, and what the 30-day trial means to you. Keep it ' +

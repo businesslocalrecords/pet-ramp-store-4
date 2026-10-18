@@ -33,10 +33,9 @@ real address.
 **Where:** `ASSETS.product.*` and `ASSETS.heroPhotos` in `src/lib/assets.ts`.
 
 **Why:** Google Merchant Center accepts only raster images (BMP, GIF, JPEG,
-PNG, WebP, TIFF) — the shipped SVG renderings are web placeholders, not
-submittable product images. Owner declined scraping Chewy/PetSafe photos
-(copyright, the brief's rule 5, Merchant Center imagery checks); recorded in
-`claims.md`.
+PNG, WebP, TIFF). The flagship gallery is the owner's photo set. The test
+catalog also uses manufacturer photographs in `public/assets/catalog/`,
+cleared by the owner for this project (see `claims.md`).
 
 **Progress:** `ASSETS.heroPhotos` now carries the owner's revised six-photo set
 (`public/assets/product/revised/`, from `edited pics/`), and it is the entire
