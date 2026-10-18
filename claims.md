@@ -186,6 +186,14 @@ Uploaded to Shopify by `scripts/shopify-product-images.mjs`
   Star ratings on these cards are numeric test ratings (see rule 2). There
   is no review text.
 
+## Voice pass (October 2026)
+
+Homepage, catalog summaries, the car-ramp supporting line, About, the buyer's guide opening, the category lede, and the footer call to action were rewritten for a more specific voice. No new specification, rating, medical outcome, or customer-count claim was added. "A hard landing" describes the jump itself, not a diagnosis. Policy numbers still come from `policy.ts`.
+
+The homepage hero photo is a link to the foldable car ramp, with a caption that names the product in the picture.
+
+Four lifestyle frames (shepherd SUV, boxer hatchback, white dog, folded ramp at the hatch) were replaced with the owner's newer photographs, cover-cropped to the same 1400×1400 JPEG canvas, metadata stripped.
+
 ## Test catalog (October 2026)
 
 | Where | What changed | Why |

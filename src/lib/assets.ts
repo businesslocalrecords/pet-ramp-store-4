@@ -95,7 +95,7 @@ export const ASSETS = {
     {
       src: '/assets/product/revised/ramp-scene-carrying-folded.jpg',
       alt:
-        'A man carrying the folded Paw-Grip ramp beside a white SUV while a white dog waits in the cargo area',
+        'A man holding the folded Paw-Grip ramp at the open hatch of a white SUV while a white dog waits in the cargo area',
       label: 'Folds in half',
     },
     {

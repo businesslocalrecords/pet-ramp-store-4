@@ -7,7 +7,7 @@ import { ProductCard } from '../components/ProductCard';
 const JOBS = [
   {
     title: 'Into the cargo area',
-    caption: 'The bi-fold, for SUVs and hatchbacks',
+    caption: 'The bi-fold grit ramp, for the cargo floor of an SUV or a hatchback',
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     alt: 'A German Shepherd walking up a ramp into an SUV',
     frame: 'lg:object-[center_22%]',
@@ -15,7 +15,7 @@ const JOBS = [
   },
   {
     title: 'Into the back seat',
-    caption: 'Steps at the side door',
+    caption: 'Steps that meet the sill, so the back seat is a walk, not a lift',
     image: '/assets/catalog/side-door-steps.jpg',
     alt: 'Pet steps at a vehicle side door',
     frame: 'lg:object-center',
@@ -23,7 +23,7 @@ const JOBS = [
   },
   {
     title: 'Onto the bed',
-    caption: 'A ramp that stays in the bedroom',
+    caption: 'For the dog who pauses at the mattress and waits to be helped',
     image: '/assets/catalog/bed-ramp.jpg',
     alt: 'A ramp from the floor to a bed',
     frame: 'lg:object-[center_58%]',
@@ -38,18 +38,27 @@ export const HomePage: React.FC = () => {
   return (
     <main>
       <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
-        <img
-          src="/assets/product/grit/ramp-boxer-hatchback.jpg"
-          alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
-          className="order-2 aspect-square w-full rounded-2xl bg-white object-contain lg:order-1 lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
-        />
+        <Link
+          to={{ pathname: productPath(flagship), search }}
+          className="order-2 block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0F6E62] lg:order-1"
+        >
+          <img
+            src="/assets/product/grit/ramp-boxer-hatchback.jpg"
+            alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
+            className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-16rem))] lg:w-auto"
+          />
+          <span className="mt-3 block text-sm leading-snug">
+            <span className="font-bold text-[#14202B]">Foldable dog car ramp.</span>{' '}
+            <span className="text-[#5C6B73]">A Boxer takes the grit deck into a hatchback. This photo opens that ramp.</span>
+          </span>
+        </Link>
         <div className="order-1 lg:order-2">
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>
           <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-[#14202B] sm:mt-3 sm:text-5xl">
             A way up for the car, the bed, and the back seat.
           </h1>
           <p className="mt-3 max-w-md text-lg text-[#5C6B73] sm:mt-4">
-            Paw-Grip is a shop for getting a pet up without a lift. Start with the foldable car ramp, or look through stairs and longer ramps.
+            The leap from a hatchback is a hard landing. The hoist into an SUV is your back. Between them is a walk: a foldable ramp with a grit deck, and stairs for the bed, the couch, and the side door.
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-4 lg:mt-8">
             <Link
@@ -68,6 +77,7 @@ export const HomePage: React.FC = () => {
       <section className="bg-[#F3F6F7]">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-10">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Shop by the job</h2>
+          <p className="mt-2 max-w-xl text-[#5C6B73]">Three places a dog gets stuck. Pick the one you are solving today.</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {JOBS.map((job) => {
               const product = CATALOG.find((item) => item.slug === job.slug)!;
@@ -91,9 +101,9 @@ export const HomePage: React.FC = () => {
 
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-12">
         <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">In the shop</h2>
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">The ramp for the job</h2>
           <Link to={{ pathname: '/dog-ramps', search }} className="text-sm font-bold text-[#0F6E62]">
-            See all
+            See the whole shop
           </Link>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -106,9 +116,9 @@ export const HomePage: React.FC = () => {
       <section className="bg-[#14202B] text-white">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">
           <div>
-            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Not sure of the length?</h2>
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">A short ramp is a steep ramp.</h2>
             <p className="mt-3 text-white/80">
-              Measure from the ground to the cargo floor. The size finder on the car ramp picks Compact or Extended from that number.
+              Measure from the ground to the cargo floor. The size finder turns that number into Compact or Extended, so the slope stays a walk.
             </p>
             <Link
               to={{ pathname: '/products/foldable-dog-car-ramp', hash: 'size-guide', search }}

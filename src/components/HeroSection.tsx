@@ -150,8 +150,8 @@ export const HeroSection: React.FC = () => {
 
       {/* One short supporting line — values single-sourced from offers.ts. */}
       <p className="mt-3 text-[1rem] text-stone-600 sm:text-[1.0625rem]">
-        Stop lifting your dog into the {dki.vehicleInline}. The Paw-Grip deck gives
-        paws real traction, and the {compact.rampWeightLb}&nbsp;lb ramp folds in half
+        Quit the hoist into the {dki.vehicleInline}. Paws meet a grit deck, side rails
+        keep the walk narrow, and this {compact.rampWeightLb}&nbsp;lb ramp folds in half
         to {compact.foldedIn}&Prime; for the trunk.
       </p>
 

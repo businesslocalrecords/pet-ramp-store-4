@@ -161,7 +161,7 @@ const IMAGE_MANIFEST = [
       { file: 'assets/product/grit/ramp-grit-deck-tailgate.jpg', alt: 'Close view of the Paw-Grip ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge' },
       { file: 'assets/product/grit/ramp-boxer-hatchback.jpg', alt: 'A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches' },
       { file: 'assets/product/grit/ramp-pickup-truck-rear-door.jpg', alt: 'The Paw-Grip ramp set up at the open rear door of a brown pickup truck cab' },
-      { file: 'assets/product/revised/ramp-scene-carrying-folded.jpg', alt: 'A man carrying the folded Paw-Grip ramp beside a white SUV while a white dog waits in the cargo area' },
+      { file: 'assets/product/revised/ramp-scene-carrying-folded.jpg', alt: 'A man holding the folded Paw-Grip ramp at the open hatch of a white SUV while a white dog waits in the cargo area' },
       { file: 'assets/product/revised/ramp-studio-three-quarter.jpg', alt: 'Studio view of the Paw-Grip foldable dog car ramp at a three-quarter angle on a white background' },
       { file: 'assets/product/revised/ramp-folded-studio.jpg', alt: 'Studio view of the Paw-Grip foldable dog car ramp folded in half on a white background' },
     ],

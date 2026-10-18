@@ -72,16 +72,16 @@ export const Footer: React.FC = () => {
       <div className="border-b border-stone-800">
         <div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            Give Your Dog an Easier Ride
+            The walk in. Not the hoist.
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-stone-400">
-            {POLICY.returnDays}-day risk-free trial, free insured shipping, free returns.
+            {POLICY.returnDays} days to try it in your own car, free insured shipping, and a full refund if the dog will not take it.
           </p>
           <a
             href="/products/foldable-dog-car-ramp"
             className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-md bg-[#F37021] px-9 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-[#D95E1A]"
           >
-            Shop Paw-Grip
+            Shop the car ramp
           </a>
         </div>
       </div>

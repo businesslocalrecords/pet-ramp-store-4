@@ -16,13 +16,13 @@ export const AboutPage: React.FC = () => (
     <h1>About Paw-Grip</h1>
     <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
     <p>
-      Paw-Grip is a shop for dog ramps and stairs: into the car, onto the bed, and up to the back seat.
-      The foldable car ramp is the product we size in detail. The rest of the catalog is here so you can match the ramp to the job.
+      Paw-Grip is the shop for the moment a dog stops making the jump: into the cargo area, onto the bed, or up to the back seat.
+      The foldable car ramp is the one we size down to the inch. Everything else is here so the ramp matches the job, not a guess.
     </p>
     <h2>Why this exists</h2>
     <p>
-      Every day, owners of big and aging dogs make the same trade: lift 70 lb into the trunk, or watch the dog jump.
-      A ramp should be long enough for the vehicle, rated for the dog it is sold to, and plain about what it is.
+      Big dogs and older dogs leave their people with the same choice: hoist them into the trunk, or watch the jump.
+      A ramp should be long enough for that vehicle, rated for the dog it is sold to, and plain about both.
     </p>
     <h2>How we work</h2>
     <ul>
@@ -252,7 +252,9 @@ export const GuidePage: React.FC = () => {
     <main className={prose}>
       <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Buyer&apos;s guide</p>
       <h1>How to choose a dog car ramp</h1>
-      <p>Measure first. A ramp that is too short for the vehicle becomes a wall the dog will not walk.</p>
+      <p>
+        Start with a tape measure, not a guess. A ramp that is too short for the bumper turns into a wall, and a dog who has refused it once will refuse it again.
+      </p>
       <h2>1. Measure the vehicle</h2>
       <p>
         Measure from the ground to the surface the dog steps onto — the bumper edge or the cargo floor. Low sedans are often around 20–24″, most SUVs 26–30″, lifted trucks 32–42″.

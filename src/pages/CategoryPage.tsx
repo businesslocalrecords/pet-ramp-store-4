@@ -79,7 +79,13 @@ export const CategoryPage: React.FC = () => {
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{heading}</h1>
-          {q ? <p className="mt-2 text-[#5C6B73]">Results for “{params.get('q')}”</p> : null}
+          {q ? (
+            <p className="mt-2 text-[#5C6B73]">Results for “{params.get('q')}”</p>
+          ) : (
+            <p className="mt-2 max-w-xl text-[#5C6B73]">
+              Cargo area, back seat, bed, or couch. Filter to the place the dog is stuck, then open the one that fits.
+            </p>
+          )}
         </div>
         <label className="text-sm font-semibold">
           <span className="mr-2 text-[#5C6B73]">Sort by</span>
