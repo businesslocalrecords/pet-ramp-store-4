@@ -87,6 +87,7 @@ export const HeroSection: React.FC = () => {
   const [dki] = useState(() => readDkiParams());
   const trackRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const scrollLock = useRef(false);
 
   const compact = RAMP_SIZES[0];
 
@@ -97,6 +98,7 @@ export const HeroSection: React.FC = () => {
   const active = frames[Math.min(activeIndex, frames.length - 1)];
 
   const onTrackScroll = () => {
+    if (scrollLock.current) return;
     const el = trackRef.current;
     if (!el || el.clientWidth === 0) return;
     const idx = Math.round(el.scrollLeft / el.clientWidth);
@@ -105,8 +107,12 @@ export const HeroSection: React.FC = () => {
 
   const goTo = (idx: number) => {
     const el = trackRef.current;
-    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'smooth' });
+    scrollLock.current = true;
     setActiveIndex(idx);
+    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'auto' });
+    window.setTimeout(() => {
+      scrollLock.current = false;
+    }, 80);
   };
 
   const openViewer = (idx: number) => {
