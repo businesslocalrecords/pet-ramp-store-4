@@ -272,37 +272,40 @@ export const HeroSection: React.FC = () => {
                 Close
               </button>
             </div>
-            <div className="relative min-h-0 flex-1 bg-stone-50">
-              <div className="aspect-[5/3] w-full">
+            <div className="flex min-h-0 flex-1 items-center justify-center bg-stone-50">
+              <div className="flex max-h-[70vh] w-full items-center justify-center">
                 {active.kind === 'specs' ? (
-                  <SpecsCard />
+                  <div className="h-80 w-full">
+                    <SpecsCard />
+                  </div>
                 ) : (
                   <img
                     src={active.src}
                     alt={active.alt}
-                    className={`h-full w-full ${active.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-                    style={active.position ? { objectPosition: active.position } : undefined}
+                    className="max-h-[70vh] w-full object-contain"
                   />
                 )}
               </div>
+            </div>
+            <div className="flex items-center justify-between gap-2 border-t border-stone-200 px-3 py-3">
               <button
                 type="button"
-                className="absolute left-3 top-1/2 h-11 -translate-y-1/2 rounded-full bg-white px-4 text-sm font-bold shadow"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
                 onClick={() => stepViewer(-1)}
               >
                 Previous
               </button>
+              <p className="min-w-0 text-center text-sm font-semibold text-stone-600">
+                {active.label} · {activeIndex + 1} of {frames.length}
+              </p>
               <button
                 type="button"
-                className="absolute right-3 top-1/2 h-11 -translate-y-1/2 rounded-full bg-white px-4 text-sm font-bold shadow"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
                 onClick={() => stepViewer(1)}
               >
                 Next
               </button>
             </div>
-            <p className="px-4 py-3 text-sm font-semibold text-stone-600">
-              {active.label} · {activeIndex + 1} of {frames.length}
-            </p>
           </div>
         </div>
       )}
