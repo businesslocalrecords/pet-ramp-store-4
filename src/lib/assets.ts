@@ -45,13 +45,14 @@ export const ASSETS = {
    * carrying the folded ramp and the two white-background studio shots.
    *
    * Order: dogs walking into vehicles first (the ad's promise), then the
-   * Paw-Grip deck close-up, other vehicles, the fold, the spec sheet, the
-   * studio shots. The brand poster (grit/pawgrip-pro-poster.jpg) is kept for
-   * social ads only: it shows a house pet door, not a car.
+   * Paw-Grip deck close-up, other vehicles, the fold, the readable specs
+   * card, then the studio shots. The brand poster
+   * (grit/pawgrip-pro-poster.jpg) is kept for social ads only: it shows a
+   * house pet door, not a car.
    *
    * Every photo file is a 1400×1400 square, the same canvas as the catalog
-   * shots. The gallery frame is square. `fit: 'contain'` is for the spec
-   * sheet, whose printed measurements must stay intact.
+   * shots. The gallery frame is square. `fit: 'contain'` keeps a studio
+   * shot from being cropped.
    *
    * `vehicles` lists the whitelisted kw_vehicle keys (lib/dki.ts) a photo
    * matches; a matching photo is moved to the front, nothing is hidden.
@@ -102,14 +103,6 @@ export const ASSETS = {
       kind: 'specs',
       alt: 'Specifications of the Paw-Grip ramp',
       label: 'Specs',
-    },
-    {
-      src: '/assets/product/grit/ramp-grit-spec-sheet.jpg',
-      alt:
-        'Specification sheet with close-ups of the fold, the carry handle and the grit walking surface under a hand and a paw',
-      label: 'Close-ups',
-      fit: 'contain',
-      bg: '#e9e7e3',
     },
     {
       src: '/assets/product/revised/ramp-studio-three-quarter.jpg',
