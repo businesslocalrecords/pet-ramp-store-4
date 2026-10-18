@@ -9,6 +9,7 @@
 import { ADDON_PRICES, PRODUCT_HANDLES, TIERS, formatMoney } from './offers';
 
 export type CatalogUse = 'car' | 'home' | 'cargo';
+export type CatalogKind = 'ramp' | 'stairs' | 'accessory';
 
 export interface CatalogProduct {
   /** URL slug under /products/. The flagship uses a readable slug. */
@@ -27,6 +28,7 @@ export interface CatalogProduct {
   /** Second frame for the card hover, when we have one. */
   imageHover?: string;
   use: CatalogUse;
+  kind: CatalogKind;
   capacityLb: number;
   bullets: string[];
   /** The long-form flagship page, with the existing gallery. */
@@ -47,6 +49,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     imageHover: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
     imageAlt: 'A German Shepherd walking up the Paw-Grip ramp into an SUV',
     use: 'car',
+    kind: 'ramp',
     capacityLb: 150,
     bullets: [
       'Compact 62″, folds to 31″',
@@ -67,6 +70,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/side-door-steps.jpg',
     imageAlt: 'Pet steps set up at a vehicle side door',
     use: 'car',
+    kind: 'stairs',
     capacityLb: 200,
     bullets: ['Reaches a side-door sill', 'Platform at the top', 'Lifts in and out of the car'],
   },
@@ -82,6 +86,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/bed-ramp.jpg',
     imageAlt: 'A fabric ramp running from the floor to a bed',
     use: 'home',
+    kind: 'ramp',
     capacityLb: 120,
     bullets: ['Reaches about 25″', 'Rated to 120 lb', 'Stays in the bedroom'],
   },
@@ -97,6 +102,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/extra-long-ramp.jpg',
     imageAlt: 'A long telescoping dog ramp on a white background',
     use: 'car',
+    kind: 'ramp',
     capacityLb: 150,
     bullets: ['Extends 47–87″', 'For tall truck beds', 'Collapses for storage'],
   },
@@ -112,6 +118,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/compact-ramp.jpg',
     imageAlt: 'A compact telescoping dog ramp on a white background',
     use: 'car',
+    kind: 'ramp',
     capacityLb: 120,
     bullets: ['Extends 28–70″', '14 lb', 'For smaller cargo areas'],
   },
@@ -127,6 +134,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/foam-steps.jpg',
     imageAlt: 'Foam pet steps on a white background',
     use: 'home',
+    kind: 'stairs',
     capacityLb: 80,
     bullets: ['Rated to 80 lb', 'For couch and low beds', 'Two sizes in the catalog'],
   },
@@ -142,6 +150,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/hitch-step.jpg',
     imageAlt: 'A hitch-mounted pet step on a white background',
     use: 'cargo',
+    kind: 'stairs',
     capacityLb: 150,
     bullets: ['Mounts at the hitch', 'Folds up to stow', 'For truck tailgates'],
   },
@@ -157,6 +166,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/catalog/folding-steps.jpg',
     imageAlt: 'Folding pet steps on a white background',
     use: 'home',
+    kind: 'stairs',
     capacityLb: 100,
     bullets: ['Folds flat', 'For couch and low beds', 'Light enough to carry'],
   },
@@ -172,6 +182,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/product/mat-traction-2pack.svg',
     imageAlt: 'Illustration of the traction mat two-pack',
     use: 'cargo',
+    kind: 'accessory',
     capacityLb: 250,
     bullets: ['2-pack', 'Sits under the ramp feet', 'For smooth floors'],
   },
@@ -187,6 +198,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/product/tether-adjustable.svg',
     imageAlt: 'Illustration of the adjustable car safety tether',
     use: 'car',
+    kind: 'accessory',
     capacityLb: 250,
     bullets: ['Clips to a harness', 'Adjustable length', 'Front or rear seat'],
   },

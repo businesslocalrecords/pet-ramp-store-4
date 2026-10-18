@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { HeroSection } from '../components/HeroSection';
 import { BuyBox } from '../components/BuyBox';
 import { QuickAnswers } from '../components/QuickAnswers';
@@ -14,7 +14,9 @@ import { StickyMobileBuyBar } from '../components/StickyMobileBuyBar';
 import { FounderNote } from '../components/FounderNote';
 import { PurchaseProvider } from '../lib/purchase-provider';
 import { GATES } from '../lib/assets';
+import { findBySlug, formatPrice, productPath } from '../lib/catalog';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL } from '../lib/policy';
+import { Stars } from '../components/Stars';
 
 /* --------------------------------------------------------------------------
    Core Web Vitals: defer below-the-fold sections.
@@ -88,6 +90,8 @@ function useFitsViewport<T extends HTMLElement>() {
  */
 const Page: React.FC = () => {
   const [offerRef, offerFits] = useFitsViewport<HTMLDivElement>();
+  const { search } = useLocation();
+  const similar = findBySlug('compact-telescoping-dog-ramp');
 
   return (
     <div className="bg-white text-stone-900 antialiased selection:bg-blue-200 selection:text-stone-900">
@@ -137,6 +141,30 @@ const Page: React.FC = () => {
             >
               <div className="mx-auto max-w-lg rounded-md border border-gray-300 bg-white p-6 shadow-sm">
                 <BuyBox />
+                {similar && (
+                  <Link
+                    to={{ pathname: productPath(similar), search }}
+                    className="mt-5 flex gap-3 rounded-xl border border-[#E4EAEB] p-3 hover:border-[#0F6E62]"
+                  >
+                    <img
+                      src={similar.image}
+                      alt=""
+                      className="h-20 w-20 shrink-0 rounded-lg bg-[#F3F6F7] object-contain"
+                    />
+                    <span className="min-w-0">
+                      <span className="block text-xs font-bold uppercase tracking-wide text-[#5C6B73]">
+                        Similar item
+                      </span>
+                      <span className="mt-1 block text-sm font-bold leading-snug text-stone-900">
+                        {similar.name}
+                      </span>
+                      <Stars value={similar.rating} count={similar.ratingCount} />
+                      <span className="mt-1 block text-base font-extrabold tabular-nums">
+                        {formatPrice(similar.price)}
+                      </span>
+                    </span>
+                  </Link>
+                )}
               </div>
 
               <p className="mt-4 text-center text-xs text-stone-500">

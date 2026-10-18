@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { readDkiParams } from '../lib/dki';
 import { ASSETS, type HeroPhoto } from '../lib/assets';
 import { RAMP_SIZES } from '../lib/offers';
@@ -81,10 +81,12 @@ function orderForVehicle(frames: readonly HeroPhoto[], vehicleKey: string | null
  */
 export const HeroSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [viewerOpen, setViewerOpen] = useState(false);
   // Read once on mount. This is a client-only SPA, so there is no hydration
   // mismatch to guard against.
   const [dki] = useState(() => readDkiParams());
   const trackRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const compact = RAMP_SIZES[0];
 
@@ -106,6 +108,31 @@ export const HeroSection: React.FC = () => {
     if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'smooth' });
     setActiveIndex(idx);
   };
+
+  const openViewer = (idx: number) => {
+    goTo(idx);
+    setViewerOpen(true);
+  };
+
+  const stepViewer = (delta: number) => {
+    goTo((activeIndex + delta + frames.length) % frames.length);
+  };
+
+  useEffect(() => {
+    if (!viewerOpen) return;
+    closeButtonRef.current?.focus();
+  }, [viewerOpen]);
+
+  useEffect(() => {
+    if (!viewerOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setViewerOpen(false);
+      if (event.key === 'ArrowRight') goTo((activeIndex + 1) % frames.length);
+      if (event.key === 'ArrowLeft') goTo((activeIndex - 1 + frames.length) % frames.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [viewerOpen, activeIndex, frames.length]);
 
   return (
     <section id="hero" className="scroll-mt-24">
@@ -138,22 +165,29 @@ export const HeroSection: React.FC = () => {
                 style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
                 aria-hidden={idx !== activeIndex}
               >
-                {frame.kind === 'specs' ? (
-                  <SpecsCard />
-                ) : (
-                <img
-                  src={frame.src}
-                  alt={frame.alt}
-                  width={1000}
-                  height={600}
-                  loading={idx === 0 ? 'eager' : 'lazy'}
-                  fetchPriority={idx === 0 ? 'high' : 'auto'}
-                  decoding="async"
-                  draggable={false}
-                  className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-                  style={frame.position ? { objectPosition: frame.position } : undefined}
-                />
-                )}
+                <button
+                  type="button"
+                  className="block h-full w-full"
+                  aria-label={`slide ${idx + 1} of ${frames.length}`}
+                  onClick={() => openViewer(idx)}
+                >
+                  {frame.kind === 'specs' ? (
+                    <SpecsCard />
+                  ) : (
+                    <img
+                      src={frame.src}
+                      alt={frame.alt}
+                      width={1000}
+                      height={600}
+                      loading={idx === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={idx === 0 ? 'high' : 'auto'}
+                      decoding="async"
+                      draggable={false}
+                      className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+                      style={frame.position ? { objectPosition: frame.position } : undefined}
+                    />
+                  )}
+                </button>
               </div>
             ))}
           </div>
@@ -179,8 +213,8 @@ export const HeroSection: React.FC = () => {
               type="button"
               role="tab"
               aria-selected={idx === activeIndex}
-              aria-label={frame.alt}
-              onClick={() => goTo(idx)}
+              aria-label={`slide ${idx + 1} of ${frames.length}`}
+              onClick={() => openViewer(idx)}
               className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 transition-shadow duration-200 sm:h-14 sm:w-14 sm:rounded-xl ${
                 idx === activeIndex ? 'ring-2 ring-blue-600' : 'ring-stone-900/10 hover:ring-stone-900/20'
               }`}
@@ -205,6 +239,67 @@ export const HeroSection: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {viewerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 p-4"
+          role="presentation"
+          onClick={() => setViewerOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="large-photo-title"
+            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
+              <h2 id="large-photo-title" className="text-base font-bold text-stone-900">
+                Large view of product photos
+              </h2>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="h-10 rounded-full px-3 text-sm font-semibold text-stone-700"
+                onClick={() => setViewerOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+            <div className="relative min-h-0 flex-1 bg-stone-50">
+              <div className="aspect-[5/3] w-full">
+                {active.kind === 'specs' ? (
+                  <SpecsCard />
+                ) : (
+                  <img
+                    src={active.src}
+                    alt={active.alt}
+                    className={`h-full w-full ${active.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+                    style={active.position ? { objectPosition: active.position } : undefined}
+                  />
+                )}
+              </div>
+              <button
+                type="button"
+                className="absolute left-3 top-1/2 h-11 -translate-y-1/2 rounded-full bg-white px-4 text-sm font-bold shadow"
+                onClick={() => stepViewer(-1)}
+              >
+                Previous
+              </button>
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 h-11 -translate-y-1/2 rounded-full bg-white px-4 text-sm font-bold shadow"
+                onClick={() => stepViewer(1)}
+              >
+                Next
+              </button>
+            </div>
+            <p className="px-4 py-3 text-sm font-semibold text-stone-600">
+              {active.label} · {activeIndex + 1} of {frames.length}
+            </p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

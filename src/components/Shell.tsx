@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, PawPrint, Search, ShoppingCart, X } from 'lucide-react';
 import { useCart } from '../lib/cart-context';
@@ -18,7 +18,15 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const { totalQuantity } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [compact, setCompact] = useState(false);
   const params = new URLSearchParams(search);
+
+  useEffect(() => {
+    const onScroll = () => setCompact(window.scrollY > 72);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   function onSearch(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,7 +53,10 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             <span className="text-lg font-extrabold tracking-tight">Paw Grip</span>
           </Link>
 
-          <nav className="ml-6 hidden items-center gap-6 md:flex" aria-label="Shop">
+          <nav
+            className={`ml-6 items-center gap-6 ${compact ? 'hidden' : 'hidden md:flex'}`}
+            aria-label="Shop"
+          >
             {LINKS.map((link) => (
               <NavLink
                 key={link.to}
@@ -88,7 +99,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
           <button
             type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-full md:hidden"
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${compact ? '' : 'md:hidden'}`}
             aria-expanded={menuOpen}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMenuOpen((open) => !open)}
@@ -111,7 +122,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         </form>
 
         {menuOpen && (
-          <nav className="border-t border-[#E4EAEB] px-4 py-3 md:hidden" aria-label="Shop">
+          <nav className={`border-t border-[#E4EAEB] px-4 py-3 ${compact ? '' : 'md:hidden'}`} aria-label="Shop">
             {LINKS.map((link) => (
               <Link
                 key={link.to}
