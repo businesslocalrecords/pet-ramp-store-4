@@ -10,6 +10,7 @@ const JOBS = [
     caption: 'The bi-fold, for SUVs and hatchbacks',
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     alt: 'A German Shepherd walking up a ramp into an SUV',
+    frame: 'lg:object-[center_22%]',
     slug: 'foldable-dog-car-ramp',
   },
   {
@@ -17,6 +18,7 @@ const JOBS = [
     caption: 'Steps at the side door',
     image: '/assets/catalog/side-door-steps.jpg',
     alt: 'Pet steps at a vehicle side door',
+    frame: 'lg:object-center',
     slug: 'side-door-pet-steps',
   },
   {
@@ -24,6 +26,7 @@ const JOBS = [
     caption: 'A ramp that stays in the bedroom',
     image: '/assets/catalog/bed-ramp.jpg',
     alt: 'A ramp from the floor to a bed',
+    frame: 'lg:object-[center_58%]',
     slug: 'bed-ramp',
   },
 ] as const;
@@ -34,11 +37,11 @@ export const HomePage: React.FC = () => {
 
   return (
     <main>
-      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:py-20">
+      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
         <img
           src="/assets/product/grit/ramp-boxer-hatchback.jpg"
           alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
-          className="aspect-square w-full rounded-2xl bg-white object-contain"
+          className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
         />
         <div>
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>
@@ -63,7 +66,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       <section className="bg-[#F3F6F7]">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-20">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-10">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Shop by the job</h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {JOBS.map((job) => {
@@ -74,7 +77,7 @@ export const HomePage: React.FC = () => {
                   to={{ pathname: productPath(product), search }}
                   className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
-                  <img src={job.image} alt={job.alt} className="aspect-square w-full bg-white object-contain" />
+                  <img src={job.image} alt={job.alt} className={`aspect-square w-full bg-white object-contain lg:aspect-[5/3] lg:object-cover ${job.frame}`} />
                   <div className="p-4">
                     <h3 className="font-bold">{job.title}</h3>
                     <p className="mt-1 text-sm text-[#5C6B73]">{job.caption}</p>
@@ -86,7 +89,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-20">
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-12">
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">In the shop</h2>
           <Link to={{ pathname: '/dog-ramps', search }} className="text-sm font-bold text-[#0F6E62]">
@@ -101,7 +104,7 @@ export const HomePage: React.FC = () => {
       </section>
 
       <section className="bg-[#14202B] text-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-16">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Not sure of the length?</h2>
             <p className="mt-3 text-white/80">
