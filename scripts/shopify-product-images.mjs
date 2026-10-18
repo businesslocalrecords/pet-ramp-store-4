@@ -231,6 +231,19 @@ const IMAGE_MANIFEST = [
   },
 ];
 
+const CHEWY_ROWS = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'src/lib/chewy-products.json'), 'utf8')
+);
+for (const item of CHEWY_ROWS) {
+  IMAGE_MANIFEST.push({
+    handle: `chewy-${item.dp}`,
+    images: item.images.map((src, index) => ({
+      file: src.replace(/^\//, ''),
+      alt: index === 0 ? item.name : `${item.name} (${index + 1})`,
+    })),
+  });
+}
+
 /* -------------------------------------------------------------------------- */
 /* Helpers                                                                     */
 /* -------------------------------------------------------------------------- */

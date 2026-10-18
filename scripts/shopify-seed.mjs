@@ -783,6 +783,68 @@ why the difference faded. A recurring order removes that decision.</p>
   },
 ];
 
+/**
+ * Chewy dog-stairs assortment. Cost is the Chewy listed price. The selling
+ * price matches priceFromChewyCost() in src/lib/offers.ts. Inventory is not
+ * tracked, so this pass does not invent a stock count and does not restock
+ * products that already exist.
+ */
+function priceFromChewyCost(cost) {
+  const money = (value) => Math.round((value + Number.EPSILON) * 100) / 100;
+  const sum = money(cost + 15);
+  const next = money(Math.floor(sum) + 0.99);
+  return next + 0.001 < sum ? money(next + 1) : next;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (ch) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[ch]));
+}
+
+const CHEWY_ROWS = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'src/lib/chewy-products.json'), 'utf8')
+);
+const CHEWY_CATALOG = CHEWY_ROWS.map((item) => {
+  const price = priceFromChewyCost(item.cost);
+  const title = item.name;
+  return {
+    key: `chewy${item.dp}`,
+    handle: `chewy-${item.dp}`,
+    title,
+    productType: item.kind === 'ramp' ? 'Pet Ramp' : 'Pet Steps',
+    tags: ['chewy-catalog', item.kind, item.use],
+    status: 'ACTIVE',
+    price,
+    compareAt: price,
+    cost: item.cost,
+    sku: `CHW-${item.dp}`,
+    weight: 10,
+    weightUnit: 'POUNDS',
+    inventoryQuantity: 0,
+    trackInventory: false,
+    options: ['Style'],
+    variants: [{ option: 'Standard', price, compareAt: price, sku: `CHW-${item.dp}` }],
+    excerpt: 'For the car, the bed, or the couch.',
+    description: `<p>${escapeHtml(title)}. For the car, the bed, or the couch.</p>`,
+  };
+});
+
+const CHEWY_ONLY = process.argv.includes('--chewy');
+if (CHEWY_ONLY && PURGE) {
+  console.error('  ERROR: --chewy cannot be combined with --purge.');
+  process.exit(1);
+}
+if (CHEWY_ONLY) {
+  CATALOG.splice(0, CATALOG.length, ...CHEWY_CATALOG);
+} else {
+  CATALOG.push(...CHEWY_CATALOG);
+}
+
 /* Collections â€” 'Bumps' is intentionally hidden from the storefront. */
 const COLLECTIONS = [
   { key: 'carMobility', title: 'Car Mobility', handle: 'car-mobility', description: 'Everything for a safer, calmer car ride â€” ramps, tethers and traction.' },
@@ -1544,7 +1606,7 @@ async function main() {
 
   await seedProducts();
   await publishToOnlineStore();
-  await seedCollections();
+  if (!CHEWY_ONLY) await seedCollections();
 
   if (!DRY_RUN) {
     fs.writeFileSync(OUTPUT_FILE, JSON.stringify(manifest, null, 2));

@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "shopify:seed": "node scripts/shopify-seed.mjs",
     "shopify:seed:dry": "node scripts/shopify-seed.mjs --dry-run",
+    "shopify:chewy": "node scripts/shopify-seed.mjs --chewy",
+    "shopify:chewy:dry": "node scripts/shopify-seed.mjs --chewy --dry-run",
     "shopify:verify": "node scripts/shopify-seed.mjs --verify",
     "shopify:purge": "node scripts/shopify-seed.mjs --purge",
     "shopify:discounts:dry": "node scripts/shopify-bundle-discounts.mjs --dry-run",
