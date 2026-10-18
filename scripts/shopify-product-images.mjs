@@ -11,16 +11,18 @@
  *   2. HTTP POST the file   → multipart/form-data to target.url (params + file)
  *   3. productCreateMedia   → originalSource = resourceUrl, mediaContentType IMAGE
  *
- * Image sources (public/assets/product/):
- *   - premium-foldable-dog-car-ramp → the owner's white-background photos
- *     (revised/*.jpg). The flagship gallery stays that set.
- *   - mat / tether / chews / bed steps → original SVG renderings, rasterized to
- *     PNG here via `sharp` because Shopify product media must be raster
- *     (SVG is rejected). The storefront test catalog uses manufacturer
- *     photographs from public/assets/catalog/ for the mobility assortment.
+ * Image sources are paths under public/:
+ *   - premium-foldable-dog-car-ramp → the current flagship gallery JPEGs
+ *     (the specs card is text, so it is not uploaded).
+ *   - mat / tether → SVG renderings, rasterized to PNG via `sharp`
+ *     (Shopify rejects SVG).
+ *   - mobility assortment → manufacturer photographs in public/assets/catalog/.
+ *     Dimension diagrams and claim graphics are not in this set.
+ *   - the draft joint-chew product is left untouched.
  *
- * Idempotent: an image whose alt text already exists on the product is skipped,
- * so re-running never duplicates media.
+ * Idempotent: an image whose alt text already exists on the product is skipped.
+ * Media whose alt is not in this set is removed on apply, so an older photo
+ * does not stay stacked beside the new one.
  *
  * Auth + Admin GraphQL client mirror shopify-seed.mjs exactly. Credentials come
  * from .env.local (never committed, never pasted into chat):
@@ -38,7 +40,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
-const PRODUCT_DIR = path.join(ROOT, 'public', 'assets', 'product');
+const PUBLIC_DIR = path.join(ROOT, 'public');
 const OUTPUT_FILE = path.join(__dirname, 'product-images-output.json');
 
 const APPLY = process.argv.includes('--apply');
@@ -154,26 +156,78 @@ const IMAGE_MANIFEST = [
   {
     handle: 'premium-foldable-dog-car-ramp',
     images: [
-      { file: 'revised/ramp-studio-three-quarter.jpg', alt: 'The Premium Foldable Dog Car Ramp, three-quarter studio view on a white background' },
-      { file: 'revised/ramp-folded-studio.jpg', alt: 'The dog car ramp folded flat for storage, studio view on a white background' },
-      { file: 'revised/ramp-scene-deployed-tailgate.jpg', alt: 'The dog car ramp deployed at a vehicle tailgate' },
+      { file: 'assets/product/grit/ramp-german-shepherd-suv.jpg', alt: 'A German Shepherd walking up the Paw-Grip grit-deck ramp into the cargo area of a blue SUV while its owner encourages it' },
+      { file: 'assets/product/grit/ramp-white-dog-walking-up-suv.jpg', alt: 'A large white dog walking up the Paw-Grip grit-deck ramp into a white SUV, guided by its owner' },
+      { file: 'assets/product/grit/ramp-grit-deck-tailgate.jpg', alt: 'Close view of the Paw-Grip ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge' },
+      { file: 'assets/product/grit/ramp-boxer-hatchback.jpg', alt: 'A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches' },
+      { file: 'assets/product/grit/ramp-pickup-truck-rear-door.jpg', alt: 'The Paw-Grip ramp set up at the open rear door of a brown pickup truck cab' },
+      { file: 'assets/product/revised/ramp-scene-carrying-folded.jpg', alt: 'A man carrying the folded Paw-Grip ramp beside a white SUV while a white dog waits in the cargo area' },
+      { file: 'assets/product/revised/ramp-studio-three-quarter.jpg', alt: 'Studio view of the Paw-Grip foldable dog car ramp at a three-quarter angle on a white background' },
+      { file: 'assets/product/revised/ramp-folded-studio.jpg', alt: 'Studio view of the Paw-Grip foldable dog car ramp folded in half on a white background' },
     ],
   },
   {
     handle: 'heavy-duty-traction-mat-upgrade-2-pack',
-    images: [{ file: 'mat-traction-2pack.svg', alt: 'Heavy-duty traction mat two-pack with a textured non-slip surface' }],
+    images: [{ file: 'assets/product/mat-traction-2pack.svg', alt: 'Heavy-duty traction mat two-pack with a textured non-slip surface' }],
   },
   {
     handle: 'crash-tested-adjustable-car-safety-tether',
-    images: [{ file: 'tether-adjustable.svg', alt: 'Adjustable car safety tether with a seatbelt clip and slider buckle' }],
+    images: [{ file: 'assets/product/tether-adjustable.svg', alt: 'Adjustable car safety tether with a seatbelt clip and slider buckle' }],
   },
   {
-    handle: 'advanced-hip-joint-soft-chews',
-    images: [{ file: 'chews-soft-chew.svg', alt: 'Hip and joint soft chews in a stand-up pouch with soft-chew pieces' }],
+    handle: 'side-door-pet-steps',
+    images: [
+      { file: 'assets/catalog/side-door-steps.jpg', alt: 'Pet steps set up at a vehicle side door' },
+      { file: 'assets/catalog/side-door-steps-2.jpg', alt: 'A dog in the back seat with pet steps at the open side door' },
+    ],
+  },
+  {
+    handle: 'bed-ramp',
+    images: [
+      { file: 'assets/catalog/bed-ramp.jpg', alt: 'A fabric ramp running from the floor to a bed' },
+      { file: 'assets/catalog/bed-ramp-2.jpg', alt: 'A husky sitting beside a light wood ramp at the foot of a bed' },
+      { file: 'assets/catalog/bed-ramp-3.jpg', alt: 'A bulldog on a bed with a fabric ramp running down to the floor' },
+      { file: 'assets/catalog/bed-ramp-4.jpg', alt: 'A light wood bed ramp on a white background' },
+    ],
+  },
+  {
+    handle: 'extra-long-telescoping-dog-ramp',
+    images: [
+      { file: 'assets/catalog/extra-long-ramp.jpg', alt: 'A German Shepherd at the top of a long telescoping ramp into a pickup bed' },
+    ],
+  },
+  {
+    handle: 'compact-telescoping-dog-ramp',
+    images: [
+      { file: 'assets/catalog/compact-ramp.jpg', alt: 'A boxer standing in an open hatch with a compact telescoping ramp' },
+    ],
   },
   {
     handle: 'orthopedic-foam-bed-steps',
-    images: [{ file: 'bed-steps-foam.svg', alt: 'Orthopedic foam pet steps, a three-step set with removable covers' }],
+    images: [
+      { file: 'assets/catalog/foam-steps.jpg', alt: 'Foam pet steps on a white background' },
+      { file: 'assets/catalog/foam-steps-2.jpg', alt: 'A pug on a couch with foam pet steps beside it' },
+      { file: 'assets/catalog/foam-steps-3.jpg', alt: 'A small dog standing on foam pet steps next to an armchair' },
+    ],
+  },
+  {
+    handle: 'dog-hitch-step',
+    images: [
+      { file: 'assets/catalog/hitch-step.jpg', alt: 'A French bulldog standing on a hitch step at the back of an SUV' },
+      { file: 'assets/catalog/hitch-step-2.jpg', alt: 'A hitch step standing open on a white background' },
+      { file: 'assets/catalog/hitch-step-3.jpg', alt: 'A small dog stepping onto a hitch step at a vehicle tailgate' },
+      { file: 'assets/catalog/hitch-step-4.jpg', alt: 'Side view of a hitch step on a white background' },
+      { file: 'assets/catalog/hitch-step-5.jpg', alt: 'Three-quarter view of a hitch step on a white background' },
+    ],
+  },
+  {
+    handle: 'folding-pet-steps',
+    images: [
+      { file: 'assets/catalog/folding-steps.jpg', alt: 'A small dog beside gray folding pet steps in a living room' },
+      { file: 'assets/catalog/folding-steps-2.jpg', alt: 'A corgi beside tan folding pet steps next to a couch' },
+      { file: 'assets/catalog/folding-steps-3.jpg', alt: 'A white dog sitting on tan folding pet steps' },
+      { file: 'assets/catalog/folding-steps-4.jpg', alt: 'A collie beside gray folding pet steps next to a couch' },
+    ],
   },
 ];
 
@@ -191,7 +245,7 @@ function mimeTypeFor(file) {
 
 /** Reads a file; rasterizes SVG → PNG buffer (Shopify rejects SVG media). */
 async function loadImageBuffer(file) {
-  const abs = path.join(PRODUCT_DIR, file);
+  const abs = path.join(PUBLIC_DIR, file);
   if (!fs.existsSync(abs)) throw new Error(`Missing image file: ${path.relative(ROOT, abs)}`);
   const raw = fs.readFileSync(abs);
   if (path.extname(file).toLowerCase() === '.svg') {
@@ -217,7 +271,7 @@ async function findProduct(handle) {
        products(first: 1, query: $q) {
          edges { node {
            id title handle
-           media(first: 50) { edges { node { alt } } }
+           media(first: 50) { edges { node { id alt } } }
          } }
        }
      }`,
@@ -253,6 +307,21 @@ async function uploadToStagedTarget(target, buffer, filename, mimeType) {
     const body = await res.text().catch(() => '');
     throw new Error(`Staged upload failed (HTTP ${res.status}): ${body.slice(0, 200)}`);
   }
+}
+
+async function deleteMedia(productId, mediaIds) {
+  if (!mediaIds.length) return;
+  const data = await gql(
+    `mutation($productId: ID!, $mediaIds: [ID!]!) {
+       productDeleteMedia(productId: $productId, mediaIds: $mediaIds) {
+         deletedMediaIds
+         mediaUserErrors { field message }
+       }
+     }`,
+    { productId, mediaIds }
+  );
+  const result = data.productDeleteMedia;
+  if (result.mediaUserErrors?.length) throw new Error(result.mediaUserErrors.map((e) => e.message).join('; '));
 }
 
 async function createMedia(productId, resourceUrl, alt) {
@@ -312,9 +381,27 @@ async function main() {
       );
     }
 
+    const wantedAlts = new Set(entry.images.map((img) => img.alt.trim()));
+    if (!DRY_RUN && product) {
+      const stale = (product.media?.edges ?? [])
+        .map((edge) => edge.node)
+        .filter((node) => node?.id && !wantedAlts.has((node.alt || '').trim()));
+      if (stale.length) {
+        try {
+          await deleteMedia(product.id, stale.map((node) => node.id));
+          ok(`removed ${stale.length} older photo(s)`);
+          report.products[entry.handle] = { removed: stale.length };
+        } catch (err) {
+          fail(`could not remove older photos: ${err.message}`);
+        }
+      }
+    } else if (DRY_RUN) {
+      info('would remove any photo whose alt is not in this set');
+    }
+
     const uploaded = [];
     for (const img of entry.images) {
-      const abs = path.join(PRODUCT_DIR, img.file);
+      const abs = path.join(PUBLIC_DIR, img.file);
       if (!fs.existsSync(abs)) {
         fail(`missing file: ${img.file}`);
         continue;

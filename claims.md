@@ -176,7 +176,11 @@ Uploaded to Shopify by `scripts/shopify-product-images.mjs`
 - **Test mobility assortment** (side-door steps, bed ramp, telescoping ramps,
   hitch step, folding steps, foam steps) uses manufacturer photographs saved
   from PetSafe's public product images — the manufacturer behind the Chewy
-  listings — under `public/assets/catalog/`. The owner cleared those photos
+  listings — under `public/assets/catalog/`. Extra frames from those product
+  pages are on each product page. Dimension diagrams, slope guides, and
+  frames with baked marketing lines were left out (same rule as the removed
+  ramp spec-sheet collage). Each kept file was re-saved as a 1400×1400 JPEG
+  with EXIF, XMP, and IPTC stripped. The owner cleared those photos
   for this project. Captions under the photos are Paw-Grip copy. Product
   titles on the storefront are Paw-Grip names, not the manufacturer's marks.
   Star ratings on these cards are numeric test ratings (see rule 2). There

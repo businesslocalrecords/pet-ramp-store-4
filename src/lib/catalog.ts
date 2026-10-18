@@ -25,6 +25,8 @@ export interface CatalogProduct {
   ratingCount: number;
   image: string;
   imageAlt: string;
+  /** Extra manufacturer frames for the product page. The first entry is `image`. */
+  photos: readonly { src: string; alt: string; label: string }[];
   /** Second frame for the card hover, when we have one. */
   imageHover?: string;
   use: CatalogUse;
@@ -48,6 +50,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     imageHover: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
     imageAlt: 'A German Shepherd walking up the Paw-Grip ramp into an SUV',
+    photos: [],
     use: 'car',
     kind: 'ramp',
     capacityLb: 150,
@@ -69,6 +72,18 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 73,
     image: '/assets/catalog/side-door-steps.jpg',
     imageAlt: 'Pet steps set up at a vehicle side door',
+    photos: [
+      {
+        src: '/assets/catalog/side-door-steps.jpg',
+        alt: 'Pet steps set up at a vehicle side door',
+        label: 'Into the back seat',
+      },
+      {
+        src: '/assets/catalog/side-door-steps-2.jpg',
+        alt: 'A dog in the back seat with pet steps at the open side door',
+        label: 'At the door',
+      },
+    ],
     use: 'car',
     kind: 'stairs',
     capacityLb: 200,
@@ -85,6 +100,28 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 118,
     image: '/assets/catalog/bed-ramp.jpg',
     imageAlt: 'A fabric ramp running from the floor to a bed',
+    photos: [
+      {
+        src: '/assets/catalog/bed-ramp.jpg',
+        alt: 'A fabric ramp running from the floor to a bed',
+        label: 'Up to the mattress',
+      },
+      {
+        src: '/assets/catalog/bed-ramp-2.jpg',
+        alt: 'A husky sitting beside a light wood ramp at the foot of a bed',
+        label: 'Light wood',
+      },
+      {
+        src: '/assets/catalog/bed-ramp-3.jpg',
+        alt: 'A bulldog on a bed with a fabric ramp running down to the floor',
+        label: 'On the bed',
+      },
+      {
+        src: '/assets/catalog/bed-ramp-4.jpg',
+        alt: 'A light wood bed ramp on a white background',
+        label: 'The ramp',
+      },
+    ],
     use: 'home',
     kind: 'ramp',
     capacityLb: 120,
@@ -100,7 +137,14 @@ export const CATALOG: readonly CatalogProduct[] = [
     rating: 4.5,
     ratingCount: 64,
     image: '/assets/catalog/extra-long-ramp.jpg',
-    imageAlt: 'A long telescoping dog ramp on a white background',
+    imageAlt: 'A German Shepherd at the top of a long telescoping ramp into a pickup bed',
+    photos: [
+      {
+        src: '/assets/catalog/extra-long-ramp.jpg',
+        alt: 'A German Shepherd at the top of a long telescoping ramp into a pickup bed',
+        label: 'For tall truck beds',
+      },
+    ],
     use: 'car',
     kind: 'ramp',
     capacityLb: 150,
@@ -116,7 +160,14 @@ export const CATALOG: readonly CatalogProduct[] = [
     rating: 4.3,
     ratingCount: 29,
     image: '/assets/catalog/compact-ramp.jpg',
-    imageAlt: 'A compact telescoping dog ramp on a white background',
+    imageAlt: 'A boxer standing in an open hatch with a compact telescoping ramp',
+    photos: [
+      {
+        src: '/assets/catalog/compact-ramp.jpg',
+        alt: 'A boxer standing in an open hatch with a compact telescoping ramp',
+        label: 'The short trunk',
+      },
+    ],
     use: 'car',
     kind: 'ramp',
     capacityLb: 120,
@@ -133,6 +184,23 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 41,
     image: '/assets/catalog/foam-steps.jpg',
     imageAlt: 'Foam pet steps on a white background',
+    photos: [
+      {
+        src: '/assets/catalog/foam-steps.jpg',
+        alt: 'Foam pet steps on a white background',
+        label: 'Two steps to the couch',
+      },
+      {
+        src: '/assets/catalog/foam-steps-2.jpg',
+        alt: 'A pug on a couch with foam pet steps beside it',
+        label: 'By the couch',
+      },
+      {
+        src: '/assets/catalog/foam-steps-3.jpg',
+        alt: 'A small dog standing on foam pet steps next to an armchair',
+        label: 'On the chair',
+      },
+    ],
     use: 'home',
     kind: 'stairs',
     capacityLb: 80,
@@ -149,6 +217,33 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 52,
     image: '/assets/catalog/hitch-step.jpg',
     imageAlt: 'A hitch-mounted pet step on a white background',
+    photos: [
+      {
+        src: '/assets/catalog/hitch-step.jpg',
+        alt: 'A French bulldog standing on a hitch step at the back of an SUV',
+        label: 'A step at the tailgate',
+      },
+      {
+        src: '/assets/catalog/hitch-step-2.jpg',
+        alt: 'A hitch step standing open on a white background',
+        label: 'Open',
+      },
+      {
+        src: '/assets/catalog/hitch-step-3.jpg',
+        alt: 'A small dog stepping onto a hitch step at a vehicle tailgate',
+        label: 'In the driveway',
+      },
+      {
+        src: '/assets/catalog/hitch-step-4.jpg',
+        alt: 'Side view of a hitch step on a white background',
+        label: 'Side view',
+      },
+      {
+        src: '/assets/catalog/hitch-step-5.jpg',
+        alt: 'Three-quarter view of a hitch step on a white background',
+        label: 'Three-quarter',
+      },
+    ],
     use: 'cargo',
     kind: 'stairs',
     capacityLb: 150,
@@ -165,6 +260,28 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 88,
     image: '/assets/catalog/folding-steps.jpg',
     imageAlt: 'Folding pet steps on a white background',
+    photos: [
+      {
+        src: '/assets/catalog/folding-steps.jpg',
+        alt: 'A small dog beside gray folding pet steps in a living room',
+        label: 'Flattens for the closet',
+      },
+      {
+        src: '/assets/catalog/folding-steps-2.jpg',
+        alt: 'A corgi beside tan folding pet steps next to a couch',
+        label: 'Tan',
+      },
+      {
+        src: '/assets/catalog/folding-steps-3.jpg',
+        alt: 'A white dog sitting on tan folding pet steps',
+        label: 'Four steps',
+      },
+      {
+        src: '/assets/catalog/folding-steps-4.jpg',
+        alt: 'A collie beside gray folding pet steps next to a couch',
+        label: 'Gray',
+      },
+    ],
     use: 'home',
     kind: 'stairs',
     capacityLb: 100,
@@ -181,6 +298,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 36,
     image: '/assets/product/mat-traction-2pack.svg',
     imageAlt: 'Illustration of the traction mat two-pack',
+    photos: [],
     use: 'cargo',
     kind: 'accessory',
     capacityLb: 250,
@@ -197,6 +315,7 @@ export const CATALOG: readonly CatalogProduct[] = [
     ratingCount: 44,
     image: '/assets/product/tether-adjustable.svg',
     imageAlt: 'Illustration of the adjustable car safety tether',
+    photos: [],
     use: 'car',
     kind: 'accessory',
     capacityLb: 250,

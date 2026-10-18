@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { findBySlug, formatPrice, CATALOG } from '../lib/catalog';
 import { Stars } from '../components/Stars';
@@ -7,6 +7,8 @@ import { fetchProductByHandle } from '../lib/shopify';
 import { useCart } from '../lib/cart-context';
 import { appendAttribution, collectAttributionParams } from '../lib/dki';
 import { ProductCard } from '../components/ProductCard';
+import { ProductPhotoGallery } from '../components/ProductPhotoGallery';
+import { MAX_QUANTITY } from '../lib/purchase-provider';
 
 export const CatalogProductPage: React.FC = () => {
   const { handle = '' } = useParams();
@@ -14,6 +16,41 @@ export const CatalogProductPage: React.FC = () => {
   const { startCheckout } = useCart();
   const [buying, setBuying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState<number | null>(null);
+  const stockHandle = product && !product.flagship ? product.shopifyHandle : '';
+  const [quantityHandle, setQuantityHandle] = useState(stockHandle);
+
+  if (quantityHandle !== stockHandle) {
+    setQuantityHandle(stockHandle);
+    setQuantity(1);
+    setStock(null);
+    setError(null);
+  }
+
+  useEffect(() => {
+    if (!stockHandle) return;
+    let cancelled = false;
+    fetchProductByHandle(stockHandle)
+      .then((live) => {
+        if (cancelled) return;
+        const variant = live?.variants.edges.map((edge) => edge.node).find((node) => node.availableForSale);
+        if (!variant) {
+          setStock(0);
+          return;
+        }
+        setStock(typeof variant.quantityAvailable === 'number' ? variant.quantityAvailable : null);
+      })
+      .catch(() => {
+        if (!cancelled) setStock(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [stockHandle]);
+
+  const maxQuantity = Math.max(1, Math.min(MAX_QUANTITY, stock ?? MAX_QUANTITY));
+  const safeQuantity = Math.min(quantity, maxQuantity);
 
   if (!product || product.flagship) {
     return (
@@ -37,7 +74,8 @@ export const CatalogProductPage: React.FC = () => {
         setError('This test product is not in the live Shopify catalog yet. Its handle is ready for the seeder.');
         return;
       }
-      const cart = await startCheckout([{ merchandiseId: variant.id, quantity: 1 }]);
+      const units = Math.min(safeQuantity, Math.max(1, Math.min(MAX_QUANTITY, variant.quantityAvailable ?? MAX_QUANTITY)));
+      const cart = await startCheckout([{ merchandiseId: variant.id, quantity: units }]);
       window.location.assign(appendAttribution(cart.checkoutUrl, collectAttributionParams()));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Checkout could not start.');
@@ -59,12 +97,18 @@ export const CatalogProductPage: React.FC = () => {
       </nav>
 
       <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
-        <figure>
-          <div className="overflow-hidden rounded-2xl bg-[#F3F6F7]">
-            <img src={product.image} alt={product.imageAlt} className="aspect-square w-full object-contain" />
-          </div>
-          <figcaption className="mt-3 text-sm font-semibold text-[#5C6B73]">{product.caption}</figcaption>
-        </figure>
+        <div>
+          {product.photos.length > 0 ? (
+            <ProductPhotoGallery photos={product.photos} />
+          ) : (
+            <figure>
+              <div className="overflow-hidden rounded-2xl bg-[#F3F6F7]">
+                <img src={product.image} alt={product.imageAlt} className="aspect-square w-full object-contain" />
+              </div>
+              <figcaption className="mt-3 text-sm font-semibold text-[#5C6B73]">{product.caption}</figcaption>
+            </figure>
+          )}
+        </div>
 
         <div className="lg:sticky lg:top-28">
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Paw-Grip</p>
@@ -85,11 +129,28 @@ export const CatalogProductPage: React.FC = () => {
               </li>
             ))}
           </ul>
+          <div className="mt-6 flex items-center gap-3">
+            <label htmlFor="product-quantity" className="text-xs font-bold uppercase tracking-wide text-[#5C6B73]">
+              Quantity
+            </label>
+            <select
+              id="product-quantity"
+              value={safeQuantity}
+              onChange={(event) => setQuantity(Number(event.target.value))}
+              className="min-h-11 rounded-md border border-[#E4EAEB] bg-white px-3 text-sm font-bold text-[#14202B]"
+            >
+              {Array.from({ length: maxQuantity }, (_, index) => index + 1).map((n) => (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              ))}
+            </select>
+          </div>
           <button
             type="button"
             onClick={buy}
             disabled={buying}
-            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#F37021] text-base font-bold text-white hover:bg-[#D95E1A] disabled:opacity-60"
+            className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-full bg-[#F37021] text-base font-bold text-white hover:bg-[#D95E1A] disabled:opacity-60"
           >
             {buying ? 'Starting checkout…' : 'Add to cart'}
           </button>
