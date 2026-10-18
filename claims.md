@@ -204,8 +204,8 @@ Owner decision, not yet applied to the live offer. Checkout still charges the Sh
 
 - Paw Grip's cost for a product taken from Chewy is the price Chewy lists. Chewy's price is not the price Paw Grip charges.
 - Ad planning is 40 cents a click, and the price must cover 25 clicks on a sale ($10).
-- Free insured shipping is still on Paw Grip. Leave about $18 in the price for a ramp-sized parcel.
-- Selling price = Chewy listed price + $10 + $18, rounded up to the next `.99`. No new compare-at price is invented from Chewy's number.
+- Free insured shipping is still on Paw Grip. Leave $5 in the price for shipping.
+- Selling price = Chewy listed price + $10 + $5, rounded up to the next `.99`. No new compare-at price is invented from Chewy's number.
 
 ## Test catalog (October 2026)
 
