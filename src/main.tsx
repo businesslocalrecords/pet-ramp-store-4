@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles/globals.css'
-import App from './pages/index.tsx'
+import App from './App.tsx'
 import { CartProvider } from './lib/cart'
 import { initAnalytics } from './lib/analytics'
 import { trackClick } from './lib/click-tracker'

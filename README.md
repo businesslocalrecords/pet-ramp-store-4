@@ -159,9 +159,10 @@ checkout so attribution survives the cross-domain hop.
 
 ## Assets & gates
 
-Product renderings in `public/assets/product/` are original SVG artwork on
-white backgrounds (NOT scraped photography — see `claims.md`). Owner photos
-slot in through `ASSETS.heroPhotos`. Gated sections (`GATES` in
+The flagship gallery is the owner's photo set in `ASSETS.heroPhotos`.
+Accessory SVGs live in `public/assets/product/`. The test ramp-and-stairs
+catalog uses manufacturer photographs in `public/assets/catalog/` (see
+`claims.md`). Gated sections (`GATES` in
 `src/lib/assets.ts`) stay inert until their real asset exists; flipping a
 gate is documented in `AGENTS.md`.
 

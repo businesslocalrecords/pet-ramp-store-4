@@ -26,7 +26,7 @@ export const Byline: React.FC = () => {
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
       <p className="text-sm font-bold text-stone-900">
-        By the <span className="text-stone-900">PawGrip Pro</span> team
+        By the <span className="text-stone-900">Paw-Grip</span> team
       </p>
 
       <span className="hidden h-6 w-px bg-stone-900/10 sm:block" aria-hidden="true" />

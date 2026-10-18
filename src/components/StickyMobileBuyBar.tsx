@@ -32,6 +32,15 @@ export const StickyMobileBuyBar: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!visible) return;
+    const previous = document.body.style.paddingBottom;
+    document.body.style.paddingBottom = '5.5rem';
+    return () => {
+      document.body.style.paddingBottom = previous;
+    };
+  }, [visible]);
+
   if (!visible) return null;
 
   return (

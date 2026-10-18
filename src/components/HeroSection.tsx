@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { readDkiParams } from '../lib/dki';
 import { ASSETS, type HeroPhoto } from '../lib/assets';
 import { RAMP_SIZES } from '../lib/offers';
@@ -12,13 +12,13 @@ import { RAMP_SIZES } from '../lib/offers';
 const FALLBACK_FRAMES: HeroPhoto[] = [
   {
     src: ASSETS.product.standard,
-    alt: 'Compact 62-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
+    alt: 'Compact 62-inch configuration of the Paw-Grip foldable dog car ramp, side view',
     label: 'Compact \u00b7 62\u2033',
     fit: 'contain',
   },
   {
     src: ASSETS.product.extended,
-    alt: 'Extended 70-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
+    alt: 'Extended 70-inch configuration of the Paw-Grip foldable dog car ramp, side view',
     label: 'Extended \u00b7 70\u2033',
     fit: 'contain',
   },
@@ -81,10 +81,13 @@ function orderForVehicle(frames: readonly HeroPhoto[], vehicleKey: string | null
  */
 export const HeroSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [viewerOpen, setViewerOpen] = useState(false);
   // Read once on mount. This is a client-only SPA, so there is no hydration
   // mismatch to guard against.
   const [dki] = useState(() => readDkiParams());
   const trackRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const scrollLock = useRef(false);
 
   const compact = RAMP_SIZES[0];
 
@@ -95,6 +98,7 @@ export const HeroSection: React.FC = () => {
   const active = frames[Math.min(activeIndex, frames.length - 1)];
 
   const onTrackScroll = () => {
+    if (scrollLock.current) return;
     const el = trackRef.current;
     if (!el || el.clientWidth === 0) return;
     const idx = Math.round(el.scrollLeft / el.clientWidth);
@@ -103,9 +107,38 @@ export const HeroSection: React.FC = () => {
 
   const goTo = (idx: number) => {
     const el = trackRef.current;
-    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'smooth' });
+    scrollLock.current = true;
     setActiveIndex(idx);
+    if (el) el.scrollTo({ left: idx * el.clientWidth, behavior: 'auto' });
+    window.setTimeout(() => {
+      scrollLock.current = false;
+    }, 80);
   };
+
+  const openViewer = (idx: number) => {
+    goTo(idx);
+    setViewerOpen(true);
+  };
+
+  const stepViewer = (delta: number) => {
+    goTo((activeIndex + delta + frames.length) % frames.length);
+  };
+
+  useEffect(() => {
+    if (!viewerOpen) return;
+    closeButtonRef.current?.focus();
+  }, [viewerOpen]);
+
+  useEffect(() => {
+    if (!viewerOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setViewerOpen(false);
+      if (event.key === 'ArrowRight') goTo((activeIndex + 1) % frames.length);
+      if (event.key === 'ArrowLeft') goTo((activeIndex - 1 + frames.length) % frames.length);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [viewerOpen, activeIndex, frames.length]);
 
   return (
     <section id="hero" className="scroll-mt-24">
@@ -134,26 +167,33 @@ export const HeroSection: React.FC = () => {
             {frames.map((frame, idx) => (
               <div
                 key={frame.src}
-                className="aspect-[5/3] w-full shrink-0 snap-center"
+                className="aspect-square w-full shrink-0 snap-center"
                 style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
                 aria-hidden={idx !== activeIndex}
               >
-                {frame.kind === 'specs' ? (
-                  <SpecsCard />
-                ) : (
-                <img
-                  src={frame.src}
-                  alt={frame.alt}
-                  width={1000}
-                  height={600}
-                  loading={idx === 0 ? 'eager' : 'lazy'}
-                  fetchPriority={idx === 0 ? 'high' : 'auto'}
-                  decoding="async"
-                  draggable={false}
-                  className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
-                  style={frame.position ? { objectPosition: frame.position } : undefined}
-                />
-                )}
+                <button
+                  type="button"
+                  className="block h-full w-full"
+                  aria-label={`slide ${idx + 1} of ${frames.length}`}
+                  onClick={() => openViewer(idx)}
+                >
+                  {frame.kind === 'specs' ? (
+                    <SpecsCard />
+                  ) : (
+                    <img
+                      src={frame.src}
+                      alt={frame.alt}
+                      width={1000}
+                      height={600}
+                      loading={idx === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={idx === 0 ? 'high' : 'auto'}
+                      decoding="async"
+                      draggable={false}
+                      className={`h-full w-full ${frame.fit === 'contain' ? 'object-contain' : 'object-cover'}`}
+                      style={frame.position ? { objectPosition: frame.position } : undefined}
+                    />
+                  )}
+                </button>
               </div>
             ))}
           </div>
@@ -179,8 +219,8 @@ export const HeroSection: React.FC = () => {
               type="button"
               role="tab"
               aria-selected={idx === activeIndex}
-              aria-label={frame.alt}
-              onClick={() => goTo(idx)}
+              aria-label={`slide ${idx + 1} of ${frames.length}`}
+              onClick={() => openViewer(idx)}
               className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 transition-shadow duration-200 sm:h-14 sm:w-14 sm:rounded-xl ${
                 idx === activeIndex ? 'ring-2 ring-blue-600' : 'ring-stone-900/10 hover:ring-stone-900/20'
               }`}
@@ -205,6 +245,63 @@ export const HeroSection: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {viewerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/80 p-4"
+          role="presentation"
+          onClick={() => setViewerOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Product photo"
+            className="relative flex h-[min(90vh,860px)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex justify-end px-1 py-1">
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="h-10 rounded-full px-3 text-sm font-semibold text-stone-700"
+                onClick={() => setViewerOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4">
+              {active.kind === 'specs' ? (
+                <div className="h-80 w-full">
+                  <SpecsCard />
+                </div>
+              ) : (
+                <img
+                  src={active.src}
+                  alt={active.alt}
+                  className="max-h-full w-full object-contain"
+                />
+              )}
+            </div>
+            <div className="flex shrink-0 items-center justify-between gap-2 border-t border-stone-200 px-3 py-3">
+              <button
+                type="button"
+                className="h-11 shrink-0 rounded-full border border-stone-300 bg-white px-4 text-sm font-bold text-stone-900"
+                onClick={() => stepViewer(-1)}
+              >
+                Previous
+              </button>
+              <p className="min-w-0 text-center text-sm font-semibold text-stone-600">{active.label}</p>
+              <button
+                type="button"
+                className="h-11 shrink-0 rounded-full border border-stone-300 bg-white px-4 text-sm font-bold text-stone-900"
+                onClick={() => stepViewer(1)}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

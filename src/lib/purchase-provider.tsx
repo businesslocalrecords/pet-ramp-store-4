@@ -18,8 +18,8 @@ import { PurchaseContext, type PurchaseContextValue } from './purchase-context';
 
 const BUMP_PRICE = ADDON_PRICES.tractionMat;
 
-/** Highest ramp quantity offered in the buy box's quantity picker. */
-const MAX_QUANTITY = 5;
+/** Highest quantity offered in a product quantity menu. */
+export const MAX_QUANTITY = 5;
 
 type Variant = ProductVariantEdge['node'];
 
