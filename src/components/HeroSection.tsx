@@ -256,7 +256,7 @@ export const HeroSection: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Product photo"
-            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
+            className="relative flex h-[min(90vh,860px)] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex justify-end px-1 py-1">
@@ -269,25 +269,23 @@ export const HeroSection: React.FC = () => {
                 Close
               </button>
             </div>
-            <div className="flex min-h-0 flex-1 items-center justify-center">
-              <div className="flex max-h-[70vh] w-full items-center justify-center">
-                {active.kind === 'specs' ? (
-                  <div className="h-80 w-full">
-                    <SpecsCard />
-                  </div>
-                ) : (
-                  <img
-                    src={active.src}
-                    alt={active.alt}
-                    className="max-h-[70vh] w-full object-contain"
-                  />
-                )}
-              </div>
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-hidden px-4">
+              {active.kind === 'specs' ? (
+                <div className="h-80 w-full">
+                  <SpecsCard />
+                </div>
+              ) : (
+                <img
+                  src={active.src}
+                  alt={active.alt}
+                  className="max-h-full w-full object-contain"
+                />
+              )}
             </div>
-            <div className="flex items-center justify-between gap-2 px-3 py-3">
+            <div className="flex shrink-0 items-center justify-between gap-2 border-t border-stone-200 px-3 py-3">
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
+                className="h-11 shrink-0 rounded-full border border-stone-300 bg-white px-4 text-sm font-bold text-stone-900"
                 onClick={() => stepViewer(-1)}
               >
                 Previous
@@ -295,7 +293,7 @@ export const HeroSection: React.FC = () => {
               <p className="min-w-0 text-center text-sm font-semibold text-stone-600">{active.label}</p>
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
+                className="h-11 shrink-0 rounded-full border border-stone-300 bg-white px-4 text-sm font-bold text-stone-900"
                 onClick={() => stepViewer(1)}
               >
                 Next
