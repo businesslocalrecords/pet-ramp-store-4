@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, PawPrint, Search, ShoppingCart, X } from 'lucide-react';
 import { useCart } from '../lib/cart-context';
@@ -13,13 +13,27 @@ const LINKS = [
 ];
 
 export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { search } = useLocation();
+  const { pathname, hash, search } = useLocation();
   const navigate = useNavigate();
   const { totalQuantity } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [compact, setCompact] = useState(false);
   const params = new URLSearchParams(search);
+
+  useLayoutEffect(() => {
+    // The window keeps its scroll offset across routes. A short product page
+    // then opens at the bottom of the previous page. Smooth scrolling would
+    // glide there from the footer, so this jump is instant.
+    if (hash) {
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (target) {
+        target.scrollIntoView({ behavior: 'instant', block: 'start' });
+        return;
+      }
+    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname, hash]);
 
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 72);
