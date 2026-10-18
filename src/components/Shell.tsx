@@ -42,7 +42,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0F6E62]">
               <PawPrint className="h-5 w-5 text-white" aria-hidden="true" />
             </span>
-            <span className="text-lg font-extrabold tracking-tight">Paw-Grip</span>
+            <span className="text-lg font-extrabold tracking-tight">Paw Grip</span>
           </Link>
 
           <nav className="ml-6 hidden items-center gap-6 md:flex" aria-label="Shop">
