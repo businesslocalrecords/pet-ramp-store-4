@@ -207,6 +207,8 @@ Owner decision, not yet applied to the live offer. Checkout still charges the Sh
 - Free insured shipping is still on Paw Grip. Leave $5 in the price for shipping.
 - Selling price = Chewy listed price + $10 + $5, rounded up to the next `.99`. No new compare-at price is invented from Chewy's number.
 
+The Chewy dog-stairs category (184 distinct products) is on `/dog-ramps`. Photos were saved from `image.chewy.com`, resized to a 1400-pixel maximum, and written as JPEG with EXIF, XMP, and IPTC removed. These products are not in Shopify yet, so checkout tells the shopper that. No star rating was invented for them. The existing Paw Grip products keep their own prices.
+
 ## Test catalog (October 2026)
 
 | Where | What changed | Why |

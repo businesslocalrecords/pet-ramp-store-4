@@ -2,6 +2,7 @@ import React from 'react';
 
 /** Numeric rating. No review quote, no reviewer name. */
 export const Stars: React.FC<{ value: number; count: number }> = ({ value, count }) => {
+  if (count <= 0) return null;
   const full = Math.max(0, Math.min(5, Math.round(value)));
   const marks = '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(full);
   return (

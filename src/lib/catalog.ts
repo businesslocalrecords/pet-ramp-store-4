@@ -6,7 +6,8 @@
  * seeder. Star ratings are numeric test ratings — no review text.
  */
 
-import { ADDON_PRICES, PRODUCT_HANDLES, TIERS, formatMoney } from './offers';
+import chewyProducts from './chewy-products.json';
+import { ADDON_PRICES, PRODUCT_HANDLES, TIERS, formatMoney, priceFromChewyCost } from './offers';
 
 export type CatalogUse = 'car' | 'home' | 'cargo';
 export type CatalogKind = 'ramp' | 'stairs' | 'accessory';
@@ -37,7 +38,7 @@ export interface CatalogProduct {
   flagship?: boolean;
 }
 
-export const CATALOG: readonly CatalogProduct[] = [
+const OWN_CATALOG: readonly CatalogProduct[] = [
   {
     slug: 'foldable-dog-car-ramp',
     shopifyHandle: PRODUCT_HANDLES.heroRamp,
@@ -322,6 +323,46 @@ export const CATALOG: readonly CatalogProduct[] = [
     bullets: ['Clips to a harness', 'Adjustable length', 'Front or rear seat'],
   },
 ];
+
+interface ChewyProduct {
+  dp: string;
+  name: string;
+  cost: number;
+  kind: CatalogKind;
+  use: CatalogUse;
+  images: string[];
+}
+
+function chewyCaption(use: CatalogUse): string {
+  if (use === 'car') return 'For the car';
+  if (use === 'cargo') return 'For the hitch';
+  return 'For the bed or the couch';
+}
+
+const CHEWY_CATALOG: readonly CatalogProduct[] = (chewyProducts as ChewyProduct[]).map((item) => ({
+  slug: `dp-${item.dp}`,
+  shopifyHandle: `chewy-${item.dp}`,
+  name: item.name,
+  caption: chewyCaption(item.use),
+  summary: 'In the shop for the car, the bed, or the couch.',
+  price: priceFromChewyCost(item.cost),
+  rating: 0,
+  ratingCount: 0,
+  image: item.images[0],
+  imageHover: item.images[1],
+  imageAlt: item.name,
+  photos: item.images.map((src, index) => ({
+    src,
+    alt: item.name,
+    label: index === 0 ? 'Photo' : `Photo ${index + 1}`,
+  })),
+  use: item.use,
+  kind: item.kind,
+  capacityLb: 0,
+  bullets: [],
+}));
+
+export const CATALOG: readonly CatalogProduct[] = [...OWN_CATALOG, ...CHEWY_CATALOG];
 
 export function productPath(product: CatalogProduct): string {
   return product.flagship ? '/products/foldable-dog-car-ramp' : `/products/${product.slug}`;

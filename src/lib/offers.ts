@@ -119,6 +119,17 @@ export function money(value: number): number {
   return Math.round((value + Number.EPSILON) * 100) / 100;
 }
 
+/**
+ * Selling price for a product whose cost is the Chewy listed price.
+ * Adds $10 for 25 clicks at 40 cents and $5 for shipping, then rounds up
+ * to the next .99.
+ */
+export function priceFromChewyCost(cost: number): number {
+  const sum = money(cost + 15);
+  const next = money(Math.floor(sum) + 0.99);
+  return next + 0.001 < sum ? money(next + 1) : next;
+}
+
 /** Formats as a 2-decimal string, e.g. 79.9 -> "79.90". */
 export function formatMoney(value: number): string {
   return money(value).toFixed(2);
