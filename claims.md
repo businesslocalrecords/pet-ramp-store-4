@@ -9,9 +9,11 @@ here first.
 
 1. **No claim without a source.** Specifications, policy numbers and prices
    live in `src/lib/offers.ts` / `src/lib/policy.ts` and are single-sourced.
-2. **No invented social proof.** No star ratings, review counts, "94% of
-   customers", customer counts, or vet/medical endorsements that the store
-   cannot produce.
+2. **No invented reviews.** No review quotes, reviewer names, "94% of
+   customers", customer counts, or vet/medical endorsements. Numeric star
+   ratings and a rating count are allowed on the test catalog (owner
+   decision, October 2026). They are shown in the UI only — never as
+   JSON-LD `aggregateRating`, and never as the removed 4.9 / 2,847 figure.
 3. **No medical claims.** The ramp is described with physics and specs
    (slope angles, published weight ratings); health outcomes are deferred to
    the visitor's veterinarian.
@@ -79,7 +81,7 @@ The original brief asked to strip all compare-at prices. The owner decided to
 ## "Manual cured" image set — provenance and what is deliberately not displayed
 
 The owner's `product images/ramp/manual cured/` folder holds 8 Gemini-generated
-images produced from scraped Chewy/PetSafe reference photography
+images produced from manufacturer reference photography
 (`product images/ramp/PetSafe …/`). All 8 are committed to
 `public/assets/product/manual-cured/` (renamed `.jfif` → `.jpg` — identical JPEG
 bytes, avoids MIME ambiguity on the static host). **None is displayed anymore:**
@@ -162,26 +164,29 @@ unit is still owed before a Merchant Center image submit (LAUNCH_BLOCKERS #2).
 | "About This Item" panels (Details / Instructions / Size) | Built only from `offers.ts` sizes and `policy.ts` labels; instructions describe the bi-fold unfold → rest on bumper/cargo floor → treat-train → fold & latch use, no new performance claim |
 | Quantity selector (1–5) | UX only; capped by Shopify stock, price = unit price × quantity |
 
-## Product catalog imagery (Shopify) — provenance & honesty
+## Product catalog imagery
 
-Uploaded to the store's catalog by `scripts/shopify-product-images.mjs`
-(`npm run shopify:images:apply`). Two tiers, deliberately distinguished:
+Uploaded to Shopify by `scripts/shopify-product-images.mjs`
+(`npm run shopify:images:apply`) for the original four products.
 
-- **Hero ramp** (`premium-foldable-dog-car-ramp`) uses the owner's **real**
-  white-background photos from `public/assets/product/revised/`. Real beats
-  invented, so the flagship product shows real imagery.
-- **Mat, tether, soft chews, foam bed steps** have no owner photo in the repo,
-  so each gets an **original SVG illustration** (`public/assets/product/*.svg`),
-  rasterized to PNG at upload time because Shopify product media must be raster
-  (SVG is rejected). These are **placeholder renderings, not photographs of real
-  inventory** — alt text describes only the depicted form, and no image asserts
-  ownership, review counts, or veterinary endorsement.
+- **Hero ramp** (`premium-foldable-dog-car-ramp`) keeps the owner's photo set.
+  The storefront gallery is `ASSETS.heroPhotos`. Those files are not replaced.
+- **Mat, tether, soft chews** still use the SVG illustrations when this script
+  runs, because they have no manufacturer photograph in `public/assets/catalog/`.
+- **Test mobility assortment** (side-door steps, bed ramp, telescoping ramps,
+  hitch step, folding steps, foam steps) uses manufacturer photographs saved
+  from PetSafe's public product images — the manufacturer behind the Chewy
+  listings — under `public/assets/catalog/`. The owner cleared those photos
+  for this project. Captions under the photos are Paw-Grip copy. Product
+  titles on the storefront are Paw-Grip names, not the manufacturer's marks.
+  Star ratings on these cards are numeric test ratings (see rule 2). There
+  is no review text.
 
-**Not Merchant-Center-submittable.** The invented renderings (and the ramp's
-scene photos, unless the owner confirms they photograph the shipped unit) are
-still owed white-background photography of the actual product before a Google
-Merchant Center image submit — this tracks the existing open item in
-LAUNCH_BLOCKERS. Adding catalog images here is a storefront/UX fix; it does not
-close the Merchant Center imagery blocker. No new textual claim is introduced by
-the imagery.
+## Test catalog (October 2026)
+
+| Where | What changed | Why |
+|---|---|---|
+| Homepage, `/dog-ramps`, `/products/:handle` | The site is a ramp-and-stairs shop, not a one-product landing | Owner decision: meet any pet owner looking for a ramp, using Shopify handles, for this test |
+| `public/assets/catalog/` | Manufacturer photographs on the new products | Owner has written notice from the manufacturer that the photos may be used. Chewy itself returned 403 to the browser on port 9222, so the files were saved from the manufacturer's own product images |
+| Star ratings | A rating and a count on each catalog card | Owner allowed invented ratings and not reviews. No `aggregateRating` JSON-LD |
 

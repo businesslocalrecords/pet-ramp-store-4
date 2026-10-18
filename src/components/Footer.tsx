@@ -9,10 +9,10 @@ const linkGroups = [
   {
     title: 'Product',
     links: [
-      { label: 'Benefits', href: '#benefits' },
-      { label: 'Compare options', href: '#compare' },
-      { label: 'Size finder', href: '#size-guide' },
-      { label: 'FAQ', href: '#faq' },
+      { label: 'Shop ramps', href: '/dog-ramps' },
+      { label: 'Foldable car ramp', href: '/products/foldable-dog-car-ramp' },
+      { label: 'Size finder', href: '/products/foldable-dog-car-ramp#size-guide' },
+      { label: 'FAQ', href: '/products/foldable-dog-car-ramp#faq' },
     ],
   },
   {
@@ -78,10 +78,10 @@ export const Footer: React.FC = () => {
             {POLICY.returnDays}-day risk-free trial, free insured shipping, free returns.
           </p>
           <a
-            href="#offer"
+            href="/products/foldable-dog-car-ramp"
             className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-md bg-[#F37021] px-9 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-[#D95E1A]"
           >
-            Get the PawGrip Pro
+            Shop Paw-Grip
           </a>
         </div>
       </div>

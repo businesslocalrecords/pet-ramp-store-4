@@ -106,11 +106,13 @@ section never downloads its lazy chunk.
 
 ## Claim discipline
 
-No invented reviews, star ratings, "94% of customers", vet endorsements,
-medical claims, or lifetime warranties. Every rewording is recorded with its
-reason in `claims.md` — add a row before adding a claim. Compare-at prices
-are allowed as a subtle anchor (owner decision) but must be real prices the
-store has charged.
+No invented reviews, review quotes, reviewer names, "94% of customers", vet
+endorsements, medical claims, or lifetime warranties. Numeric star ratings
+and a rating count are allowed on test-catalog products (owner decision,
+recorded in `claims.md`); they are not written into JSON-LD `aggregateRating`.
+Every rewording is recorded with its reason in `claims.md` — add a row before
+adding a claim. Compare-at prices are allowed as a subtle anchor (owner
+decision) but must be real prices the store has charged.
 
 ## Untracked working files
 

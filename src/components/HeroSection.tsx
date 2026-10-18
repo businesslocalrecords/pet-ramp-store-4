@@ -12,13 +12,13 @@ import { RAMP_SIZES } from '../lib/offers';
 const FALLBACK_FRAMES: HeroPhoto[] = [
   {
     src: ASSETS.product.standard,
-    alt: 'Compact 62-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
+    alt: 'Compact 62-inch configuration of the Paw-Grip foldable dog car ramp, side view',
     label: 'Compact \u00b7 62\u2033',
     fit: 'contain',
   },
   {
     src: ASSETS.product.extended,
-    alt: 'Extended 70-inch configuration of the PawGrip Pro foldable dog car ramp, side view',
+    alt: 'Extended 70-inch configuration of the Paw-Grip foldable dog car ramp, side view',
     label: 'Extended \u00b7 70\u2033',
     fit: 'contain',
   },

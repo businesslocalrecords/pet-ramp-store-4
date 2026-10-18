@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { AnnouncementBar } from '../components/AnnouncementBar';
-import { StickyHeader } from '../components/StickyHeader';
+import { Link } from 'react-router-dom';
 import { HeroSection } from '../components/HeroSection';
 import { BuyBox } from '../components/BuyBox';
 import { QuickAnswers } from '../components/QuickAnswers';
@@ -11,7 +10,6 @@ import { ComparisonTable } from '../components/ComparisonTable';
 import { SizeGuide } from '../components/SizeGuide';
 import { ShippingReturns } from '../components/ShippingReturns';
 import { Faq } from '../components/Faq';
-import { Footer } from '../components/Footer';
 import { StickyMobileBuyBar } from '../components/StickyMobileBuyBar';
 import { FounderNote } from '../components/FounderNote';
 import { PurchaseProvider } from '../lib/purchase-provider';
@@ -92,15 +90,15 @@ const Page: React.FC = () => {
   const [offerRef, offerFits] = useFitsViewport<HTMLDivElement>();
 
   return (
-    <div className="min-h-screen bg-white text-stone-900 antialiased selection:bg-blue-200 selection:text-stone-900">
-      {/* Glass header — pinned to the top, always visible, follows the scroll */}
-      <StickyHeader />
-
-      {/* Static announcement bar — sits under the header and scrolls away with
-          the page (it slides under the pinned header as you scroll) */}
-      <AnnouncementBar />
-
-      <main className="mx-auto max-w-screen-lg px-4 pb-24 pt-10 sm:px-6 sm:pt-16">
+    <div className="bg-white text-stone-900 antialiased selection:bg-blue-200 selection:text-stone-900">
+      <main className="mx-auto max-w-screen-lg px-4 pb-24 pt-6 sm:px-6 sm:pt-10">
+        <nav className="mb-6 text-sm text-[#5C6B73]" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-[#0F6E62]">Home</Link>
+          <span aria-hidden="true"> / </span>
+          <Link to="/dog-ramps" className="hover:text-[#0F6E62]">Dog ramps</Link>
+          <span aria-hidden="true"> / </span>
+          <span className="text-stone-900">Foldable dog car ramp</span>
+        </nav>
         <div className="grid grid-cols-1 gap-y-16 lg:grid-cols-12 lg:gap-x-12">
           {/* ---------------- HERO (mobile 1 | desktop 1) ----------------
               CPC prototype: headline -> photo come first on mobile so the buy
@@ -200,8 +198,6 @@ const Page: React.FC = () => {
 
       {/* Mobile-only sticky buy bar (needs the shared purchase context) */}
       <StickyMobileBuyBar />
-
-      <Footer />
     </div>
   );
 };

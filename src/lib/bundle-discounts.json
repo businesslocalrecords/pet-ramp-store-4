@@ -4,7 +4,13 @@
     "tractionMat": "heavy-duty-traction-mat-upgrade-2-pack",
     "carTether": "crash-tested-adjustable-car-safety-tether",
     "bedSteps": "orthopedic-foam-bed-steps",
-    "jointChews": "advanced-hip-joint-soft-chews"
+    "jointChews": "advanced-hip-joint-soft-chews",
+    "sideDoorSteps": "side-door-pet-steps",
+    "bedRamp": "bed-ramp",
+    "extraLongRamp": "extra-long-telescoping-dog-ramp",
+    "compactTelescoping": "compact-telescoping-dog-ramp",
+    "hitchStep": "dog-hitch-step",
+    "foldingSteps": "folding-pet-steps"
   },
   "discounts": {
     "two": {

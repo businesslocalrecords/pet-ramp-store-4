@@ -12,12 +12,12 @@
  *   3. productCreateMedia   → originalSource = resourceUrl, mediaContentType IMAGE
  *
  * Image sources (public/assets/product/):
- *   - premium-foldable-dog-car-ramp → the owner's REAL white-background photos
- *     (revised/*.jpg). Real beats invented, so the hero product uses photos.
+ *   - premium-foldable-dog-car-ramp → the owner's white-background photos
+ *     (revised/*.jpg). The flagship gallery stays that set.
  *   - mat / tether / chews / bed steps → original SVG renderings, rasterized to
  *     PNG here via `sharp` because Shopify product media must be raster
- *     (SVG is rejected). These are PLACEHOLDER renderings, not photographs of
- *     real inventory — see the provenance note in claims.md / LAUNCH_BLOCKERS.
+ *     (SVG is rejected). The storefront test catalog uses manufacturer
+ *     photographs from public/assets/catalog/ for the mobility assortment.
  *
  * Idempotent: an image whose alt text already exists on the product is skipped,
  * so re-running never duplicates media.
