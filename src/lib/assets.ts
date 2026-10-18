@@ -97,7 +97,6 @@ export const ASSETS = {
       alt:
         'A man carrying the folded Paw-Grip ramp beside a white SUV while a white dog waits in the cargo area',
       label: 'Folds in half',
-      position: 'center 25%',
     },
     {
       src: '',

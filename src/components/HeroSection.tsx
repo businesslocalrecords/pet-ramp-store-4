@@ -167,7 +167,7 @@ export const HeroSection: React.FC = () => {
             {frames.map((frame, idx) => (
               <div
                 key={frame.src}
-                className="aspect-[5/3] w-full shrink-0 snap-center"
+                className="aspect-square w-full shrink-0 snap-center"
                 style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
                 aria-hidden={idx !== activeIndex}
               >

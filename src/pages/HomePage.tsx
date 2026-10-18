@@ -38,7 +38,7 @@ export const HomePage: React.FC = () => {
         <img
           src="/assets/product/grit/ramp-boxer-hatchback.jpg"
           alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
-          className="aspect-[5/3] w-full rounded-2xl bg-[#F3F6F7] object-cover"
+          className="aspect-square w-full rounded-2xl bg-white object-contain"
         />
         <div>
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>
@@ -74,7 +74,7 @@ export const HomePage: React.FC = () => {
                   to={{ pathname: productPath(product), search }}
                   className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
-                  <img src={job.image} alt={job.alt} className="aspect-[4/3] w-full bg-[#F3F6F7] object-contain" />
+                  <img src={job.image} alt={job.alt} className="aspect-square w-full bg-white object-contain" />
                   <div className="p-4">
                     <h3 className="font-bold">{job.title}</h3>
                     <p className="mt-1 text-sm text-[#5C6B73]">{job.caption}</p>
