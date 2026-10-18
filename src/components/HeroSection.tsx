@@ -255,24 +255,21 @@ export const HeroSection: React.FC = () => {
           <div
             role="dialog"
             aria-modal="true"
-            aria-labelledby="large-photo-title"
-            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
+            aria-label="Product photo"
+            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col bg-white/10"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between gap-3 border-b border-stone-200 px-4 py-3">
-              <h2 id="large-photo-title" className="text-base font-bold text-stone-900">
-                Large view of product photos
-              </h2>
+            <div className="flex justify-end px-1 py-1">
               <button
                 ref={closeButtonRef}
                 type="button"
-                className="h-10 rounded-full px-3 text-sm font-semibold text-stone-700"
+                className="h-10 rounded-full px-3 text-sm font-semibold text-white"
                 onClick={() => setViewerOpen(false)}
               >
                 Close
               </button>
             </div>
-            <div className="flex min-h-0 flex-1 items-center justify-center bg-stone-50">
+            <div className="flex min-h-0 flex-1 items-center justify-center">
               <div className="flex max-h-[70vh] w-full items-center justify-center">
                 {active.kind === 'specs' ? (
                   <div className="h-80 w-full">
@@ -287,20 +284,18 @@ export const HeroSection: React.FC = () => {
                 )}
               </div>
             </div>
-            <div className="flex items-center justify-between gap-2 border-t border-stone-200 px-3 py-3">
+            <div className="flex items-center justify-between gap-2 px-3 py-3">
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-white hover:bg-white/10"
                 onClick={() => stepViewer(-1)}
               >
                 Previous
               </button>
-              <p className="min-w-0 text-center text-sm font-semibold text-stone-600">
-                {active.label} · {activeIndex + 1} of {frames.length}
-              </p>
+              <p className="min-w-0 text-center text-sm font-semibold text-white">{active.label}</p>
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-white hover:bg-white/10"
                 onClick={() => stepViewer(1)}
               >
                 Next
