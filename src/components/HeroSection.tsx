@@ -256,14 +256,14 @@ export const HeroSection: React.FC = () => {
             role="dialog"
             aria-modal="true"
             aria-label="Product photo"
-            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col bg-white/10"
+            className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex justify-end px-1 py-1">
               <button
                 ref={closeButtonRef}
                 type="button"
-                className="h-10 rounded-full px-3 text-sm font-semibold text-white"
+                className="h-10 rounded-full px-3 text-sm font-semibold text-stone-700"
                 onClick={() => setViewerOpen(false)}
               >
                 Close
@@ -287,15 +287,15 @@ export const HeroSection: React.FC = () => {
             <div className="flex items-center justify-between gap-2 px-3 py-3">
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-white hover:bg-white/10"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
                 onClick={() => stepViewer(-1)}
               >
                 Previous
               </button>
-              <p className="min-w-0 text-center text-sm font-semibold text-white">{active.label}</p>
+              <p className="min-w-0 text-center text-sm font-semibold text-stone-600">{active.label}</p>
               <button
                 type="button"
-                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-white hover:bg-white/10"
+                className="h-11 shrink-0 rounded-full px-4 text-sm font-bold text-stone-800 hover:bg-stone-100"
                 onClick={() => stepViewer(1)}
               >
                 Next
