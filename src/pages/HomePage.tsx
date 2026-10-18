@@ -37,21 +37,21 @@ export const HomePage: React.FC = () => {
 
   return (
     <main>
-      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
+      <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
         <img
           src="/assets/product/grit/ramp-boxer-hatchback.jpg"
           alt="A brindle Boxer stepping onto the Paw-Grip ramp at the hatch of a blue hatchback while its owner watches"
-          className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
+          className="order-2 aspect-square w-full rounded-2xl bg-white object-contain lg:order-1 lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
         />
-        <div>
+        <div className="order-1 lg:order-2">
           <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>
-          <h1 className="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-[#14202B] sm:text-5xl">
+          <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-[#14202B] sm:mt-3 sm:text-5xl">
             A way up for the car, the bed, and the back seat.
           </h1>
-          <p className="mt-4 max-w-md text-lg text-[#5C6B73]">
+          <p className="mt-3 max-w-md text-lg text-[#5C6B73] sm:mt-4">
             Paw-Grip is a shop for getting a pet up without a lift. Start with the foldable car ramp, or look through stairs and longer ramps.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+          <div className="mt-5 flex flex-wrap items-center gap-4 lg:mt-8">
             <Link
               to={{ pathname: productPath(flagship), search }}
               className="inline-flex h-12 items-center rounded-full bg-[#F37021] px-6 text-base font-bold text-white hover:bg-[#D95E1A]"
