@@ -198,6 +198,15 @@ The storefront brand is **Paw Grip**, with a space. Product titles, the footer l
 
 Four lifestyle frames (shepherd SUV, boxer hatchback, white dog, folded ramp at the hatch) were replaced with the owner's newer photographs, cover-cropped to the same 1400×1400 JPEG canvas, metadata stripped.
 
+## CPC price rule (October 2026)
+
+Owner decision, not yet applied to the live offer. Checkout still charges the Shopify price. Do not change a displayed price until Shopify is updated to the same number, because the buy button refuses a mismatch.
+
+- Paw Grip's cost for a product taken from Chewy is the price Chewy lists. Chewy's price is not the price Paw Grip charges.
+- Ad planning is 40 cents a click, and the price must cover 25 clicks on a sale ($10).
+- Free insured shipping is still on Paw Grip. Leave about $18 in the price for a ramp-sized parcel.
+- Selling price = Chewy listed price + $10 + $18, rounded up to the next `.99`. No new compare-at price is invented from Chewy's number.
+
 ## Test catalog (October 2026)
 
 | Where | What changed | Why |
