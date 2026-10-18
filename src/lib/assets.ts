@@ -49,10 +49,9 @@ export const ASSETS = {
    * studio shots. The brand poster (grit/pawgrip-pro-poster.jpg) is kept for
    * social ads only: it shows a house pet door, not a car.
    *
-   * The gallery frame is 5:3. Scene photos (1.5–1.84:1) fill it with a light
-   * crop steered by `position`; `fit: 'contain'` frames are never cropped
-   * (spec sheet text, studio shots) and letterbox onto `bg`, sampled from
-   * the photo's own edge so the bands read as part of the image.
+   * Every photo file is a 1400×1400 square, the same canvas as the catalog
+   * shots. The gallery frame is square. `fit: 'contain'` is for the spec
+   * sheet, whose printed measurements must stay intact.
    *
    * `vehicles` lists the whitelisted kw_vehicle keys (lib/dki.ts) a photo
    * matches; a matching photo is moved to the front, nothing is hidden.
@@ -115,7 +114,7 @@ export const ASSETS = {
     {
       src: '/assets/product/revised/ramp-studio-three-quarter.jpg',
       alt:
-        'Studio view of the Paw-Grip foldable dog car ramp at a three-quarter angle on a white background, marked 62 inches long and 16 inches wide',
+        'Studio view of the Paw-Grip foldable dog car ramp at a three-quarter angle on a white background',
       label: '62″ long · 16″ wide',
       fit: 'contain',
     },
