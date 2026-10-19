@@ -291,7 +291,7 @@ export const GuidePage: React.FC = () => {
       <h2>4. Look at the deck and the rails</h2>
       <p>Dogs refuse slick decks. Look for a grit surface that grips nails, and side rails so a nervous dog does not step off the edge.</p>
       <h2>5. Check the feet</h2>
-      <p>Rubber feet at both ends, and a mat if the floor is smooth. Bare plastic feet walk away from the bumper.</p>
+      <p>Rubber feet at both ends. Bare plastic feet walk away from the bumper.</p>
       <h2>6. Check storage</h2>
       <p>
         The Compact folds to {compact.foldedIn}″. The Extended folds to {extended.foldedIn}″. If it will not fit where you plan to keep it, it will live in the garage unused.

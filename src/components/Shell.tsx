@@ -7,7 +7,7 @@ import { AnnouncementBar } from './AnnouncementBar';
 import { Footer } from './Footer';
 
 const LINKS = [
-  { to: '/dog-ramps', label: 'Shop ramps' },
+  { to: '/dog-ramps', label: 'Shop all' },
   { to: '/guide/how-to-choose-a-dog-car-ramp', label: 'How to choose' },
   { to: '/contact', label: 'Support' },
 ];

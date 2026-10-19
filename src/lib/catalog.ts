@@ -344,7 +344,7 @@ const CHEWY_CATALOG: readonly CatalogProduct[] = (chewyProducts as ChewyProduct[
   shopifyHandle: `chewy-${item.dp}`,
   name: item.name,
   caption: chewyCaption(item.use),
-  summary: 'In the shop for the car, the bed, or the couch.',
+  summary: '',
   price: priceFromChewyCost(item.cost),
   rating: 0,
   ratingCount: 0,
@@ -362,7 +362,26 @@ const CHEWY_CATALOG: readonly CatalogProduct[] = (chewyProducts as ChewyProduct[
   bullets: [],
 }));
 
-export const CATALOG: readonly CatalogProduct[] = [...OWN_CATALOG, ...CHEWY_CATALOG];
+/**
+ * Paw Grip test products with a single photo or an illustration and no
+ * manufacturer description. They stay out of the shop, the homepage, search,
+ * and direct product URLs. The mat and tether handles remain in offers.ts
+ * for the Shopify catalog; they are not offered on the car-ramp buy box.
+ */
+const UNLISTED_SLUGS = new Set([
+  'extra-long-telescoping-dog-ramp',
+  'compact-telescoping-dog-ramp',
+  'traction-mat',
+  'car-safety-tether',
+]);
+
+export const CATALOG: readonly CatalogProduct[] = [...OWN_CATALOG, ...CHEWY_CATALOG].filter(
+  (product) => !UNLISTED_SLUGS.has(product.slug),
+);
+
+export function isOwnProduct(product: CatalogProduct): boolean {
+  return !product.slug.startsWith('dp-');
+}
 
 export function productPath(product: CatalogProduct): string {
   return product.flagship ? '/products/foldable-dog-car-ramp' : `/products/${product.slug}`;

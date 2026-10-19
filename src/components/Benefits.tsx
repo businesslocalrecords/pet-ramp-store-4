@@ -24,12 +24,12 @@ const extended = RAMP_SIZES[1];
 const benefits: Benefit[] = [
   {
     icon: TrendingDown,
-    title: 'A gentle, computed slope',
+    title: 'A gentle slope',
     body: `At a 24\u2033 cargo height the Compact runs about ${Math.round(
       slopeDeg(24, compact.lengthIn)
     )}\u00b0 and the Extended about ${Math.round(
       slopeDeg(24, extended.lengthIn)
-    )}\u00b0. The longer the ramp, the gentler the walk \u2014 the SizeGuide below computes the exact angle for your vehicle.`,
+    )}\u00b0. The longer the ramp, the gentler the walk \u2014 the size finder below works out the exact angle for your vehicle.`,
   },
   {
     icon: ShieldCheck,
@@ -50,7 +50,7 @@ export const Benefits: React.FC = () => {
   return (
     <section id="benefits" className="scroll-mt-24">
       <header className="mb-7">
-        <span className="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-blue-700">
+        <span className="inline-flex items-center rounded-full bg-mist px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-pine">
           Why a ramp
         </span>
         <h2 className="mt-3 text-2xl font-bold text-stone-900 sm:text-3xl">

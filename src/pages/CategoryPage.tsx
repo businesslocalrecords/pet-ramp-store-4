@@ -4,9 +4,9 @@ import { CATALOG, type CatalogKind, type CatalogUse } from '../lib/catalog';
 import { ProductCard } from '../components/ProductCard';
 
 const PLACES: { id: CatalogUse; label: string }[] = [
-  { id: 'car', label: 'Car' },
-  { id: 'home', label: 'Bed and couch' },
-  { id: 'cargo', label: 'Door and hitch' },
+  { id: 'car', label: 'Car, SUV or truck' },
+  { id: 'home', label: 'Bed or couch' },
+  { id: 'cargo', label: 'Door or hitch' },
 ];
 
 const KINDS: { id: CatalogKind; label: string }[] = [
@@ -29,6 +29,7 @@ export const CategoryPage: React.FC = () => {
   const kinds = readList(params, 'type') as CatalogKind[];
   const prices = readList(params, 'price');
   const [sort, setSort] = useState<SortId>('relevance');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   function toggle(key: string, value: string) {
     const next = new URLSearchParams(params);
@@ -79,15 +80,25 @@ export const CategoryPage: React.FC = () => {
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{heading}</h1>
-          <p className="mt-1 text-sm font-semibold text-pine">{results.length} in the shop</p>
+          <p className="mt-1 text-sm font-semibold text-pine">{results.length} products</p>
           {q ? (
             <p className="mt-2 text-muted">Results for “{params.get('q')}”</p>
           ) : (
             <p className="mt-2 max-w-xl text-muted">
-              Cargo area, back seat, bed, or couch. Filter to the place the dog is stuck, then open the one that fits.
+              Pick where your dog needs help. Then pick a product.
             </p>
           )}
         </div>
+        <div className="flex w-full items-center justify-between gap-3 sm:w-auto">
+        <button
+          type="button"
+          onClick={() => setFiltersOpen((open) => !open)}
+          aria-expanded={filtersOpen}
+          aria-controls="shop-filters"
+          className="h-10 rounded-full border border-line bg-white px-4 text-sm font-semibold lg:hidden"
+        >
+          Filter{chips.length ? ` (${chips.length})` : ''}
+        </button>
         <label className="text-sm font-semibold">
           <span className="mr-2 text-muted">Sort by</span>
           <select
@@ -95,12 +106,13 @@ export const CategoryPage: React.FC = () => {
             onChange={(event) => setSort(event.target.value as SortId)}
             className="h-10 rounded-full border border-line bg-white px-3"
           >
-            <option value="relevance">Relevance</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="rating">Avg. Customer Review</option>
+            <option value="relevance">Featured</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating">Highest rated</option>
           </select>
         </label>
+        </div>
       </div>
 
       {chips.length > 0 && (
@@ -120,9 +132,13 @@ export const CategoryPage: React.FC = () => {
       )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
-        <aside className="h-fit space-y-6 rounded-2xl border border-line bg-white p-4" aria-label="Filters">
-          <CheckGroup label="Placement" options={PLACES} selected={places} onToggle={(id) => toggle('place', id)} />
-          <CheckGroup label="Product type" options={KINDS} selected={kinds} onToggle={(id) => toggle('type', id)} />
+        <aside
+          id="shop-filters"
+          className={`h-fit space-y-6 rounded-2xl border border-line bg-white p-4 lg:block ${filtersOpen ? 'block' : 'hidden'}`}
+          aria-label="Filters"
+        >
+          <CheckGroup label="Where it goes" options={PLACES} selected={places} onToggle={(id) => toggle('place', id)} />
+          <CheckGroup label="Type" options={KINDS} selected={kinds} onToggle={(id) => toggle('type', id)} />
           <CheckGroup
             label="Price"
             options={[{ id: 'under100', label: 'Under $100' }, { id: 'over100', label: '$100 and up' }]}

@@ -37,7 +37,7 @@ export const Faq: React.FC = () => {
             <MessageCircleQuestion className="h-3.5 w-3.5" aria-hidden="true" /> Questions &amp; Answers
           </span>
           <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-            Everything You Are Wondering
+            Questions people ask
           </h2>
         </div>
 

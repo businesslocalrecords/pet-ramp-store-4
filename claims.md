@@ -228,3 +228,14 @@ Measurements, setup steps, box contents, and product questions render only after
 | `public/assets/catalog/` | Manufacturer photographs on the new products | Owner has written notice from the manufacturer that the photos may be used. Chewy itself returned 403 to the browser on port 9222, so the files were saved from the manufacturer's own product images |
 | Star ratings | A rating and a count on each catalog card | Owner allowed invented ratings and not reviews. No `aggregateRating` JSON-LD |
 
+
+## Layout and wording pass (October 2026)
+
+| Where | What changed | Why |
+|---|---|---|
+| Homepage hero paragraph | "Jumping down from a hatchback is hard on a dog. Lifting one into an SUV is hard on you." replaces the "hard landing / your back" lines | Plainer wording. Says "hard on", names no injury or condition |
+| Homepage "Where does your dog need a boost?" and "Paw Grip ramps and steps" | Place tiles link to filtered shop results. The product row lists only our own line | The two sections used to repeat the same three products |
+| Product pages, "More ramps and steps" | Replaces "Often added with this" | We have no data on what is bought together |
+| Catalog product page | Store-wide shipping/guarantee/warranty questions removed from Questions (the Shipping, returns and warranty cards already say it) | Removed duplication. Numbers still come from `policy.ts` |
+| Shop, homepage, and product URLs | Extra-long ramp, compact telescoping ramp, traction mat, and car safety tether are unlisted | Those four have one photo or a drawing and no manufacturer description. Owner decision: take them off the shop rather than invent copy |
+| Car-ramp buy box | The traction-mat and tether checkboxes are removed | Same decision. The single ramp is the only thing that page sells. The FAQ no longer tells the shopper to add the mat |

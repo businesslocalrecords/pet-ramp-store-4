@@ -23,7 +23,7 @@ export const FlatBuyButton: React.FC<FlatBuyButtonProps> = ({
   loading = false,
   disabled = false,
   onClick,
-  label = 'Proceed to Checkout',
+  label = 'Buy now',
 }) => {
   return (
     <button

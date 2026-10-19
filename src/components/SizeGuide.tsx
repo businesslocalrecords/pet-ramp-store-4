@@ -104,7 +104,7 @@ export const SizeGuide: React.FC = () => {
           step={1}
           value={heightIn}
           onChange={(e) => setHeightIn(Number(e.target.value))}
-          className="mt-4 h-12 w-full cursor-pointer accent-blue-700"
+          className="mt-4 h-12 w-full cursor-pointer accent-pine"
           aria-describedby="vehicle-height-help"
         />
         <div className="flex justify-between text-[11px] font-medium text-stone-400">

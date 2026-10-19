@@ -1,50 +1,61 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATALOG, formatPrice, productPath } from '../lib/catalog';
-import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL, FREE_SHIPPING_LABEL } from '../lib/policy';
 import { ProductCard } from '../components/ProductCard';
+import { Stars } from '../components/Stars';
 
-const JOBS = [
+const FEATURED_SLUGS = [
+  'side-door-pet-steps',
+  'bed-ramp',
+  'folding-pet-steps',
+  'orthopedic-foam-bed-steps',
+] as const;
+
+const MEASURE_STEPS = [
+  'Measure from the ground to the floor of the cargo area.',
+  'Enter that number in the size finder.',
+  'It tells you Compact or Extended.',
+] as const;
+
+const PLACE_TILES = [
   {
-    title: 'Into the cargo area',
-    caption: 'The bi-fold grit ramp, for the cargo floor of an SUV or a hatchback',
+    title: 'Car, SUV or truck',
+    place: 'car',
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     alt: 'A German Shepherd walking up a ramp into an SUV',
-    frame: 'lg:object-[center_22%]',
-    slug: 'foldable-dog-car-ramp',
+    frame: 'object-[center_22%]',
   },
   {
-    title: 'Into the back seat',
-    caption: 'Steps that meet the sill, so the back seat is a walk, not a lift',
-    image: '/assets/catalog/side-door-steps.jpg',
-    alt: 'Pet steps at a vehicle side door',
-    frame: 'lg:object-center',
-    slug: 'side-door-pet-steps',
-  },
-  {
-    title: 'Onto the bed',
-    caption: 'For the dog who pauses at the mattress and waits to be helped',
+    title: 'Bed or couch',
+    place: 'home',
     image: '/assets/catalog/bed-ramp.jpg',
     alt: 'A ramp from the floor to a bed',
-    frame: 'lg:object-[center_58%]',
-    slug: 'bed-ramp',
+    frame: 'object-[center_58%]',
+  },
+  {
+    title: 'Door or hitch',
+    place: 'cargo',
+    image: '/assets/catalog/hitch-step.jpg',
+    alt: 'A step at a trailer hitch',
+    frame: 'object-center',
   },
 ] as const;
 
 export const HomePage: React.FC = () => {
   const { search } = useLocation();
   const flagship = CATALOG[0];
+  const featured = FEATURED_SLUGS.map((slug) => CATALOG.find((item) => item.slug === slug)!);
 
   return (
     <main>
-      <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:grid-rows-[auto_auto] lg:gap-x-12 lg:gap-y-4 lg:py-8">
-        <div className="lg:col-start-2 lg:row-start-1">
+      <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:grid-rows-[auto_auto] lg:gap-x-12 lg:gap-y-5 lg:py-8">
+        <div className="lg:col-start-2 lg:row-start-1 lg:self-end">
           <p className="text-sm font-bold uppercase tracking-wide text-pine">Dog ramps and stairs</p>
           <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:mt-3 sm:text-5xl">
             A way up for the car, the bed, and the back seat.
           </h1>
           <p className="mt-3 max-w-md text-lg text-muted sm:mt-4">
-            The leap from a hatchback is a hard landing. The hoist into an SUV is your back. Between them is a walk: a foldable ramp with a grit deck, and stairs for the bed, the couch, and the side door.
+            Jumping down from a hatchback is hard on a dog. Lifting one into an SUV is hard on you. A ramp or a set of steps lets your dog walk it instead.
           </p>
         </div>
         <div className="lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-center">
@@ -58,11 +69,14 @@ export const HomePage: React.FC = () => {
               className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
             />
           </Link>
-          <p className="mt-3 text-3xl font-extrabold tabular-nums text-ink">{formatPrice(flagship.price)}</p>
+          <p className="mt-3 text-sm font-semibold text-ink">Paw Grip Foldable Dog Car Ramp</p>
+          <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="text-3xl font-extrabold tabular-nums text-ink">{formatPrice(flagship.price)}</p>
+            <Stars value={flagship.rating} count={flagship.ratingCount} />
+          </div>
         </div>
-        <div className="lg:col-start-2 lg:row-start-2">
-          <p className="text-sm font-semibold text-deal">{FREE_SHIPPING_LABEL}</p>
-          <div className="mt-4 flex flex-wrap items-center gap-4 lg:mt-5">
+        <div className="lg:col-start-2 lg:row-start-2 lg:self-start">
+          <div className="flex flex-wrap items-center gap-4">
             <Link
               to={{ pathname: productPath(flagship), search }}
               className="inline-flex h-12 items-center rounded-full bg-cta px-6 text-base font-bold text-white hover:bg-cta-deep"
@@ -78,50 +92,57 @@ export const HomePage: React.FC = () => {
 
       <section className="bg-well">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-10">
-          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Shop by the job</h2>
-          <p className="mt-2 max-w-xl text-muted">Three places a dog gets stuck. Pick the one you are solving today.</p>
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {JOBS.map((job) => {
-              const product = CATALOG.find((item) => item.slug === job.slug)!;
-              return (
-                <Link
-                  key={job.slug}
-                  to={{ pathname: productPath(product), search }}
-                  className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-                >
-                  <img src={job.image} alt={job.alt} className={`aspect-square w-full bg-white object-contain lg:aspect-[5/3] lg:object-cover ${job.frame}`} />
-                  <div className="p-4">
-                    <h3 className="font-bold">{job.title}</h3>
-                    <p className="mt-1 text-sm text-muted">{job.caption}</p>
-                    <p className="mt-2 text-base font-extrabold tabular-nums">{formatPrice(product.price)}</p>
-                  </div>
-                </Link>
-              );
-            })}
+          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Where does your dog need a boost?</h2>
+          <p className="mt-2 max-w-xl text-muted">Pick the place. We show what fits.</p>
+          <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {PLACE_TILES.map((tile) => (
+              <Link
+                key={tile.title}
+                to={{ pathname: '/dog-ramps', search: `?place=${tile.place}` }}
+                className="overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+              >
+                <img src={tile.image} alt={tile.alt} className={`aspect-[5/3] w-full bg-white object-cover ${tile.frame}`} />
+                <div className="p-4">
+                  <h3 className="font-bold">{tile.title}</h3>
+                  <p className="mt-1 text-sm text-muted">{CATALOG.filter((item) => item.use === tile.place).length} products</p>
+                </div>
+              </Link>
+            ))}
+            <a
+              href="/guide/how-to-choose-a-dog-car-ramp/"
+              className="flex flex-col justify-center rounded-2xl bg-mist p-6 transition hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+            >
+              <h3 className="font-bold">Not sure which one?</h3>
+              <p className="mt-1 text-sm text-muted">Read how to choose a ramp for your car and your dog.</p>
+              <span className="mt-3 text-sm font-bold text-pine">Read the guide</span>
+            </a>
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-12">
         <div className="flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">The ramp for the job</h2>
-          <Link to={{ pathname: '/dog-ramps', search }} className="text-sm font-bold text-pine">
-            See the whole shop
+          <div>
+            <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Paw Grip ramps and steps</h2>
+            <p className="mt-2 text-muted">Our own line, each with a star rating.</p>
+          </div>
+          <Link to={{ pathname: '/dog-ramps', search }} className="shrink-0 text-sm font-bold text-pine">
+            See all {CATALOG.length} ramps and steps
           </Link>
         </div>
         <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {CATALOG.slice(0, 4).map((product) => (
+          {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
         </div>
       </section>
 
-      <section className="bg-ink text-white">
+      <section className="bg-pine-deep text-white">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">A short ramp is a steep ramp.</h2>
             <p className="mt-3 text-white/80">
-              Measure from the ground to the cargo floor. The size finder turns that number into Compact or Extended, so the slope stays a walk.
+              A ramp that is too short climbs too steeply for a dog to walk up. Measuring takes a minute.
             </p>
             <Link
               to={{ pathname: '/products/foldable-dog-car-ramp', hash: 'size-guide', search }}
@@ -130,13 +151,14 @@ export const HomePage: React.FC = () => {
               Open the size finder
             </Link>
           </div>
-          <ul className="grid gap-3 text-sm">
-            {[FREE_SHIPPING_LABEL, GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL].map((label) => (
-              <li key={label} className="rounded-2xl bg-white/10 px-4 py-3 font-semibold">
-                {label}
+          <ol className="grid gap-3 text-sm">
+            {MEASURE_STEPS.map((step, index) => (
+              <li key={step} className="flex gap-3 rounded-2xl bg-white/10 px-4 py-3 font-semibold">
+                <span className="text-white/60">{index + 1}</span>
+                {step}
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
     </main>

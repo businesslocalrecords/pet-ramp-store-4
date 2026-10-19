@@ -23,7 +23,7 @@ const DETAILS = [
 ];
 
 const INSTRUCTIONS = [
-  'Unfold the ramp and rest its top edge on your bumper or cargo floor, with the feet on level ground.',
+  'Unfold the ramp and rest its top edge on your bumper or the floor of the cargo area, with the feet on level ground.',
   'Check that it sits steady before your dog steps on.',
   'First time? Lay it flat on the ground, place treats along it and praise each step, then raise it to the car.',
   'To store, fold it in half and close the safety latch.',
@@ -63,7 +63,7 @@ export const AboutItem: React.FC = () => {
 
   return (
     <section id="about-item" className="scroll-mt-24">
-      <h2 className="text-2xl font-extrabold tracking-tight text-stone-900">About This Item</h2>
+      <h2 className="text-2xl font-extrabold tracking-tight text-stone-900">About this item</h2>
 
       <div className="mt-3 divide-y divide-stone-200 border-y border-stone-200 [overflow-anchor:none]">
         <div>
@@ -108,7 +108,7 @@ export const AboutItem: React.FC = () => {
               <p className="mt-3 text-sm text-stone-500">
                 {compact.name} {compact.lengthIn}&Prime; shown. The {extended.name}{' '}
                 ({extended.lengthIn}&Prime;, {extended.weightCapacityLb} lb rated) is coming soon.{' '}
-                <a href="#size-guide" className="font-medium text-blue-700 underline">
+                <a href="#size-guide" className="font-medium text-pine underline">
                   Find your size
                 </a>
               </p>

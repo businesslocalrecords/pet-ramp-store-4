@@ -91,7 +91,7 @@ function useFitsViewport<T extends HTMLElement>() {
 const Page: React.FC = () => {
   const [offerRef, offerFits] = useFitsViewport<HTMLDivElement>();
   const { search } = useLocation();
-  const similar = findBySlug('compact-telescoping-dog-ramp');
+  const similar = findBySlug('side-door-pet-steps');
 
   return (
     <div className="bg-white text-ink antialiased selection:bg-mist selection:text-ink">

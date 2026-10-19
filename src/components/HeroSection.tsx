@@ -150,7 +150,7 @@ export const HeroSection: React.FC = () => {
 
       {/* One short supporting line — values single-sourced from offers.ts. */}
       <p className="mt-3 text-[1rem] text-stone-600 sm:text-[1.0625rem]">
-        Quit the hoist into the {dki.vehicleInline}. Paws meet a grit deck, side rails
+        Skip the lift into the {dki.vehicleInline}. Paws grip the textured deck, side rails
         keep the walk narrow, and this {compact.rampWeightLb}&nbsp;lb ramp folds in half
         to {compact.foldedIn}&Prime; for the trunk.
       </p>
@@ -222,7 +222,7 @@ export const HeroSection: React.FC = () => {
               aria-label={`slide ${idx + 1} of ${frames.length}`}
               onClick={() => openViewer(idx)}
               className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 transition-shadow duration-200 sm:h-14 sm:w-14 sm:rounded-xl ${
-                idx === activeIndex ? 'ring-2 ring-blue-600' : 'ring-stone-900/10 hover:ring-stone-900/20'
+                idx === activeIndex ? 'ring-2 ring-pine' : 'ring-stone-900/10 hover:ring-stone-900/20'
               }`}
               style={frame.fit === 'contain' ? { backgroundColor: frame.bg ?? '#ffffff' } : undefined}
             >

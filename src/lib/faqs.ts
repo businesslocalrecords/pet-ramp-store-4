@@ -40,7 +40,7 @@ export const FAQS: FaqEntry[] = [
   {
     q: 'Will my dog slip on it?',
     short: 'The deck has a grit surface that paws and nails can grip, with raised side rails along its full length. Rubberized feet keep the ramp planted.',
-    a: `The walking deck has a grit surface that paws and nails can grip, and raised side rails run its full length. The feet are rubberized; on a smooth garage floor or bumper, add the traction mat — it locks the ramp feet down and stops bumper scuffing.`,
+    a: `The walking deck has a grit surface that paws and nails can grip, and raised side rails run its full length. The feet are rubberized so the ramp stays planted.`,
   },
   {
     q: 'How does the money-back guarantee work?',

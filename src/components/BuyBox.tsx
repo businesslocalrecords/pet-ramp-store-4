@@ -9,8 +9,6 @@ import {
   RAMP_VARIANT_MATCHERS,
 } from '../lib/offers';
 import { GUARANTEE_LABEL, RETURN_WINDOW_LABEL, POLICY } from '../lib/policy';
-import { OrderBump } from './OrderBump';
-import { TetherUpsell } from './TetherUpsell';
 import { FlatBuyButton } from './FlatBuyButton';
 
 /**
@@ -28,9 +26,7 @@ import { FlatBuyButton } from './FlatBuyButton';
  *    out of stock when Shopify has no available variant for it; the Compact
  *    (the default) is the live, in-stock primary path.
  *  - A solid orange button that runs the real checkout (`buy()`).
- *  - The traction mat and car tether are offered as optional add-ons BELOW the
- *    button. They are no longer ALSO sold as a bundle on this screen, which
- *    was the "mat appears twice" confusion.
+ *  - No optional add-ons. The traction mat and tether are not offered here.
  *
  * The value bundles (2 ramps etc.) and their code live in TieredOfferSelector
  * / bundle-discounts.json and are intentionally not surfaced here — surfacing
@@ -51,19 +47,9 @@ export const BuyBox: React.FC = () => {
     quantity,
     setQuantity,
     maxQuantity,
-    bumpEnabled,
-    setBumpEnabled,
-    bumpPrice,
-    showBump,
-    tetherUpsell,
-    setTetherUpsell,
-    tetherPrice,
-    showTetherUpsell,
     total,
     loading,
     ready,
-    matVariant,
-    tetherVariant,
     stock,
     buying,
     error,
@@ -174,7 +160,7 @@ export const BuyBox: React.FC = () => {
               Size{' '}
               <a
                 href="#size-guide"
-                className="font-medium normal-case tracking-normal text-blue-700 underline"
+                className="font-medium normal-case tracking-normal text-pine underline"
               >
                 Not sure? Check fit
               </a>
@@ -218,7 +204,7 @@ export const BuyBox: React.FC = () => {
                 The {extended.name} ({extended.lengthIn}&Prime;) is out of stock right
                 now &mdash; the {compact.name} ships now.{' '}
                 <a
-                  className="font-medium text-blue-700 underline"
+                  className="font-medium text-pine underline"
                   href={`mailto:pawgrip@businesslocalrecords.com?subject=${encodeURIComponent(
                     `Notify me: Extended ${extended.lengthIn}\u2033 ramp`
                   )}`}
@@ -264,32 +250,6 @@ export const BuyBox: React.FC = () => {
             <p role="alert" className="mt-3 border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
               {error}
             </p>
-          )}
-
-          {/* Optional add-ons — offered after the primary action, never as a
-              duplicate of a bundle. */}
-          {(showBump || showTetherUpsell) && (
-            <div className="mt-4 border-t border-gray-200 pt-3">
-              <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-gray-500">
-                Add before checkout
-              </p>
-              {showBump && (
-                <OrderBump
-                  matVariantId={matVariant?.id ?? null}
-                  enabled={bumpEnabled}
-                  onToggle={setBumpEnabled}
-                  price={bumpPrice}
-                />
-              )}
-              {showTetherUpsell && (
-                <TetherUpsell
-                  available={Boolean(tetherVariant)}
-                  enabled={tetherUpsell}
-                  onToggle={setTetherUpsell}
-                  price={tetherPrice}
-                />
-              )}
-            </div>
           )}
 
           {/* One short secure/checkout line (the trust strip above carries the

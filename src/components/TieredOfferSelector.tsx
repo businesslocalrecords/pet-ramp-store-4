@@ -40,7 +40,7 @@ export const TieredOfferSelector: React.FC<TieredOfferSelectorProps> = ({
             key={tier.id}
             className={`flex cursor-pointer items-start p-4 transition-colors ${
               index < TIERS.length - 1 ? 'border-b border-gray-200' : ''
-            } ${isActive ? 'bg-blue-50/50' : 'hover:bg-gray-50'} ${
+            } ${isActive ? 'bg-mist/60' : 'hover:bg-gray-50'} ${
               disabled ? 'cursor-not-allowed opacity-60' : ''
             }`}
           >
@@ -52,13 +52,13 @@ export const TieredOfferSelector: React.FC<TieredOfferSelectorProps> = ({
               checked={isActive}
               disabled={disabled}
               onChange={() => onSelect(tier.id)}
-              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer border-gray-400 text-blue-700 focus:ring-blue-700"
+              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer border-gray-400 text-pine focus:ring-pine"
             />
 
             <div className="ml-4 flex-1">
               <div className="flex items-start justify-between gap-3">
                 <span
-                  className={`text-[0.9375rem] font-bold ${isActive ? 'text-blue-900' : 'text-gray-900'}`}
+                  className={`text-[0.9375rem] font-bold ${isActive ? 'text-pine-deep' : 'text-gray-900'}`}
                 >
                   {tier.label}
                 </span>

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { findBySlug, formatPrice, CATALOG } from '../lib/catalog';
+import { findBySlug, formatPrice, isOwnProduct, CATALOG } from '../lib/catalog';
 import { Stars } from '../components/Stars';
 import { FREE_SHIPPING_LABEL, GUARANTEE_LABEL } from '../lib/policy';
 import { fetchProductByHandle } from '../lib/shopify';
@@ -106,7 +106,14 @@ export const CatalogProductPage: React.FC = () => {
     }
   }
 
-  const also = CATALOG.filter((item) => item.slug !== product.slug).slice(0, 3);
+  const also = CATALOG.filter((item) => item.slug !== product.slug)
+    .map((item) => ({
+      item,
+      score: (item.kind === product.kind ? 2 : 0) + (item.use === product.use ? 2 : 0) + (isOwnProduct(item) ? 1 : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((entry) => entry.item);
 
   return (
     <main className={`mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12 ${barVisible && scrolled ? 'pb-28 md:pb-12' : ''}`}>
@@ -133,7 +140,7 @@ export const CatalogProductPage: React.FC = () => {
         </div>
 
         <div id="offer" className="rounded-2xl border border-line bg-white p-5 shadow-sm lg:sticky lg:top-28 sm:p-6">
-          <p className="text-sm font-bold uppercase tracking-wide text-pine">{product.caption}</p>
+          {isOwnProduct(product) && <p className="text-sm font-semibold text-pine">{product.caption}</p>}
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl">{product.name}</h1>
           <div className="mt-3">
             <Stars value={product.rating} count={product.ratingCount} />
@@ -142,7 +149,7 @@ export const CatalogProductPage: React.FC = () => {
           <p className="mt-2 text-sm text-muted">
             {FREE_SHIPPING_LABEL}. {GUARANTEE_LABEL}.
           </p>
-          <p className="mt-4 text-muted">{product.summary}</p>
+          {product.summary && <p className="mt-4 text-muted">{product.summary}</p>}
           <ul className="mt-4 space-y-2 text-sm">
             {product.bullets.map((bullet) => (
               <li key={bullet} className="flex gap-2">
@@ -175,7 +182,7 @@ export const CatalogProductPage: React.FC = () => {
             disabled={buying}
             className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-full bg-cta text-base font-bold text-white hover:bg-cta-deep disabled:opacity-60"
           >
-            {buying ? 'Starting checkout…' : `Add to cart · ${formatPrice(product.price)}`}
+            {buying ? 'Starting checkout…' : `Buy now · ${formatPrice(product.price)}`}
           </button>
           {error && (
             <p className="mt-3 text-sm text-red-700" role="alert">
@@ -197,7 +204,7 @@ export const CatalogProductPage: React.FC = () => {
             disabled={buying}
             className="ml-auto inline-flex h-12 min-w-36 items-center justify-center rounded-full bg-cta px-5 text-sm font-bold text-white hover:bg-cta-deep disabled:opacity-60"
           >
-            {buying ? 'Starting…' : 'Add to cart'}
+            {buying ? 'Starting…' : 'Buy now'}
           </button>
         </div>
       </div>}
@@ -205,7 +212,7 @@ export const CatalogProductPage: React.FC = () => {
       <CatalogLanding product={product} buying={buying} onBuy={buy} />
 
       <section className="mt-16">
-        <h2 className="text-2xl font-extrabold tracking-tight">Often added with this</h2>
+        <h2 className="text-2xl font-extrabold tracking-tight">More ramps and steps</h2>
         <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
           {also.map((item) => (
             <ProductCard key={item.slug} product={item} />

@@ -51,7 +51,7 @@ export const ShippingReturns: React.FC = () => {
           <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Service promise
         </span>
         <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Shipping &amp; Returns, Completely Sorted
+          Shipping and returns
         </h2>
         <p className="mt-3 text-stone-600">
           Fast, free, insured &mdash; and a guarantee with zero fine print.
@@ -88,7 +88,7 @@ export const ShippingReturns: React.FC = () => {
             All 50 US states via insured express carriers. Shipping somewhere else? Email us
             before ordering and we will tell you what is possible.
           </p>
-          <a href="/shipping/" className="mt-3 inline-block text-sm font-bold text-blue-700 underline">
+          <a href="/shipping/" className="mt-3 inline-block text-sm font-bold text-pine underline">
             Full shipping policy
           </a>
         </div>
@@ -102,7 +102,7 @@ export const ShippingReturns: React.FC = () => {
             {POLICY.returnDays} days from delivery, used or unused. Email us and we send a prepaid
             label. Refunds are issued once the warehouse receives the ramp.
           </p>
-          <a href="/returns/" className="mt-3 inline-block text-sm font-bold text-blue-700 underline">
+          <a href="/returns/" className="mt-3 inline-block text-sm font-bold text-pine underline">
             Full returns policy
           </a>
         </div>
@@ -117,7 +117,7 @@ export const ShippingReturns: React.FC = () => {
             &mdash; frame, surface, and hardware. The {POLICY.returnDays}-day money-back guarantee
             is separate and unconditional.
           </p>
-          <a href="/warranty/" className="mt-3 inline-block text-sm font-bold text-blue-700 underline">
+          <a href="/warranty/" className="mt-3 inline-block text-sm font-bold text-pine underline">
             Full warranty terms
           </a>
         </div>

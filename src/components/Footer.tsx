@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { PawPrint, Mail, Phone, MapPin, Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 import { BUSINESS, BUSINESS_IS_INCOMPLETE, REQUIRE_BUSINESS_INFO } from '../lib/assets';
 import { POLICY } from '../lib/policy';
@@ -9,10 +10,11 @@ const linkGroups = [
   {
     title: 'Product',
     links: [
-      { label: 'Shop ramps', href: '/dog-ramps' },
+      { label: 'Shop all', href: '/dog-ramps' },
       { label: 'Foldable car ramp', href: '/products/foldable-dog-car-ramp' },
-      { label: 'Size finder', href: '/products/foldable-dog-car-ramp#size-guide' },
-      { label: 'FAQ', href: '/products/foldable-dog-car-ramp#faq' },
+      { label: 'How to choose a ramp', href: '/guide/how-to-choose-a-dog-car-ramp/' },
+      { label: 'Car ramp size finder', href: '/products/foldable-dog-car-ramp#size-guide' },
+      { label: 'Car ramp FAQ', href: '/products/foldable-dog-car-ramp#faq' },
     ],
   },
   {
@@ -28,7 +30,6 @@ const linkGroups = [
     title: 'Company',
     links: [
       { label: 'About', href: '/about/' },
-      { label: 'How to choose a dog car ramp', href: '/guide/how-to-choose-a-dog-car-ramp/' },
       { label: 'Privacy policy', href: '/privacy/' },
       { label: 'Terms of service', href: '/terms/' },
     ],
@@ -46,6 +47,8 @@ const linkGroups = [
  * The dead social-icon row was removed until real profiles exist.
  */
 export const Footer: React.FC = () => {
+  const { pathname } = useLocation();
+  const showCta = pathname.replace(/\/$/, '') === '/products/foldable-dog-car-ramp';
   // Launch guard: when the owner opts in via VITE_REQUIRE_BUSINESS_INFO, a
   // missing business identity is a hard failure rather than a silent one.
   // (vite.config.ts already failed the build in that state; this catches a
@@ -68,11 +71,11 @@ export const Footer: React.FC = () => {
         </div>
       )}
 
-      {/* Final CTA */}
+      {showCta && (
       <div className="border-b border-white/10">
         <div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-            The walk in. Not the hoist.
+            A walk in, not a lift.
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-stone-400">
             {POLICY.returnDays} days to try it in your own car, free insured shipping, and a full refund if the dog will not take it.
@@ -85,6 +88,7 @@ export const Footer: React.FC = () => {
           </a>
         </div>
       </div>
+      )}
 
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-5">

@@ -39,7 +39,7 @@ export const TetherUpsell: React.FC<TetherUpsellProps> = ({
         checked={enabled}
         disabled={!available}
         onChange={(e) => onToggle(e.target.checked)}
-        className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-sm border-gray-400 text-blue-700 focus:ring-blue-700"
+        className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded-sm border-gray-400 text-pine focus:ring-pine"
       />
 
       <div className="min-w-0 flex-1">
