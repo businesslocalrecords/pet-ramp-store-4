@@ -209,6 +209,17 @@ Owner decision, not yet applied to the live offer. Checkout still charges the Sh
 
 The Chewy dog-stairs category (184 distinct products) is on `/dog-ramps`. Photos were saved from `image.chewy.com`, resized to a 1400-pixel maximum, and written as JPEG with EXIF, XMP, and IPTC removed. These products are not in Shopify yet, so checkout tells the shopper that. `npm run shopify:chewy` creates only these 184 products and does not restock the products already in the store. That command was not run: this machine has no `.env.local` Admin credentials. No star rating was invented for them. The existing Paw Grip products keep their own prices.
 
+## Catalog decision page (October 2026)
+
+Products other than the foldable car ramp use a separate page, not a copy of the ramp's About This Item, size finder, or FAQ. Those sections state the ramp's own specs.
+
+What the new page may say before any desktop extract arrives:
+
+- The product's existing catalog summary, bullets, and weight rating, when the catalog already has them.
+- Shipping, the money-back guarantee, the warranty, and three questions that restate `policy.ts`.
+
+Measurements, setup steps, box contents, and product questions render only after `src/lib/product-facts.json` has a row for that slug. An empty row stays empty. The desktop prompt that fills the file is `scripts/desktop-product-facts-prompt.md`. No Chewy review text, star count, or medical claim is part of that extract.
+
 ## Test catalog (October 2026)
 
 | Where | What changed | Why |
