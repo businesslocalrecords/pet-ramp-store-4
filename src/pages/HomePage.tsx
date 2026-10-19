@@ -37,18 +37,8 @@ export const HomePage: React.FC = () => {
 
   return (
     <main>
-      <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
-        <Link
-          to={{ pathname: productPath(flagship), search }}
-          className="order-2 block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine lg:order-1"
-        >
-          <img
-            src="/assets/product/grit/ramp-boxer-hatchback.jpg"
-            alt="A brindle Boxer stepping onto the Paw Grip ramp at the hatch of a blue hatchback while its owner watches"
-            className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
-          />
-        </Link>
-        <div className="order-1 lg:order-2">
+      <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:grid-rows-[auto_auto] lg:gap-x-12 lg:gap-y-4 lg:py-8">
+        <div className="lg:col-start-2 lg:row-start-1">
           <p className="text-sm font-bold uppercase tracking-wide text-pine">Dog ramps and stairs</p>
           <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:mt-3 sm:text-5xl">
             A way up for the car, the bed, and the back seat.
@@ -56,9 +46,23 @@ export const HomePage: React.FC = () => {
           <p className="mt-3 max-w-md text-lg text-muted sm:mt-4">
             The leap from a hatchback is a hard landing. The hoist into an SUV is your back. Between them is a walk: a foldable ramp with a grit deck, and stairs for the bed, the couch, and the side door.
           </p>
-          <p className="mt-4 text-3xl font-extrabold tabular-nums text-ink">{formatPrice(flagship.price)}</p>
-          <p className="mt-1 text-sm font-semibold text-deal">{FREE_SHIPPING_LABEL}</p>
-          <div className="mt-5 flex flex-wrap items-center gap-4 lg:mt-6">
+        </div>
+        <div className="lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-center">
+          <Link
+            to={{ pathname: productPath(flagship), search }}
+            className="block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine"
+          >
+            <img
+              src="/assets/product/grit/ramp-boxer-hatchback.jpg"
+              alt="A brindle Boxer stepping onto the Paw Grip ramp at the hatch of a blue hatchback while its owner watches"
+              className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
+            />
+          </Link>
+          <p className="mt-3 text-3xl font-extrabold tabular-nums text-ink">{formatPrice(flagship.price)}</p>
+        </div>
+        <div className="lg:col-start-2 lg:row-start-2">
+          <p className="text-sm font-semibold text-deal">{FREE_SHIPPING_LABEL}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-4 lg:mt-5">
             <Link
               to={{ pathname: productPath(flagship), search }}
               className="inline-flex h-12 items-center rounded-full bg-cta px-6 text-base font-bold text-white hover:bg-cta-deep"
