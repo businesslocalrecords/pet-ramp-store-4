@@ -207,7 +207,7 @@ Owner decision, not yet applied to the live offer. Checkout still charges the Sh
 - Free insured shipping is still on Paw Grip. Leave $5 in the price for shipping.
 - Selling price = Chewy listed price + $10 + $5, rounded up to the next `.99`. No new compare-at price is invented from Chewy's number.
 
-The Chewy dog-stairs category (184 distinct products) is on `/dog-ramps`. Photos were saved from `image.chewy.com`, resized to a 1400-pixel maximum, and written as JPEG with EXIF, XMP, and IPTC removed. These products are not in Shopify yet, so checkout tells the shopper that. `npm run shopify:chewy` creates only these 184 products and does not restock the products already in the store. That command was not run: this machine has no `.env.local` Admin credentials. No star rating was invented for them. The existing Paw Grip products keep their own prices.
+The Chewy dog-stairs category (184 distinct products) is on `/dog-ramps`. Photos were saved from `image.chewy.com`, resized to a 1400-pixel maximum, and written as JPEG with EXIF, XMP, and IPTC removed. These products are not in Shopify yet, so checkout tells the shopper that. `npm run shopify:chewy` creates only these 184 products and does not restock the products already in the store. That command was not run: this machine has no `.env.local` Admin credentials. The existing Paw Grip products keep their own prices.
 
 ## Catalog decision page (October 2026)
 
@@ -226,7 +226,8 @@ Measurements, setup steps, box contents, and product questions render only after
 |---|---|---|
 | Homepage, `/dog-ramps`, `/products/:handle` | The site is a ramp-and-stairs shop, not a one-product landing | Owner decision: meet any pet owner looking for a ramp, using Shopify handles, for this test |
 | `public/assets/catalog/` | Manufacturer photographs on the new products | Owner has written notice from the manufacturer that the photos may be used. Chewy itself returned 403 to the browser on port 9222, so the files were saved from the manufacturer's own product images |
-| Star ratings | A rating and a count on each catalog card | Owner allowed invented ratings and not reviews. No `aggregateRating` JSON-LD |
+| Star ratings | A rating and a count on each Paw Grip catalog card | Owner allowed invented ratings and not reviews. No `aggregateRating` JSON-LD |
+| Chewy catalog cards | The star number and count printed on the Chewy page, for 117 of the 184 products (`src/lib/chewy-ratings.json`) | Owner decision: these 184 products are test catalog items and should show a numeric rating the way the Paw Grip test products do. The numbers are copied from the Chewy page. No review text is copied. The 67 pages with no rating stay blank. No `aggregateRating` JSON-LD |
 
 
 ## Layout and wording pass (October 2026)

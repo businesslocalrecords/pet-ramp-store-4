@@ -7,6 +7,7 @@
  */
 
 import chewyProducts from './chewy-products.json';
+import chewyRatings from './chewy-ratings.json';
 import { ADDON_PRICES, PRODUCT_HANDLES, TIERS, formatMoney, priceFromChewyCost } from './offers';
 
 export type CatalogUse = 'car' | 'home' | 'cargo';
@@ -339,6 +340,23 @@ function chewyCaption(use: CatalogUse): string {
   return 'For the bed or the couch';
 }
 
+interface ChewyRatingRow {
+  dp: string;
+  rating: number | null;
+  ratingCount: number;
+}
+
+const chewyRatingByDp = new Map(
+  (chewyRatings as { products: ChewyRatingRow[] }).products.map((row) => [row.dp, row]),
+);
+
+/** Printed Chewy star number and count. A page with no rating stays blank. */
+function chewyStars(dp: string): { rating: number; ratingCount: number } {
+  const row = chewyRatingByDp.get(dp);
+  if (!row || row.rating == null || row.ratingCount <= 0) return { rating: 0, ratingCount: 0 };
+  return { rating: row.rating, ratingCount: row.ratingCount };
+}
+
 const CHEWY_CATALOG: readonly CatalogProduct[] = (chewyProducts as ChewyProduct[]).map((item) => ({
   slug: `dp-${item.dp}`,
   shopifyHandle: `chewy-${item.dp}`,
@@ -346,8 +364,7 @@ const CHEWY_CATALOG: readonly CatalogProduct[] = (chewyProducts as ChewyProduct[
   caption: chewyCaption(item.use),
   summary: '',
   price: priceFromChewyCost(item.cost),
-  rating: 0,
-  ratingCount: 0,
+  ...chewyStars(item.dp),
   image: item.images[0],
   imageHover: item.images[1],
   imageAlt: item.name,
