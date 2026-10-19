@@ -72,7 +72,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-white">
+      <section className="bg-well">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-10">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Shop by the job</h2>
           <p className="mt-2 max-w-xl text-muted">Three places a dog gets stuck. Pick the one you are solving today.</p>

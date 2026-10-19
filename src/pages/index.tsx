@@ -94,7 +94,7 @@ const Page: React.FC = () => {
   const similar = findBySlug('compact-telescoping-dog-ramp');
 
   return (
-    <div className="bg-paper text-ink antialiased selection:bg-mist selection:text-ink">
+    <div className="bg-white text-ink antialiased selection:bg-mist selection:text-ink">
       <main className="mx-auto max-w-screen-lg px-4 pb-24 pt-6 sm:px-6 sm:pt-10">
         <nav className="mb-6 text-sm text-muted" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-pine">Home</Link>

@@ -4,12 +4,12 @@
    Design Tokens
    ========================================================================== */
 @theme {
-  /* Warm paper shop. Pine is the brand. Orange is only for buying. */
-  --color-paper: #F4F1EA;
+  /* Page background stays white. Pine is the brand. Orange is only for buying. */
+  --color-paper: #ffffff;
   --color-ink: #1C2420;
   --color-muted: #5E675F;
   --color-line: #E5DFD4;
-  --color-well: #F7F5F0;
+  --color-well: #F3F6F7;
   --color-mist: #E5F2ED;
   --color-pine: #0C6B56;
   --color-pine-deep: #084C3D;
