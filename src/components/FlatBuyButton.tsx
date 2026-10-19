@@ -30,7 +30,7 @@ export const FlatBuyButton: React.FC<FlatBuyButtonProps> = ({
       type="button"
       onClick={onClick}
       disabled={disabled || loading}
-      className="mt-5 flex w-full items-center justify-center gap-2 rounded-md bg-[#F37021] px-6 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-[#D95E1A] disabled:cursor-not-allowed disabled:opacity-60"
+      className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-cta px-6 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-cta-deep disabled:cursor-not-allowed disabled:opacity-60"
     >
       {loading ? (
         <>

@@ -33,7 +33,7 @@ export const Faq: React.FC = () => {
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-10 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-amber-800">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-mist px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-pine-deep">
             <MessageCircleQuestion className="h-3.5 w-3.5" aria-hidden="true" /> Questions &amp; Answers
           </span>
           <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -81,13 +81,13 @@ export const Faq: React.FC = () => {
         </div>
 
         {/* Still have questions — routes to the contact page's Netlify form */}
-        <div className="mt-10 rounded-2xl bg-stone-900 p-7 text-center text-stone-100">
+        <div className="mt-10 rounded-2xl bg-ink p-7 text-center text-stone-100">
           <h3 className="text-lg font-bold">Still have a question?</h3>
           <p className="mt-1 text-sm text-stone-400">Our team replies {POLICY.supportReply}.</p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <a
               href="/contact/"
-              className="inline-flex min-h-12 items-center gap-2 rounded-md bg-amber-500 px-6 py-3 font-bold text-stone-900 transition-colors hover:bg-amber-400"
+              className="inline-flex min-h-12 items-center gap-2 rounded-full bg-cta px-6 py-3 font-bold text-white transition-colors hover:bg-cta-deep"
             >
               Contact us
             </a>

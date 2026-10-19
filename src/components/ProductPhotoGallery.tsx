@@ -52,8 +52,8 @@ export const ProductPhotoGallery: React.FC<{ photos: readonly GalleryPhoto[] }> 
   if (!active) return null;
 
   return (
-    <div>
-      <div className="relative overflow-hidden rounded-2xl bg-white ring-1 ring-[#E4EAEB]">
+    <div className="min-w-0">
+      <div className="relative overflow-hidden rounded-2xl bg-white ring-1 ring-line">
         <div
           ref={trackRef}
           onScroll={() => {
@@ -90,7 +90,7 @@ export const ProductPhotoGallery: React.FC<{ photos: readonly GalleryPhoto[] }> 
         </div>
       </div>
 
-      <p className="mt-3 text-sm font-semibold text-[#5C6B73]">{active.label}</p>
+      <p className="mt-3 text-sm font-semibold text-muted">{active.label}</p>
 
       {photos.length > 1 && (
         <div className="hide-scrollbar mt-2 flex gap-2 overflow-x-auto pb-1" role="tablist" aria-label="Product images">
@@ -103,7 +103,7 @@ export const ProductPhotoGallery: React.FC<{ photos: readonly GalleryPhoto[] }> 
               aria-label={`slide ${idx + 1} of ${photos.length}`}
               onClick={() => openViewer(idx)}
               className={`h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-white ring-1 ${
-                idx === activeIndex ? 'ring-2 ring-[#0F6E62]' : 'ring-[#E4EAEB]'
+                idx === activeIndex ? 'ring-2 ring-pine' : 'ring-line'
               }`}
             >
               <img src={photo.src} alt="" width={128} height={128} loading="lazy" decoding="async" className="h-full w-full object-contain" />

@@ -209,7 +209,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ open, onClose }) => {
                 type="button"
                 onClick={handleCheckout}
                 disabled={loading}
-                className="flex w-full items-center justify-center gap-2 rounded-md bg-[#F37021] px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[#D95E1A] disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-cta px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-cta-deep disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Lock className="h-4 w-4" aria-hidden="true" />
                 Proceed to Checkout

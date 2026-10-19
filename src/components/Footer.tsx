@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
   }
 
   return (
-    <footer className="bg-stone-950 text-stone-400">
+    <footer className="bg-ink text-stone-300">
       {/* Dev warning while business details are placeholders */}
       {BUSINESS_IS_INCOMPLETE && (
         <div className="border-b border-amber-500/30 bg-amber-950/40 px-4 py-2.5 text-center text-[11px] font-medium text-amber-300">
@@ -69,7 +69,7 @@ export const Footer: React.FC = () => {
       )}
 
       {/* Final CTA */}
-      <div className="border-b border-stone-800">
+      <div className="border-b border-white/10">
         <div className="mx-auto max-w-4xl px-4 py-14 text-center sm:px-6">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             The walk in. Not the hoist.
@@ -79,7 +79,7 @@ export const Footer: React.FC = () => {
           </p>
           <a
             href="/products/foldable-dog-car-ramp"
-            className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-md bg-[#F37021] px-9 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-[#D95E1A]"
+            className="mt-7 inline-flex min-h-12 items-center gap-2 rounded-full bg-cta px-9 py-4 text-lg font-bold text-white shadow-sm transition-colors hover:bg-cta-deep"
           >
             Shop the car ramp
           </a>
@@ -91,8 +91,8 @@ export const Footer: React.FC = () => {
           {/* Brand + verified business identity */}
           <div className="md:col-span-2">
             <div className="mb-4 flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500">
-                <PawPrint className="h-6 w-6 text-stone-900" aria-hidden="true" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pine">
+                <PawPrint className="h-6 w-6 text-white" aria-hidden="true" />
               </div>
               <span className="text-xl font-extrabold tracking-tight text-white">
                 {BUSINESS.legalName}
@@ -102,7 +102,7 @@ export const Footer: React.FC = () => {
             {/* Physical address — required for Merchant Center trust */}
             <address className="space-y-1.5 text-sm not-italic">
               <span className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-mist" aria-hidden="true" />
                 <span>
                   {BUSINESS.addressLine1}
                   {BUSINESS.addressLine2 && (
@@ -118,14 +118,14 @@ export const Footer: React.FC = () => {
                 </span>
               </span>
               <span className="flex items-center gap-2">
-                <Mail className="h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
-                <a href={`mailto:${BUSINESS.email}`} className="hover:text-amber-400">
+                <Mail className="h-4 w-4 shrink-0 text-mist" aria-hidden="true" />
+                <a href={`mailto:${BUSINESS.email}`} className="hover:text-white">
                   {BUSINESS.email}
                 </a>
               </span>
               <span className="flex items-center gap-2">
-                <Phone className="h-4 w-4 shrink-0 text-amber-500" aria-hidden="true" />
-                <a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, '')}`} className="hover:text-amber-400">
+                <Phone className="h-4 w-4 shrink-0 text-mist" aria-hidden="true" />
+                <a href={`tel:${BUSINESS.phone.replace(/[^\d+]/g, '')}`} className="hover:text-white">
                   {BUSINESS.phone}
                 </a>
               </span>
@@ -133,14 +133,14 @@ export const Footer: React.FC = () => {
 
             <div className="mt-6 flex flex-wrap gap-4 text-xs">
               <span className="flex items-center gap-1.5">
-                <Truck className="h-4 w-4 text-amber-500" aria-hidden="true" /> Free insured shipping
+                <Truck className="h-4 w-4 text-mist" aria-hidden="true" /> Free insured shipping
               </span>
               <span className="flex items-center gap-1.5">
-                <RotateCcw className="h-4 w-4 text-amber-500" aria-hidden="true" /> {POLICY.returnDays}-day
+                <RotateCcw className="h-4 w-4 text-mist" aria-hidden="true" /> {POLICY.returnDays}-day
                 returns
               </span>
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-amber-500" aria-hidden="true" /> {POLICY.warrantyMonths}
+                <ShieldCheck className="h-4 w-4 text-mist" aria-hidden="true" /> {POLICY.warrantyMonths}
                 -month warranty
               </span>
             </div>
@@ -152,7 +152,7 @@ export const Footer: React.FC = () => {
               <ul className="space-y-2.5">
                 {group.links.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="text-sm transition-colors hover:text-amber-400">
+                    <a href={link.href} className="text-sm transition-colors hover:text-white">
                       {link.label}
                     </a>
                   </li>

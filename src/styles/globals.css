@@ -4,16 +4,18 @@
    Design Tokens
    ========================================================================== */
 @theme {
-  --color-brand-50: #FFFBEB;
-  --color-brand-100: #FEF3C7;
-  --color-brand-200: #FDE68A;
-  --color-brand-300: #FCD34D;
-  --color-brand-400: #FBBF24;
-  --color-brand-500: #F59E0B;
-  --color-brand-600: #D97706;
-  --color-brand-700: #B45309;
-  --color-brand-800: #92400E;
-  --color-brand-900: #78350F;
+  /* Warm paper shop. Pine is the brand. Orange is only for buying. */
+  --color-paper: #F4F1EA;
+  --color-ink: #1C2420;
+  --color-muted: #5E675F;
+  --color-line: #E5DFD4;
+  --color-well: #F7F5F0;
+  --color-mist: #E5F2ED;
+  --color-pine: #0C6B56;
+  --color-pine-deep: #084C3D;
+  --color-cta: #E04E12;
+  --color-cta-deep: #C2410C;
+  --color-deal: #0D7A3C;
 
   --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
@@ -110,7 +112,7 @@ p {
 }
 
 .text-shimmer {
-  background: linear-gradient(100deg, currentColor 20%, rgb(251 191 36 / 90%) 45%, currentColor 70%);
+  background: linear-gradient(100deg, currentColor 20%, rgb(224 78 18 / 90%) 45%, currentColor 70%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -128,7 +130,7 @@ p {
 }
 
 .shadow-hard-amber {
-  box-shadow: 6px 6px 0 0 rgb(245 158 11 / 1);
+  box-shadow: 6px 6px 0 0 rgb(12 107 86 / 1);
 }
 
 .shadow-hard-lg {
@@ -169,7 +171,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid #0C6B56;
   outline-offset: 2px;
   border-radius: 4px;
 }

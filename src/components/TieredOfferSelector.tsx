@@ -77,7 +77,7 @@ export const TieredOfferSelector: React.FC<TieredOfferSelectorProps> = ({
               {/* Savings badge only when the bundle genuinely saves money */}
               {savings > 0 && (
                 <div className="mt-1.5">
-                  <span className="inline-block bg-[#008C3A] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+                  <span className="inline-block bg-deal px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
                     Save ${formatMoney(savings)} vs buying separately
                   </span>
                 </div>

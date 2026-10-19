@@ -123,7 +123,7 @@ export const BuyBox: React.FC = () => {
               ${formatMoney(tier.compareAt)}
             </s>
             {saveAmount > 0 && (
-              <span className="inline-block bg-[#008C3A] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
+              <span className="inline-block bg-deal px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-white">
                 Save ${formatMoney(saveAmount)}
               </span>
             )}
@@ -133,7 +133,7 @@ export const BuyBox: React.FC = () => {
             {variantsLoaded && !anyRampAvailable ? (
               <span className="font-bold text-red-700">Out of stock</span>
             ) : compactAvailable ? (
-              <span className="font-bold text-[#008C3A]">
+              <span className="font-bold text-deal">
                 {stock !== null && stock > 0 && stock < 20 ? `Only ${stock} left` : 'In stock'}
               </span>
             ) : (
@@ -150,7 +150,7 @@ export const BuyBox: React.FC = () => {
             {bullets.map((line) => (
               <li key={line} className="flex items-start gap-2 text-[0.8125rem] text-gray-700">
                 <svg
-                  className="mt-1 h-3 w-3 shrink-0 text-[#008C3A]"
+                  className="mt-1 h-3 w-3 shrink-0 text-deal"
                   viewBox="0 0 12 12"
                   fill="none"
                   aria-hidden="true"

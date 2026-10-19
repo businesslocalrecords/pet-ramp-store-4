@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CATALOG, productPath } from '../lib/catalog';
+import { CATALOG, formatPrice, productPath } from '../lib/catalog';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL, FREE_SHIPPING_LABEL } from '../lib/policy';
 import { ProductCard } from '../components/ProductCard';
 
@@ -40,7 +40,7 @@ export const HomePage: React.FC = () => {
       <section className="mx-auto grid max-w-6xl items-center gap-5 px-4 py-5 sm:px-6 sm:py-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:py-8">
         <Link
           to={{ pathname: productPath(flagship), search }}
-          className="order-2 block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0F6E62] lg:order-1"
+          className="order-2 block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine lg:order-1"
         >
           <img
             src="/assets/product/grit/ramp-boxer-hatchback.jpg"
@@ -49,31 +49,33 @@ export const HomePage: React.FC = () => {
           />
         </Link>
         <div className="order-1 lg:order-2">
-          <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Dog ramps and stairs</p>
-          <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-[#14202B] sm:mt-3 sm:text-5xl">
+          <p className="text-sm font-bold uppercase tracking-wide text-pine">Dog ramps and stairs</p>
+          <h1 className="mt-2 text-4xl font-extrabold leading-[1.05] tracking-tight text-ink sm:mt-3 sm:text-5xl">
             A way up for the car, the bed, and the back seat.
           </h1>
-          <p className="mt-3 max-w-md text-lg text-[#5C6B73] sm:mt-4">
+          <p className="mt-3 max-w-md text-lg text-muted sm:mt-4">
             The leap from a hatchback is a hard landing. The hoist into an SUV is your back. Between them is a walk: a foldable ramp with a grit deck, and stairs for the bed, the couch, and the side door.
           </p>
-          <div className="mt-5 flex flex-wrap items-center gap-4 lg:mt-8">
+          <p className="mt-4 text-3xl font-extrabold tabular-nums text-ink">{formatPrice(flagship.price)}</p>
+          <p className="mt-1 text-sm font-semibold text-deal">{FREE_SHIPPING_LABEL}</p>
+          <div className="mt-5 flex flex-wrap items-center gap-4 lg:mt-6">
             <Link
               to={{ pathname: productPath(flagship), search }}
-              className="inline-flex h-12 items-center rounded-full bg-[#F37021] px-6 text-base font-bold text-white hover:bg-[#D95E1A]"
+              className="inline-flex h-12 items-center rounded-full bg-cta px-6 text-base font-bold text-white hover:bg-cta-deep"
             >
               Shop the car ramp
             </Link>
-            <Link to={{ pathname: '/dog-ramps', search }} className="text-base font-bold text-[#0F6E62] underline-offset-4 hover:underline">
+            <Link to={{ pathname: '/dog-ramps', search }} className="text-base font-bold text-pine underline-offset-4 hover:underline">
               Browse every ramp
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="bg-[#F3F6F7]">
+      <section className="bg-white">
         <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-10">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">Shop by the job</h2>
-          <p className="mt-2 max-w-xl text-[#5C6B73]">Three places a dog gets stuck. Pick the one you are solving today.</p>
+          <p className="mt-2 max-w-xl text-muted">Three places a dog gets stuck. Pick the one you are solving today.</p>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {JOBS.map((job) => {
               const product = CATALOG.find((item) => item.slug === job.slug)!;
@@ -86,7 +88,8 @@ export const HomePage: React.FC = () => {
                   <img src={job.image} alt={job.alt} className={`aspect-square w-full bg-white object-contain lg:aspect-[5/3] lg:object-cover ${job.frame}`} />
                   <div className="p-4">
                     <h3 className="font-bold">{job.title}</h3>
-                    <p className="mt-1 text-sm text-[#5C6B73]">{job.caption}</p>
+                    <p className="mt-1 text-sm text-muted">{job.caption}</p>
+                    <p className="mt-2 text-base font-extrabold tabular-nums">{formatPrice(product.price)}</p>
                   </div>
                 </Link>
               );
@@ -98,7 +101,7 @@ export const HomePage: React.FC = () => {
       <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:py-12">
         <div className="flex items-end justify-between gap-4">
           <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">The ramp for the job</h2>
-          <Link to={{ pathname: '/dog-ramps', search }} className="text-sm font-bold text-[#0F6E62]">
+          <Link to={{ pathname: '/dog-ramps', search }} className="text-sm font-bold text-pine">
             See the whole shop
           </Link>
         </div>
@@ -109,7 +112,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      <section className="bg-[#14202B] text-white">
+      <section className="bg-ink text-white">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">
           <div>
             <h2 className="text-2xl font-extrabold tracking-tight sm:text-3xl">A short ramp is a steep ramp.</h2>
@@ -118,7 +121,7 @@ export const HomePage: React.FC = () => {
             </p>
             <Link
               to={{ pathname: '/products/foldable-dog-car-ramp', hash: 'size-guide', search }}
-              className="mt-6 inline-flex h-12 items-center rounded-full bg-white px-6 font-bold text-[#14202B]"
+              className="mt-6 inline-flex h-12 items-center rounded-full bg-white px-6 font-bold text-ink"
             >
               Open the size finder
             </Link>

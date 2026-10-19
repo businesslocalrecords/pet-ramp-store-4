@@ -78,7 +78,7 @@ export const Testimonials: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-amber-100 text-amber-800">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase bg-mist text-pine-deep">
             <BadgeCheck className="w-3.5 h-3.5" aria-hidden="true" /> Verified Buyer Reviews
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-extrabold tracking-tight">

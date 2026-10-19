@@ -47,7 +47,7 @@ export const ShippingReturns: React.FC = () => {
   return (
     <section id="shipping" className="scroll-mt-24 py-12 sm:py-16">
       <div className="mb-10 text-center">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-amber-800">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-mist px-3.5 py-1.5 text-xs font-bold uppercase tracking-widest text-pine-deep">
           <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" /> Service promise
         </span>
         <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
@@ -68,8 +68,8 @@ export const ShippingReturns: React.FC = () => {
             <span className="absolute -left-3 -top-3 flex h-10 w-10 items-center justify-center rounded-xl bg-stone-900 font-extrabold text-white shadow-sm">
               {step.num}
             </span>
-            <div className="mb-4 mt-2 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100">
-              <step.icon className="h-6 w-6 text-amber-700" aria-hidden="true" />
+            <div className="mb-4 mt-2 flex h-12 w-12 items-center justify-center rounded-xl bg-mist">
+              <step.icon className="h-6 w-6 text-pine" aria-hidden="true" />
             </div>
             <h3 className="mb-2 text-lg font-bold">{step.title}</h3>
             <p className="text-sm leading-relaxed text-stone-600">{step.desc}</p>

@@ -44,21 +44,21 @@ export const StickyMobileBuyBar: React.FC = () => {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-300 bg-white px-4 py-3 md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white px-4 py-3 shadow-[0_-8px_24px_rgba(28,36,32,0.08)] md:hidden">
       <div className="flex items-center gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline gap-2">
             <span className="text-xl font-bold leading-none text-gray-900">${formatMoney(total)}</span>
             <span className="text-xs text-gray-500">free shipping</span>
           </div>
-          <p className="text-[11px] font-medium text-[#008C3A]">{GUARANTEE_LABEL}</p>
+          <p className="text-[11px] font-medium text-deal">{GUARANTEE_LABEL}</p>
         </div>
 
         <button
           type="button"
           onClick={buy}
           disabled={buying}
-          className="flex min-h-12 shrink-0 items-center gap-1.5 rounded-md bg-[#F37021] px-5 py-3 text-sm font-bold text-white shadow-sm transition-colors hover:bg-[#D95E1A] disabled:opacity-60"
+          className="flex min-h-12 shrink-0 items-center gap-1.5 rounded-full bg-cta px-5 py-3 text-sm font-bold text-white shadow-sm transition-colors hover:bg-cta-deep disabled:opacity-60"
         >
           {buying ? (
             'Processing…'

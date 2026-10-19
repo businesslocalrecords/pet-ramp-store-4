@@ -71,28 +71,29 @@ export const CategoryPage: React.FC = () => {
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
-      <nav className="text-sm text-[#5C6B73]" aria-label="Breadcrumb">
-        <Link to="/" className="hover:text-[#0F6E62]">Home</Link>
+      <nav className="text-sm text-muted" aria-label="Breadcrumb">
+        <Link to="/" className="hover:text-pine">Home</Link>
         <span aria-hidden="true"> / </span>
-        <span className="text-[#14202B]">Dog ramps</span>
+        <span className="text-ink">Dog ramps</span>
       </nav>
       <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{heading}</h1>
+          <p className="mt-1 text-sm font-semibold text-pine">{results.length} in the shop</p>
           {q ? (
-            <p className="mt-2 text-[#5C6B73]">Results for “{params.get('q')}”</p>
+            <p className="mt-2 text-muted">Results for “{params.get('q')}”</p>
           ) : (
-            <p className="mt-2 max-w-xl text-[#5C6B73]">
+            <p className="mt-2 max-w-xl text-muted">
               Cargo area, back seat, bed, or couch. Filter to the place the dog is stuck, then open the one that fits.
             </p>
           )}
         </div>
         <label className="text-sm font-semibold">
-          <span className="mr-2 text-[#5C6B73]">Sort by</span>
+          <span className="mr-2 text-muted">Sort by</span>
           <select
             value={sort}
             onChange={(event) => setSort(event.target.value as SortId)}
-            className="h-10 rounded-full border border-[#E4EAEB] bg-white px-3"
+            className="h-10 rounded-full border border-line bg-white px-3"
           >
             <option value="relevance">Relevance</option>
             <option value="price-asc">Price: Low to High</option>
@@ -109,7 +110,7 @@ export const CategoryPage: React.FC = () => {
               key={`${chip.key}-${chip.value}`}
               type="button"
               onClick={() => toggle(chip.key, chip.value)}
-              className="h-8 rounded-full bg-[#F3F6F7] px-3 text-sm font-semibold"
+              className="h-8 rounded-full bg-pine px-3 text-sm font-semibold text-white"
             >
               {chip.label} <span aria-hidden="true">×</span>
               <span className="sr-only">Remove {chip.label}</span>
@@ -119,7 +120,7 @@ export const CategoryPage: React.FC = () => {
       )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
-        <aside className="space-y-6" aria-label="Filters">
+        <aside className="h-fit space-y-6 rounded-2xl border border-line bg-white p-4" aria-label="Filters">
           <CheckGroup label="Placement" options={PLACES} selected={places} onToggle={(id) => toggle('place', id)} />
           <CheckGroup label="Product type" options={KINDS} selected={kinds} onToggle={(id) => toggle('type', id)} />
           <CheckGroup
@@ -131,7 +132,7 @@ export const CategoryPage: React.FC = () => {
         </aside>
 
         {results.length === 0 ? (
-          <p className="rounded-2xl bg-[#F3F6F7] p-8 text-[#5C6B73]">
+          <p className="rounded-2xl bg-well p-8 text-muted">
             Nothing matches those filters. Clear one and try again.
           </p>
         ) : (
@@ -167,7 +168,7 @@ function CheckGroup<T extends string>({
               type="checkbox"
               checked={selected.includes(option.id)}
               onChange={() => onToggle(option.id)}
-              className="h-4 w-4 accent-[#0F6E62]"
+              className="h-4 w-4 accent-pine"
             />
             {option.label}
           </label>

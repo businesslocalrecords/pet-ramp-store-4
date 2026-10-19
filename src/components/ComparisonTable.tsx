@@ -137,7 +137,7 @@ export const ComparisonTable: React.FC = () => {
             ))}
 
             {/* Limitation row */}
-            <tr className="border-t-2 border-stone-900/10 bg-amber-50/40">
+            <tr className="border-t-2 border-line bg-mist/70">
               <th scope="row" className="px-3 py-3 align-top text-[13px] font-bold text-stone-900">
                 Honest limitation
               </th>

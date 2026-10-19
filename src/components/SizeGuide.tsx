@@ -65,7 +65,7 @@ export const SizeGuide: React.FC = () => {
   return (
     <section id="size-guide" className="scroll-mt-24 py-12 sm:py-16">
       <header className="mb-8">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-amber-800">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-mist px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-pine-deep">
           <Ruler className="h-3.5 w-3.5" aria-hidden="true" /> Size finder
         </span>
         <h2 className="mt-3 text-2xl font-bold text-stone-900 sm:text-3xl">
@@ -147,7 +147,7 @@ export const SizeGuide: React.FC = () => {
                   {size.tierName} &middot; {size.lengthIn}&Prime;
                 </h3>
                 <Dog
-                  className={`ml-auto h-6 w-6 ${isRecommended ? 'text-amber-600' : 'text-stone-300'}`}
+                  className={`ml-auto h-6 w-6 ${isRecommended ? 'text-cta' : 'text-stone-300'}`}
                   aria-hidden="true"
                 />
               </div>
@@ -194,7 +194,7 @@ export const SizeGuide: React.FC = () => {
                   className={`flex min-h-12 items-center rounded-md px-5 text-sm font-bold transition-colors ${
                     isSelected
                       ? 'bg-stone-900 text-white hover:bg-stone-800'
-                      : 'bg-[#F37021] text-white hover:bg-[#D95E1A]'
+                      : 'bg-cta text-white hover:bg-cta-deep'
                   }`}
                 >
                   {isSelected ? 'Selected' : `Select ${size.name}`}

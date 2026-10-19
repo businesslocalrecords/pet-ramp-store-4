@@ -54,14 +54,14 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#14202B] antialiased">
-      <header className="sticky top-0 z-40 border-b border-[#E4EAEB] bg-white">
+    <div className="min-h-screen bg-paper text-ink antialiased">
+      <header className="sticky top-0 z-40 border-b border-line bg-white">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
           <Link
             to={{ pathname: '/', search }}
-            className="flex items-center gap-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F6E62]"
+            className="flex items-center gap-2 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pine"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#0F6E62]">
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-pine">
               <PawPrint className="h-5 w-5 text-white" aria-hidden="true" />
             </span>
             <span className="text-lg font-extrabold tracking-tight">Paw Grip</span>
@@ -76,7 +76,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
                 key={link.to}
                 to={{ pathname: link.to, search }}
                 className={({ isActive }) =>
-                  `text-sm font-semibold ${isActive ? 'text-[#0F6E62]' : 'text-[#14202B] hover:text-[#0F6E62]'}`
+                  `text-sm font-semibold ${isActive ? 'text-pine' : 'text-ink hover:text-pine'}`
                 }
               >
                 {link.label}
@@ -87,12 +87,12 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
           <form onSubmit={onSearch} className="ml-auto hidden min-w-0 flex-1 md:block md:max-w-sm" role="search">
             <label className="relative block">
               <span className="sr-only">Search ramps and stairs</span>
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5C6B73]" aria-hidden="true" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
               <input
                 name="q"
                 defaultValue={params.get('q') ?? ''}
                 placeholder="Search ramps and stairs"
-                className="h-10 w-full rounded-full border border-[#E4EAEB] bg-[#F3F6F7] pl-9 pr-4 text-sm outline-none focus:border-[#0F6E62] focus:bg-white"
+                className="h-10 w-full rounded-full border border-line bg-well pl-9 pr-4 text-sm outline-none focus:border-pine focus:bg-white"
               />
             </label>
           </form>
@@ -105,7 +105,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
           >
             <ShoppingCart className="h-5 w-5" aria-hidden="true" />
             {totalQuantity > 0 && (
-              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#F37021] px-1 text-xs text-white">
+              <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-cta px-1 text-xs text-white">
                 {totalQuantity}
               </span>
             )}
@@ -122,21 +122,21 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
           </button>
         </div>
 
-        <form onSubmit={onSearch} className="border-t border-[#E4EAEB] px-4 py-2 md:hidden" role="search">
+        <form onSubmit={onSearch} className="border-t border-line px-4 py-2 md:hidden" role="search">
           <label className="relative block">
             <span className="sr-only">Search ramps and stairs</span>
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5C6B73]" aria-hidden="true" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" aria-hidden="true" />
             <input
               name="q"
               defaultValue={params.get('q') ?? ''}
               placeholder="Search ramps and stairs"
-              className="h-10 w-full rounded-full border border-[#E4EAEB] bg-[#F3F6F7] pl-9 pr-4 text-sm outline-none focus:border-[#0F6E62] focus:bg-white"
+              className="h-10 w-full rounded-full border border-line bg-well pl-9 pr-4 text-sm outline-none focus:border-pine focus:bg-white"
             />
           </label>
         </form>
 
         {menuOpen && (
-          <nav className={`border-t border-[#E4EAEB] px-4 py-3 ${compact ? '' : 'md:hidden'}`} aria-label="Shop">
+          <nav className={`border-t border-line px-4 py-3 ${compact ? '' : 'md:hidden'}`} aria-label="Shop">
             {LINKS.map((link) => (
               <Link
                 key={link.to}

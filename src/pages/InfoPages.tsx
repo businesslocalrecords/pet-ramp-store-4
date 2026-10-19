@@ -9,12 +9,12 @@ import {
   WARRANTY_PRODUCT_LABEL,
 } from '../lib/policy';
 
-const prose = 'mx-auto max-w-3xl px-4 py-12 text-[#444] sm:px-6 [&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:tracking-tight [&_h1]:text-[#14202B] [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-[#14202B] [&_a]:font-semibold [&_a]:text-[#0F6E62] [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1';
+const prose = 'mx-auto max-w-3xl px-4 py-12 text-[#444] sm:px-6 [&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:tracking-tight [&_h1]:text-ink [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink [&_a]:font-semibold [&_a]:text-pine [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1';
 
 export const AboutPage: React.FC = () => (
   <main className={prose}>
     <h1>About Paw Grip</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>
       Paw Grip is the shop for the moment a dog stops making the jump: into the cargo area, onto the bed, or up to the back seat.
       The foldable car ramp is the one we size down to the inch. Everything else is here so the ramp matches the job, not a guess.
@@ -46,7 +46,7 @@ export const AboutPage: React.FC = () => (
 export const ShippingPage: React.FC = () => (
   <main className={prose}>
     <h1>Shipping Policy</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>Every Paw Grip order ships free and insured. The same numbers are on the product pages.</p>
     <h2>Where we ship</h2>
     <p>
@@ -70,7 +70,7 @@ export const ShippingPage: React.FC = () => (
 export const ReturnsPage: React.FC = () => (
   <main className={prose}>
     <h1>Returns and refunds</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>
       Try the ramp with your dog, in your car, for {POLICY.returnDays} days. If it does not work out, we take it back — used or unused — and refund you in full.
     </p>
@@ -98,7 +98,7 @@ export const ReturnsPage: React.FC = () => (
 export const WarrantyPage: React.FC = () => (
   <main className={prose}>
     <h1>Hardware warranty</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>
       Every Paw Grip ramp is covered against manufacturing defects for {POLICY.warrantyMonths} months from delivery — the frame, the walking surface, and the hardware. This sits on top of the <Link to="/returns">{GUARANTEE_LABEL}</Link>.
     </p>
@@ -124,7 +124,7 @@ export const WarrantyPage: React.FC = () => (
 export const PrivacyPage: React.FC = () => (
   <main className={prose}>
     <h1>Privacy Policy</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>This policy explains what Paw Grip collects when you use this website, and what we do with it.</p>
     <h2>What we collect</h2>
     <ul>
@@ -154,7 +154,7 @@ export const PrivacyPage: React.FC = () => (
 export const TermsPage: React.FC = () => (
   <main className={prose}>
     <h1>Terms of Service</h1>
-    <p className="text-sm text-[#5C6B73]">Last updated: October 2026</p>
+    <p className="text-sm text-muted">Last updated: October 2026</p>
     <p>These terms govern your use of pawgrip.app and any order you place with Paw Grip. By ordering, you accept them.</p>
     <h2>Orders and pricing</h2>
     <p>
@@ -196,7 +196,7 @@ export const ContactPage: React.FC = () => {
       <p>A real person replies {POLICY.supportReply}.</p>
       <p>Not sure which size fits? Send a photo of the vehicle with your message and we will size it before you order.</p>
       {sent ? (
-        <p className="mt-6 rounded-2xl bg-[#F3F6F7] p-4 font-semibold text-[#14202B]">Message received. We will reply {POLICY.supportReply}.</p>
+        <p className="mt-6 rounded-2xl bg-well p-4 font-semibold text-ink">Message received. We will reply {POLICY.supportReply}.</p>
       ) : (
         <form name="contact" method="POST" action="https://formspree.io/f/mljgpwkd" onSubmit={onSubmit} className="mt-6 space-y-4">
           <input type="hidden" name="form-name" value="contact" />
@@ -205,9 +205,9 @@ export const ContactPage: React.FC = () => {
           </p>
           <Field id="name" label="Your name" type="text" autoComplete="name" />
           <Field id="email" label="Email address" type="email" autoComplete="email" />
-          <label className="block text-sm font-bold text-[#14202B]" htmlFor="message">Message</label>
-          <textarea id="message" name="message" required className="mt-1 w-full rounded-xl border border-[#E4EAEB] p-3" rows={5} />
-          <button type="submit" className="inline-flex h-12 items-center rounded-full bg-[#F37021] px-6 font-bold text-white">
+          <label className="block text-sm font-bold text-ink" htmlFor="message">Message</label>
+          <textarea id="message" name="message" required className="mt-1 w-full rounded-xl border border-line p-3" rows={5} />
+          <button type="submit" className="inline-flex h-12 items-center rounded-full bg-cta px-6 font-bold text-white">
             Send
           </button>
         </form>
@@ -223,9 +223,9 @@ const Field: React.FC<{ id: string; label: string; type: string; autoComplete: s
   autoComplete,
   name,
 }) => (
-  <label className="block text-sm font-bold text-[#14202B]" htmlFor={id}>
+  <label className="block text-sm font-bold text-ink" htmlFor={id}>
     {label}
-    <input id={id} name={name ?? id} type={type} required autoComplete={autoComplete} className="mt-1 w-full rounded-xl border border-[#E4EAEB] p-3 font-normal" />
+    <input id={id} name={name ?? id} type={type} required autoComplete={autoComplete} className="mt-1 w-full rounded-xl border border-line p-3 font-normal" />
   </label>
 );
 
@@ -250,7 +250,7 @@ export const GuidePage: React.FC = () => {
 
   return (
     <main className={prose}>
-      <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Buyer&apos;s guide</p>
+      <p className="text-sm font-bold uppercase tracking-wide text-pine">Buyer&apos;s guide</p>
       <h1>How to choose a dog car ramp</h1>
       <p>
         Start with a tape measure, not a guess. A ramp that is too short for the bumper turns into a wall, and a dog who has refused it once will refuse it again.
@@ -266,7 +266,7 @@ export const GuidePage: React.FC = () => {
       <div className="mt-4 overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-[#E4EAEB]">
+            <tr className="border-b border-line">
               <th className="py-2">Cargo height</th>
               <th className="py-2">Compact ({compact.lengthIn}″)</th>
               <th className="py-2">Extended ({extended.lengthIn}″)</th>
@@ -274,7 +274,7 @@ export const GuidePage: React.FC = () => {
           </thead>
           <tbody>
             {HEIGHTS.map((height) => (
-              <tr key={height} className="border-b border-[#E4EAEB]">
+              <tr key={height} className="border-b border-line">
                 <td className="py-2">{height}″</td>
                 <td className="py-2 tabular-nums">{slopeDeg(height, compact.lengthIn).toFixed(1)}°</td>
                 <td className="py-2 tabular-nums">{slopeDeg(height, extended.lengthIn).toFixed(1)}°</td>
@@ -302,19 +302,19 @@ export const GuidePage: React.FC = () => {
       <h2>Founding-tester program</h2>
       <p>We are building the next version of this ramp with a small group of owners. No spam, and you can leave whenever you like.</p>
       {sent ? (
-        <p className="mt-4 rounded-2xl bg-[#F3F6F7] p-4 font-semibold text-[#14202B]">Application received. We reply {POLICY.supportReply}.</p>
+        <p className="mt-4 rounded-2xl bg-well p-4 font-semibold text-ink">Application received. We reply {POLICY.supportReply}.</p>
       ) : (
         <form name="founding-tester" method="POST" action="https://formspree.io/f/mrpeyavj" onSubmit={onSubmit} className="mt-4 space-y-4">
           <input type="hidden" name="form-name" value="founding-tester" />
           <Field id="ft-name" name="name" label="Your name" type="text" autoComplete="name" />
           <Field id="ft-email" name="email" label="Email address" type="email" autoComplete="email" />
-          <label className="block text-sm font-bold text-[#14202B]" htmlFor="ft-vehicle">
+          <label className="block text-sm font-bold text-ink" htmlFor="ft-vehicle">
             Vehicle
-            <input id="ft-vehicle" name="vehicle" required className="mt-1 w-full rounded-xl border border-[#E4EAEB] p-3 font-normal" placeholder="e.g. 2021 Subaru Outback" />
+            <input id="ft-vehicle" name="vehicle" required className="mt-1 w-full rounded-xl border border-line p-3 font-normal" placeholder="e.g. 2021 Subaru Outback" />
           </label>
-          <label className="block text-sm font-bold text-[#14202B]" htmlFor="ft-dog">
+          <label className="block text-sm font-bold text-ink" htmlFor="ft-dog">
             Your dog
-            <select id="ft-dog" name="dog" className="mt-1 w-full rounded-xl border border-[#E4EAEB] p-3 font-normal">
+            <select id="ft-dog" name="dog" className="mt-1 w-full rounded-xl border border-line p-3 font-normal">
               <option>Senior dog</option>
               <option>Large dog (60 lb+)</option>
               <option>Dog with joint issues</option>
@@ -322,7 +322,7 @@ export const GuidePage: React.FC = () => {
               <option>Prefer not to say</option>
             </select>
           </label>
-          <button type="submit" className="inline-flex h-12 items-center rounded-full bg-[#F37021] px-6 font-bold text-white">
+          <button type="submit" className="inline-flex h-12 items-center rounded-full bg-cta px-6 font-bold text-white">
             Apply to the program
           </button>
         </form>

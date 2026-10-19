@@ -94,12 +94,12 @@ const Page: React.FC = () => {
   const similar = findBySlug('compact-telescoping-dog-ramp');
 
   return (
-    <div className="bg-white text-stone-900 antialiased selection:bg-blue-200 selection:text-stone-900">
+    <div className="bg-paper text-ink antialiased selection:bg-mist selection:text-ink">
       <main className="mx-auto max-w-screen-lg px-4 pb-24 pt-6 sm:px-6 sm:pt-10">
-        <nav className="mb-6 text-sm text-[#5C6B73]" aria-label="Breadcrumb">
-          <Link to="/" className="hover:text-[#0F6E62]">Home</Link>
+        <nav className="mb-6 text-sm text-muted" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-pine">Home</Link>
           <span aria-hidden="true"> / </span>
-          <Link to="/dog-ramps" className="hover:text-[#0F6E62]">Dog ramps</Link>
+          <Link to="/dog-ramps" className="hover:text-pine">Dog ramps</Link>
           <span aria-hidden="true"> / </span>
           <span className="text-stone-900">Foldable dog car ramp</span>
         </nav>
@@ -139,20 +139,20 @@ const Page: React.FC = () => {
               ref={offerRef}
               className={offerFits ? 'lg:sticky lg:top-24' : undefined}
             >
-              <div className="mx-auto max-w-lg rounded-md border border-gray-300 bg-white p-6 shadow-sm">
+              <div className="mx-auto max-w-lg rounded-2xl border border-line bg-white p-6 shadow-sm">
                 <BuyBox />
                 {similar && (
                   <Link
                     to={{ pathname: productPath(similar), search }}
-                    className="mt-5 flex gap-3 rounded-xl border border-[#E4EAEB] p-3 hover:border-[#0F6E62]"
+                    className="mt-5 flex gap-3 rounded-xl border border-line p-3 hover:border-pine"
                   >
                     <img
                       src={similar.image}
                       alt=""
-                      className="h-20 w-20 shrink-0 rounded-lg bg-[#F3F6F7] object-contain"
+                      className="h-20 w-20 shrink-0 rounded-lg bg-well object-contain"
                     />
                     <span className="min-w-0">
-                      <span className="block text-xs font-bold uppercase tracking-wide text-[#5C6B73]">
+                      <span className="block text-xs font-bold uppercase tracking-wide text-muted">
                         Similar item
                       </span>
                       <span className="mt-1 block text-sm font-bold leading-snug text-stone-900">
