@@ -218,7 +218,7 @@ What the new page may say before any desktop extract arrives:
 - The product's existing catalog summary, bullets, and weight rating, when the catalog already has them.
 - Shipping, the money-back guarantee, the warranty, and three questions that restate `policy.ts`.
 
-Measurements, setup steps, box contents, and product questions render only after `src/lib/product-facts.json` has a row for that slug. An empty row stays empty. The desktop prompt that fills the file is `scripts/desktop-product-facts-prompt.md`. No Chewy review text, star count, or medical claim is part of that extract.
+Measurements, setup steps, box contents, and product questions render only after `src/lib/product-facts.json` has a row for that slug. An empty row stays empty. The desktop prompt that fills the file is `scripts/desktop-product-facts-prompt.md`. No Chewy review text or star count is imported. Description lines about joints, arthritis, injury, or mobility treatment are dropped on import, even when Chewy printed them. Specification rows such as a published weight rating stay.
 
 ## Test catalog (October 2026)
 

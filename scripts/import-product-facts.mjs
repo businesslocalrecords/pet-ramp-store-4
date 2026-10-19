@@ -17,7 +17,7 @@ if (!inputPath) {
   process.exit(1);
 }
 
-const BANNED = /vet[-\s]?approv|veterinarian approved|clinically proven|94\s*%|2,?847/i;
+const BANNED = /vet[-\s]?approv|veterinarian|clinically proven|94\s*%|2,?847|joint|arthritis|hip dysplasia|injur|orthopedic|mobility-limited|limited mobility|joint strain|mobility challenge/i;
 const outPath = resolve('src/lib/product-facts.json');
 const current = JSON.parse(readFileSync(outPath, 'utf8'));
 const incoming = JSON.parse(readFileSync(resolve(inputPath), 'utf8'));
