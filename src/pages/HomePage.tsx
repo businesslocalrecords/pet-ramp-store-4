@@ -55,7 +55,7 @@ export const HomePage: React.FC = () => {
             A way up for the car, the bed, and the back seat.
           </h1>
           <p className="mt-3 max-w-md text-lg text-muted sm:mt-4">
-            Jumping down from a hatchback is hard on a dog. Lifting one into an SUV is hard on you. A ramp or a set of steps lets your dog walk it instead.
+            Ramps and stairs for the car, the bed, and the back seat. Your dog walks up instead of jumping or being lifted.
           </p>
         </div>
         <div className="lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-center">
@@ -64,9 +64,9 @@ export const HomePage: React.FC = () => {
             className="block rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine"
           >
             <img
-              src="/assets/product/grit/ramp-boxer-hatchback.jpg"
+              src="/assets/product/grit/ramp-boxer-hatchback-hero.jpg"
               alt="A brindle Boxer stepping onto the Paw Grip ramp at the hatch of a blue hatchback while its owner watches"
-              className="aspect-square w-full rounded-2xl bg-white object-contain lg:h-auto lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
+              className="h-auto w-full rounded-2xl object-cover lg:max-h-[min(28rem,calc(100svh-13rem))] lg:w-auto"
             />
           </Link>
           <p className="mt-3 text-sm font-semibold text-ink">Paw Grip Foldable Dog Car Ramp</p>

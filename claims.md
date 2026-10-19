@@ -235,6 +235,8 @@ Measurements, setup steps, box contents, and product questions render only after
 | Where | What changed | Why |
 |---|---|---|
 | Homepage hero paragraph | "Jumping down from a hatchback is hard on a dog. Lifting one into an SUV is hard on you." replaces the "hard landing / your back" lines | Plainer wording. Says "hard on", names no injury or condition |
+| Homepage hero paragraph | "Ramps and stairs for the car, the bed, and the back seat. Your dog walks up instead of jumping or being lifted." | Same places as the headline, in the same voice. No new product claim |
+| Homepage hero photo | Wide crop of the existing hatchback photo, saved as `ramp-boxer-hatchback-hero.jpg` | The square frame left a band of sky and pavement around the scene. The original square file stays for the product gallery |
 | Homepage "Where does your dog need a boost?" and "Paw Grip ramps and steps" | Place tiles link to filtered shop results. The product row lists only our own line | The two sections used to repeat the same three products |
 | Product pages, "More ramps and steps" | Replaces "Often added with this" | We have no data on what is bought together |
 | Catalog product page | Store-wide shipping/guarantee/warranty questions removed from Questions (the Shipping, returns and warranty cards already say it) | Removed duplication. Numbers still come from `policy.ts` |
