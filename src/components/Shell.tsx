@@ -54,7 +54,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   }
 
   return (
-    <div className="min-h-screen bg-paper text-ink antialiased">
+    <div className="min-h-screen bg-white text-ink antialiased">
       <header className="sticky top-0 z-40 border-b border-line bg-white">
         <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6">
           <Link

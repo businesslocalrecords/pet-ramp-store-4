@@ -8,6 +8,7 @@ import { useCart } from '../lib/cart-context';
 import { appendAttribution, collectAttributionParams } from '../lib/dki';
 import { ProductCard } from '../components/ProductCard';
 import { ProductPhotoGallery } from '../components/ProductPhotoGallery';
+import { CatalogLanding } from '../components/CatalogLanding';
 import { MAX_QUANTITY } from '../lib/purchase-provider';
 
 export const CatalogProductPage: React.FC = () => {
@@ -200,6 +201,8 @@ export const CatalogProductPage: React.FC = () => {
           </button>
         </div>
       </div>}
+
+      <CatalogLanding product={product} buying={buying} onBuy={buy} />
 
       <section className="mt-16">
         <h2 className="text-2xl font-extrabold tracking-tight">Often added with this</h2>
