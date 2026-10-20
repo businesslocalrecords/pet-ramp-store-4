@@ -75,6 +75,12 @@ export interface DkiParams {
   isPersonalized: boolean;
 }
 
+/**
+ * Which homepage module should lead. Derived only from whitelisted words.
+ * The raw search string is never written into the page.
+ */
+export type ShowcaseIntent = 'car-ramp' | 'car-steps' | 'bed';
+
 /* --------------------------------------------------------------------------
    Whitelists — the ONLY values that can personalize the page.
    Add entries deliberately; each one is pre-written, grammatical copy.
@@ -138,6 +144,7 @@ function normalize(value: string | null): string | null {
   if (!value) return null;
   const cleaned = value
     .toLowerCase()
+    .replace(/[-_]+/g, ' ')
     .replace(/[^a-z0-9\s]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
@@ -191,11 +198,65 @@ export function readDkiParams(search: string = typeof window !== 'undefined' ? w
   };
 }
 
+const KW_INTENT: Record<string, ShowcaseIntent> = {
+  'car ramp': 'car-ramp',
+  ramp: 'car-ramp',
+  cargo: 'car-ramp',
+  'car steps': 'car-steps',
+  'car step': 'car-steps',
+  steps: 'car-steps',
+  stairs: 'car-steps',
+  'back seat': 'car-steps',
+  bed: 'bed',
+  'bed ramp': 'bed',
+  couch: 'bed',
+};
+
+/** Match a normalized ad keyword to a homepage module. Unknown text stays null. */
+function intentFromPhrase(text: string): ShowcaseIntent | null {
+  const steps = /\b(steps|step|stairs|stair)\b/.test(text);
+  const bed = /\b(bed|couch|sofa)\b/.test(text);
+  const car = /\b(car|suv|truck|pickup|hatchback|vehicle|back seat)\b/.test(text);
+  const ramp = /\bramps?\b/.test(text);
+  if (steps && car) return 'car-steps';
+  if (bed && !car) return 'bed';
+  if (ramp && !bed) return 'car-ramp';
+  if (steps) return bed ? 'bed' : 'car-steps';
+  if (ramp) return 'car-ramp';
+  if (bed) return 'bed';
+  if (car) return 'car-ramp';
+  return null;
+}
+
+/**
+ * Homepage order for a paid-search visit.
+ *
+ * Ads should pass a whitelisted `kw` (`car-ramp`, `car-steps`, or `bed`).
+ * `utm_term` is also checked, but only against those same ideas — a Google
+ * keyword that does not match falls through, and the words themselves are
+ * never rendered. `kw_vehicle` still means the car ramp, which is what those
+ * ads are about.
+ */
+export function readShowcaseIntent(
+  search: string = typeof window !== 'undefined' ? window.location.search : '',
+): ShowcaseIntent | null {
+  const params = new URLSearchParams(search);
+  const kw = normalize(params.get('kw'));
+  if (kw && KW_INTENT[kw]) return KW_INTENT[kw];
+  const term = normalize(params.get('utm_term'));
+  if (term) {
+    const fromTerm = intentFromPhrase(term);
+    if (fromTerm) return fromTerm;
+  }
+  if (lookup(VEHICLE_KEYWORDS, params.get('kw_vehicle'))) return 'car-ramp';
+  return null;
+}
+
 /**
  * Query keys that carry ad-campaign context and must be forwarded to the
  * Shopify checkout so attribution survives the cross-domain hop.
  */
-const TRACKED_KEYS = ['kw_vehicle', 'loc', 'kw_breed', 'gclid', 'fbclid', 'ttclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+const TRACKED_KEYS = ['kw', 'kw_vehicle', 'loc', 'kw_breed', 'gclid', 'fbclid', 'ttclid', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
 
 /**
  * Collects every query parameter that must survive the hand-off from this page

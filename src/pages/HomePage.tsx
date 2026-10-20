@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CATALOG, formatPrice, productPath } from '../lib/catalog';
+import { readShowcaseIntent, type ShowcaseIntent } from '../lib/dki';
 import { ProductCard } from '../components/ProductCard';
 import { Stars } from '../components/Stars';
 
@@ -21,6 +22,7 @@ const SHOWCASES = [
     browseLabel: 'Browse more car ramps',
     place: 'car',
     type: 'ramp',
+    intent: 'car-ramp',
   },
   {
     slug: 'side-door-pet-steps',
@@ -32,6 +34,7 @@ const SHOWCASES = [
     browseLabel: 'Browse more back seat steps',
     place: 'car',
     type: 'stairs',
+    intent: 'car-steps',
   },
   {
     slug: 'bed-ramp',
@@ -43,8 +46,15 @@ const SHOWCASES = [
     browseLabel: 'Browse more bed ramps',
     place: 'home',
     type: 'ramp',
+    intent: 'bed',
   },
 ] as const;
+
+/** The matching search intent leads. The other modules keep their order. */
+function orderedShowcases(intent: ShowcaseIntent | null) {
+  if (!intent) return SHOWCASES;
+  return [...SHOWCASES].sort((a, b) => Number(b.intent === intent) - Number(a.intent === intent));
+}
 
 function filteredShopSearch(current: string, place: string, type: string): string {
   const params = new URLSearchParams(current);
@@ -61,6 +71,7 @@ const MEASURE_STEPS = [
 
 export const HomePage: React.FC = () => {
   const { search } = useLocation();
+  const showcases = orderedShowcases(readShowcaseIntent(search));
   const featured = FEATURED_SLUGS.map((slug) => CATALOG.find((item) => item.slug === slug)!);
 
   return (
@@ -78,11 +89,12 @@ export const HomePage: React.FC = () => {
         </a>
       </section>
 
-      {SHOWCASES.map((showcase) => {
+      {showcases.map((showcase) => {
         const product = CATALOG.find((item) => item.slug === showcase.slug)!;
         return (
           <section
             key={showcase.slug}
+            id={showcase.intent}
             className="mx-auto grid max-w-6xl items-center gap-4 border-t border-line px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-x-12 lg:py-10"
           >
             <div className="lg:col-start-2 lg:row-start-1">

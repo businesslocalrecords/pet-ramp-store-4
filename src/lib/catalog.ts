@@ -8,6 +8,7 @@
 
 import chewyProducts from './chewy-products.json';
 import chewyRatings from './chewy-ratings.json';
+import photoAppeal from './photo-appeal.json';
 import { ADDON_PRICES, PRODUCT_HANDLES, TIERS, formatMoney, priceFromChewyCost } from './offers';
 
 export type CatalogUse = 'car' | 'home' | 'cargo';
@@ -408,14 +409,34 @@ export function findBySlug(slug: string): CatalogProduct | undefined {
   return CATALOG.find((product) => product.slug === slug || product.shopifyHandle === slug);
 }
 
-/** Other shop items for the "More ramps and steps" block. Same kind and use rank first. */
+type PhotoAppeal = { frames: number; scene: boolean };
+const PHOTO_APPEAL = photoAppeal as Record<string, PhotoAppeal>;
+
+/**
+ * Card-photo strength for the "More ramps and steps" row.
+ * A full scene (a dog and the product in a real setting) outranks a studio
+ * cutout. Extra frames help once the shopper opens the page. A lower price
+ * is a small bonus, not the reason a card is chosen.
+ */
+function conversionScore(item: CatalogProduct, current: CatalogProduct): number {
+  const appeal = PHOTO_APPEAL[item.slug] ?? {
+    frames: Math.max(item.photos.length, item.image ? 1 : 0),
+    scene: false,
+  };
+  const scenePoints = appeal.scene && appeal.frames >= 4 ? 8 : appeal.scene ? 3 : 1;
+  const framePoints = Math.min(appeal.frames, 6);
+  const pricePoints = item.price <= 80 ? 6 : item.price <= 110 ? 4 : item.price <= 150 ? 2 : 0;
+  const sameUse = item.use === current.use;
+  const sameKind = item.kind === current.kind;
+  const relevance = sameUse && sameKind ? 3 : sameUse ? 2 : sameKind ? 1 : 0;
+  return relevance * 6 + scenePoints * 2 + framePoints + pricePoints;
+}
+
+/** Other shop items for the "More ramps and steps" block. */
 export function relatedProducts(product: CatalogProduct, limit = 3): CatalogProduct[] {
   return CATALOG.filter((item) => item.slug !== product.slug)
-    .map((item) => ({
-      item,
-      score: (item.kind === product.kind ? 2 : 0) + (item.use === product.use ? 2 : 0) + (isOwnProduct(item) ? 1 : 0),
-    }))
-    .sort((a, b) => b.score - a.score)
+    .map((item) => ({ item, score: conversionScore(item, product) }))
+    .sort((a, b) => b.score - a.score || a.item.price - b.item.price)
     .slice(0, limit)
     .map((entry) => entry.item);
 }

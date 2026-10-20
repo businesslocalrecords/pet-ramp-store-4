@@ -1,0 +1,762 @@
+{
+  "dp-53683": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-125533": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-368243": {
+    "frames": 4,
+    "scene": true
+  },
+  "dp-3774054": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-393324": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-1825062": {
+    "frames": 6,
+    "scene": true
+  },
+  "dp-542390": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-1816078": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-3774038": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-5320798": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-4482342": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-5047750": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-701510": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-675110": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-53567": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-701518": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-341225": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-1816086": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-3774062": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-1825158": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-219690": {
+    "frames": 6,
+    "scene": true
+  },
+  "dp-3307622": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-4319006": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-3792910": {
+    "frames": 6,
+    "scene": true
+  },
+  "dp-1280254": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-5170054": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-5051478": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-4251478": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-4313238": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-113145": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-1825126": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-389281": {
+    "frames": 6,
+    "scene": true
+  },
+  "dp-5070574": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-297264": {
+    "frames": 6,
+    "scene": false
+  },
+  "dp-3866030": {
+    "frames": 9,
+    "scene": true
+  },
+  "dp-183511": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-1429342": {
+    "frames": 4,
+    "scene": true
+  },
+  "dp-5104646": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-3792958": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-246543": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-368244": {
+    "frames": 4,
+    "scene": true
+  },
+  "dp-5320766": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-219673": {
+    "frames": 5,
+    "scene": true
+  },
+  "dp-4482198": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-4326486": {
+    "frames": 9,
+    "scene": false
+  },
+  "dp-341219": {
+    "frames": 7,
+    "scene": true
+  },
+  "dp-167090": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3766534": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-234032": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-341218": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-2195910": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-49491": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-264187": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1358014": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-219684": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1948238": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-1086734": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3856550": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-1371710": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-225405": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4372694": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-392993": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3511742": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-49495": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1825014": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4330614": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-264171": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-2073766": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-371346": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-4186414": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1570790": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4836510": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-288504": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-55108": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3549190": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5143894": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5306094": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1371670": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4076966": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1569822": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4210294": {
+    "frames": 8,
+    "scene": true
+  },
+  "dp-341223": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-240942": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-368241": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3511726": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-392996": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4131070": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4313262": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4344982": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1948174": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-2958678": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-341217": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-212533": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1919126": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-106012": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4188622": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-674998": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-387441": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1371702": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3856518": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-159072": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-288506": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1919142": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3865974": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-674974": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5150702": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-2231478": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-393313": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5053222": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-153991": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-153015": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-135504": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4254214": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5317374": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-1445006": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5077614": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4141134": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5143854": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5053182": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-227331": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-675062": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-53527": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4835662": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-3272942": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5306030": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-146117": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3687326": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5143774": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-264198": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5049086": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-53570": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5150742": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4131102": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305798": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-359957": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-1948206": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-613686": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5053158": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-3687358": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4141126": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5317454": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3272918": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305934": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3775238": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-246588": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5143814": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-613670": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-288508": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5053174": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5304758": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-4131046": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305926": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5016478": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-394570": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305966": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305942": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-125549": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5072094": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5064590": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-4182078": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-3298342": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5306038": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5305878": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5071942": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5150662": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5064526": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-4141158": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5306006": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5072030": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5150846": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5306110": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5064518": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5143990": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5053198": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5244438": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5306046": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5150806": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5304686": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5049118": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5072054": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5053254": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5150790": {
+    "frames": 1,
+    "scene": false
+  },
+  "dp-5150862": {
+    "frames": 1,
+    "scene": true
+  },
+  "dp-5049094": {
+    "frames": 1,
+    "scene": false
+  },
+  "foldable-dog-car-ramp": {
+    "frames": 8,
+    "scene": true
+  },
+  "side-door-pet-steps": {
+    "frames": 2,
+    "scene": false
+  },
+  "bed-ramp": {
+    "frames": 4,
+    "scene": true
+  },
+  "orthopedic-foam-bed-steps": {
+    "frames": 3,
+    "scene": false
+  },
+  "dog-hitch-step": {
+    "frames": 5,
+    "scene": true
+  },
+  "folding-pet-steps": {
+    "frames": 4,
+    "scene": true
+  }
+}

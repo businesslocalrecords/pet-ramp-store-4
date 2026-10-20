@@ -239,6 +239,8 @@ Measurements, setup steps, box contents, and product questions render only after
 | Homepage hero photo | Wide crop of the existing hatchback photo, saved as `ramp-boxer-hatchback-hero.jpg` | The square frame left a band of sky and pavement around the scene. The original square file stays for the product gallery |
 | Homepage showcases | “Most popular for the car / the bed / the back seat” on the car ramp, bed ramp, and side-door steps | Owner wording for these three homepage modules. It is not a sales ranking. Each “Browse more…” link opens the shop with that place and type already filtered |
 | Homepage showcases | Each module is one product again. Order is car, then back seat, then bed | Owner asked to drop the extra two products and to put the back seat ahead of the bed |
+| Homepage showcases | A whitelisted search intent (`kw` or a matching `utm_term`) moves that module first: car ramp, car steps, or bed | The raw keyword is never printed. Organic visits with no match keep car, then back seat, then bed |
+| Product pages, "More ramps and steps" | Cards prefer a scene photo and several frames, with a lower price as a tie-breaker, still favoring the same place and type | Owner asked for the photos most likely to convert, and for inexpensive ones when the photo is as strong |
 | Homepage, “Paw Grip ramps and steps” | “The products we put our name on.” replaces “Our own line, each with a star rating.” | Same meaning, written as a store would say it. No new rating claim |
 | Homepage, “See all ramps and steps” | The product count is no longer printed in the link | Owner asked to drop the number |
 | Car-ramp page | “Why a ramp” and “Head to head” (including “What to look for in any ramp”) are removed | Owner asked to delete that block |
