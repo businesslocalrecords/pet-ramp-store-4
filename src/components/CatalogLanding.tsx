@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatPrice, type CatalogProduct } from '../lib/catalog';
+import { MoreRamps } from './MoreRamps';
 import { factsFor, type SpecRow } from '../lib/product-facts';
 import {
   FREE_SHIPPING_LABEL,
@@ -58,7 +59,8 @@ export const CatalogLanding: React.FC<{
   product: CatalogProduct;
   buying: boolean;
   onBuy: () => void;
-}> = ({ product, buying, onBuy }) => {
+  related?: readonly CatalogProduct[];
+}> = ({ product, buying, onBuy, related = [] }) => {
   const facts = factsFor(product.slug);
   const details = (facts?.details ?? []).filter((line) => !product.bullets.includes(line));
   const specs: SpecRow[] = [...(facts?.specs ?? [])];
@@ -155,6 +157,8 @@ export const CatalogLanding: React.FC<{
           </ul>
         </section>
       )}
+
+      <MoreRamps products={related} />
 
       <section className="mt-10" aria-labelledby="catalog-promise">
         <h2 id="catalog-promise" className="text-xl font-extrabold tracking-tight">Shipping, returns and warranty</h2>

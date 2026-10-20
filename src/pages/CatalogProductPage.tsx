@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { findBySlug, formatPrice, isOwnProduct, CATALOG } from '../lib/catalog';
+import { findBySlug, formatPrice, isOwnProduct, relatedProducts } from '../lib/catalog';
 import { Stars } from '../components/Stars';
 import { FREE_SHIPPING_LABEL, GUARANTEE_LABEL } from '../lib/policy';
 import { fetchProductByHandle } from '../lib/shopify';
 import { useCart } from '../lib/cart-context';
 import { appendAttribution, collectAttributionParams } from '../lib/dki';
-import { ProductCard } from '../components/ProductCard';
 import { ProductPhotoGallery } from '../components/ProductPhotoGallery';
 import { CatalogLanding } from '../components/CatalogLanding';
 import { MAX_QUANTITY } from '../lib/purchase-provider';
@@ -106,14 +105,7 @@ export const CatalogProductPage: React.FC = () => {
     }
   }
 
-  const also = CATALOG.filter((item) => item.slug !== product.slug)
-    .map((item) => ({
-      item,
-      score: (item.kind === product.kind ? 2 : 0) + (item.use === product.use ? 2 : 0) + (isOwnProduct(item) ? 1 : 0),
-    }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
-    .map((entry) => entry.item);
+  const also = relatedProducts(product);
 
   return (
     <main className={`mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12 ${barVisible && scrolled ? 'pb-28 md:pb-12' : ''}`}>
@@ -209,16 +201,7 @@ export const CatalogProductPage: React.FC = () => {
         </div>
       </div>}
 
-      <CatalogLanding product={product} buying={buying} onBuy={buy} />
-
-      <section className="mt-16">
-        <h2 className="text-2xl font-extrabold tracking-tight">More ramps and steps</h2>
-        <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
-          {also.map((item) => (
-            <ProductCard key={item.slug} product={item} />
-          ))}
-        </div>
-      </section>
+      <CatalogLanding product={product} buying={buying} onBuy={buy} related={also} />
     </main>
   );
 };

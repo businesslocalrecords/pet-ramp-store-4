@@ -8,13 +8,14 @@ import { AboutItem } from '../components/AboutItem';
 import { Benefits } from '../components/Benefits';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { SizeGuide } from '../components/SizeGuide';
+import { MoreRamps } from '../components/MoreRamps';
 import { ShippingReturns } from '../components/ShippingReturns';
 import { Faq } from '../components/Faq';
 import { StickyMobileBuyBar } from '../components/StickyMobileBuyBar';
 import { FounderNote } from '../components/FounderNote';
 import { PurchaseProvider } from '../lib/purchase-provider';
 import { GATES } from '../lib/assets';
-import { findBySlug, formatPrice, productPath } from '../lib/catalog';
+import { findBySlug, formatPrice, productPath, relatedProducts } from '../lib/catalog';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL } from '../lib/policy';
 import { Stars } from '../components/Stars';
 
@@ -83,7 +84,8 @@ function useFitsViewport<T extends HTMLElement>() {
  * globals.css.
  *
  * At `lg` the `lg:order-*` values restore today's editorial sequence
- * (hero, benefits, comparison, size guide, founder, badges, shipping, faq)
+ * (hero, benefits, comparison, size guide, founder, related products,
+ * shipping, faq)
  * while the buy column takes explicit grid placement — `col-start-8`
  * spanning `row-span-full` so the sticky purchase column stays glued for
  * the full page.
@@ -92,6 +94,8 @@ const Page: React.FC = () => {
   const [offerRef, offerFits] = useFitsViewport<HTMLDivElement>();
   const { search } = useLocation();
   const similar = findBySlug('side-door-pet-steps');
+  const ramp = findBySlug('foldable-dog-car-ramp');
+  const related = ramp ? relatedProducts(ramp) : [];
 
   return (
     <div className="bg-white text-ink antialiased selection:bg-mist selection:text-ink">
@@ -133,7 +137,7 @@ const Page: React.FC = () => {
               size finder and the long editorial sections. On desktop it spans
               the left column's rows (row-span-full only covers explicit rows,
               of which there are none) so the left sections stack beside it. */}
-          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-9">
+          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-10">
             <div
               id="offer"
               ref={offerRef}
@@ -212,13 +216,18 @@ const Page: React.FC = () => {
             <FounderNote />
           </div>
 
-          {/* ---------------- SHIPPING (desktop 9) ---------------- */}
+          {/* Related cards sit immediately before shipping on every product page. */}
           <div className="order-7 lg:col-span-7 lg:order-9">
+            <MoreRamps products={related} className="" gridClassName="grid-cols-2" />
+          </div>
+
+          {/* ---------------- SHIPPING (desktop 10) ---------------- */}
+          <div className="order-8 lg:col-span-7 lg:order-10">
             <ShippingReturns />
           </div>
 
-          {/* ---------------- FAQ (desktop 10) ---------------- */}
-          <div className="order-8 lg:col-span-7 lg:order-10">
+          {/* ---------------- FAQ (desktop 11) ---------------- */}
+          <div className="order-9 lg:col-span-7 lg:order-11">
             <Faq />
           </div>
         </div>

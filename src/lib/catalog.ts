@@ -408,6 +408,18 @@ export function findBySlug(slug: string): CatalogProduct | undefined {
   return CATALOG.find((product) => product.slug === slug || product.shopifyHandle === slug);
 }
 
+/** Other shop items for the "More ramps and steps" block. Same kind and use rank first. */
+export function relatedProducts(product: CatalogProduct, limit = 3): CatalogProduct[] {
+  return CATALOG.filter((item) => item.slug !== product.slug)
+    .map((item) => ({
+      item,
+      score: (item.kind === product.kind ? 2 : 0) + (item.use === product.use ? 2 : 0) + (isOwnProduct(item) ? 1 : 0),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((entry) => entry.item);
+}
+
 export function formatPrice(value: number): string {
   return `$${formatMoney(value)}`;
 }
