@@ -238,7 +238,7 @@ Measurements, setup steps, box contents, and product questions render only after
 | Homepage hero paragraph | "Ramps and stairs for the car, the bed, and the back seat. Your dog walks up instead of jumping or being lifted." | Same places as the headline, in the same voice. No new product claim |
 | Homepage hero photo | Wide crop of the existing hatchback photo, saved as `ramp-boxer-hatchback-hero.jpg` | The square frame left a band of sky and pavement around the scene. The original square file stays for the product gallery |
 | Homepage showcases | “Most popular for the car / the bed / the back seat” on the car ramp, bed ramp, and side-door steps | Owner wording for these three homepage modules. It is not a sales ranking. Each “Browse more…” link opens the shop with that place and type already filtered |
-| Homepage showcases | Each module lists the Paw Grip product plus two other shop items of the same place and type | Owner asked for three products in each category. The extra two are the closest catalog matches, not a sales ranking |
+| Homepage showcases | Each module is one product again. Order is car, then back seat, then bed | Owner asked to drop the extra two products and to put the back seat ahead of the bed |
 | Homepage, “Paw Grip ramps and steps” | “The products we put our name on.” replaces “Our own line, each with a star rating.” | Same meaning, written as a store would say it. No new rating claim |
 | Homepage, “See all ramps and steps” | The product count is no longer printed in the link | Owner asked to drop the number |
 | Car-ramp page | “Why a ramp” and “Head to head” (including “What to look for in any ramp”) are removed | Owner asked to delete that block |

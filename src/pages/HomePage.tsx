@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { CATALOG, formatPrice, productPath, relatedProducts } from '../lib/catalog';
+import { CATALOG, formatPrice, productPath } from '../lib/catalog';
 import { ProductCard } from '../components/ProductCard';
 import { Stars } from '../components/Stars';
 
@@ -23,17 +23,6 @@ const SHOWCASES = [
     type: 'ramp',
   },
   {
-    slug: 'bed-ramp',
-    title: 'Most popular for the bed',
-    image: '/assets/catalog/bed-ramp.jpg',
-    imageAlt: 'A fabric ramp running from the floor to a bed',
-    frame: 'object-[center_42%]',
-    shopLabel: 'Shop the bed ramp',
-    browseLabel: 'Browse more bed ramps',
-    place: 'home',
-    type: 'ramp',
-  },
-  {
     slug: 'side-door-pet-steps',
     title: 'Most popular for the back seat',
     image: '/assets/catalog/side-door-steps-2.jpg',
@@ -43,6 +32,17 @@ const SHOWCASES = [
     browseLabel: 'Browse more back seat steps',
     place: 'car',
     type: 'stairs',
+  },
+  {
+    slug: 'bed-ramp',
+    title: 'Most popular for the bed',
+    image: '/assets/catalog/bed-ramp.jpg',
+    imageAlt: 'A fabric ramp running from the floor to a bed',
+    frame: 'object-[center_42%]',
+    shopLabel: 'Shop the bed ramp',
+    browseLabel: 'Browse more bed ramps',
+    place: 'home',
+    type: 'ramp',
   },
 ] as const;
 
@@ -80,49 +80,45 @@ export const HomePage: React.FC = () => {
 
       {SHOWCASES.map((showcase) => {
         const product = CATALOG.find((item) => item.slug === showcase.slug)!;
-        const also = relatedProducts(product, 2);
         return (
           <section
             key={showcase.slug}
-            className="mx-auto max-w-6xl border-t border-line px-4 py-8 sm:px-6 lg:py-10"
+            className="mx-auto grid max-w-6xl items-center gap-4 border-t border-line px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-x-12 lg:py-10"
           >
-            <h2 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{showcase.title}</h2>
-            <div className="mt-5 grid items-start gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-8">
-              <div>
+            <div className="lg:col-start-2 lg:row-start-1">
+              <h2 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{showcase.title}</h2>
+            </div>
+            <div className="lg:col-start-1 lg:row-span-2 lg:row-start-1">
+              <Link
+                to={{ pathname: productPath(product), search }}
+                className="block overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine"
+              >
+                <img
+                  src={showcase.image}
+                  alt={showcase.imageAlt}
+                  className={`aspect-[3/2] w-full object-cover ${showcase.frame}`}
+                />
+              </Link>
+              <p className="mt-3 text-sm font-semibold text-ink">{product.name}</p>
+              <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <p className="text-3xl font-extrabold tabular-nums text-ink">{formatPrice(product.price)}</p>
+                <Stars value={product.rating} count={product.ratingCount} />
+              </div>
+            </div>
+            <div className="lg:col-start-2 lg:row-start-2">
+              <div className="flex flex-wrap items-center gap-4">
                 <Link
                   to={{ pathname: productPath(product), search }}
-                  className="block overflow-hidden rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-pine"
+                  className="inline-flex h-12 items-center rounded-full bg-cta px-6 text-base font-bold text-white hover:bg-cta-deep"
                 >
-                  <img
-                    src={showcase.image}
-                    alt={showcase.imageAlt}
-                    className={`aspect-[3/2] w-full object-cover ${showcase.frame}`}
-                  />
+                  {showcase.shopLabel}
                 </Link>
-                <p className="mt-3 text-sm font-semibold text-ink">{product.name}</p>
-                <div className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <p className="text-3xl font-extrabold tabular-nums text-ink">{formatPrice(product.price)}</p>
-                  <Stars value={product.rating} count={product.ratingCount} />
-                </div>
-                <div className="mt-4 flex flex-wrap items-center gap-4">
-                  <Link
-                    to={{ pathname: productPath(product), search }}
-                    className="inline-flex h-12 items-center rounded-full bg-cta px-6 text-base font-bold text-white hover:bg-cta-deep"
-                  >
-                    {showcase.shopLabel}
-                  </Link>
-                  <Link
-                    to={{ pathname: '/dog-ramps', search: filteredShopSearch(search, showcase.place, showcase.type) }}
-                    className="text-base font-bold text-pine underline-offset-4 hover:underline"
-                  >
-                    {showcase.browseLabel}
-                  </Link>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {also.map((item) => (
-                  <ProductCard key={item.slug} product={item} />
-                ))}
+                <Link
+                  to={{ pathname: '/dog-ramps', search: filteredShopSearch(search, showcase.place, showcase.type) }}
+                  className="text-base font-bold text-pine underline-offset-4 hover:underline"
+                >
+                  {showcase.browseLabel}
+                </Link>
               </div>
             </div>
           </section>
