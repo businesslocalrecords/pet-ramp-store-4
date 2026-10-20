@@ -109,9 +109,9 @@ manual) is wired in and the gate is flipped. Do not invent quotes to get there.
 
 **What it shows:** a corgi climbs gray foam steps beside a bed, stands on the
 top, steps back down to the carpet, then moves on the bed. The caption says
-that and nothing else. It is on the homepage and
-`/products/orthopedic-foam-bed-steps`, not presented as the car ramp. A
-"Magic Hour" mark stays in the frame.
+that and nothing else. It is on `/products/orthopedic-foam-bed-steps` and the
+stairs guide, not the homepage, and it is not presented as the car ramp. The
+Magic Hour corner mark has been removed from the file.
 
 ## 7. Owner UGC → UGCGallery gate
 

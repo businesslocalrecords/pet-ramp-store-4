@@ -4,7 +4,6 @@ import { CATALOG, formatPrice, productPath } from '../lib/catalog';
 import { readShowcaseIntent, type ShowcaseIntent } from '../lib/dki';
 import { ProductCard } from '../components/ProductCard';
 import { Stars } from '../components/Stars';
-import { VideoProof } from '../components/VideoProof';
 import { usePageMeta } from '../lib/use-page-meta';
 
 const FEATURED_SLUGS = [
@@ -39,10 +38,10 @@ const SHOWCASES = [
     intent: 'car-steps',
   },
   {
-    slug: 'dp-5104646',
+    slug: 'orthopedic-foam-bed-steps',
     title: 'Most popular for the bed',
-    image: '/assets/chewy/5104646/1.jpg',
-    imageAlt: 'A corgi standing on steps beside a bed',
+    image: '/assets/catalog/foam-steps-corgi.jpg',
+    imageAlt: 'A corgi standing on gray foam pet steps beside a bed',
     frame: 'object-[center_40%]',
     shopLabel: 'Shop the bed steps',
     browseLabel: 'Browse more bed steps',
@@ -164,8 +163,6 @@ export const HomePage: React.FC = () => {
           </a>
         </div>
       </section>
-
-      <VideoProof />
 
       <section className="bg-pine-deep text-white">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">

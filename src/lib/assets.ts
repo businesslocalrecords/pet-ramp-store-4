@@ -157,7 +157,7 @@ export const FOAM_STEPS_CLIP = {
    -------------------------------------------------------------------------- */
 
 export const GATES = {
-  /** 9-second corgi clip on the foam steps. Copy matches the footage. */
+  /** 9-second corgi clip on the foam-steps page and the stairs guide. Copy matches the footage. */
   videoProof: true,
   /** Owner-submitted vertical clips (needs real, credited customer videos). */
   ugcGallery: false,
