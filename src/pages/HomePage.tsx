@@ -151,6 +151,14 @@ export const HomePage: React.FC = () => {
           {featured.map((product) => (
             <ProductCard key={product.slug} product={product} />
           ))}
+          <a
+            href="/guide/how-to-choose-a-dog-car-ramp/"
+            className="flex h-full flex-col justify-center rounded-2xl bg-mist p-5 transition hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:p-6"
+          >
+            <h3 className="text-lg font-bold">Not sure which one?</h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted">Read how to choose a ramp for your car and your dog.</p>
+            <span className="mt-4 text-sm font-bold text-pine">Read the guide</span>
+          </a>
         </div>
       </section>
 
