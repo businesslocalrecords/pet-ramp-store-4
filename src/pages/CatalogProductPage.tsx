@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { findBySlug, formatPrice, isOwnProduct, relatedProducts } from '../lib/catalog';
+import { findBySlug, formatPrice, isOwnProduct, productPath, relatedProducts } from '../lib/catalog';
 import { Stars } from '../components/Stars';
 import { FREE_SHIPPING_LABEL, GUARANTEE_LABEL } from '../lib/policy';
 import { fetchProductByHandle } from '../lib/shopify';
@@ -8,7 +8,10 @@ import { useCart } from '../lib/cart-context';
 import { appendAttribution, collectAttributionParams } from '../lib/dki';
 import { ProductPhotoGallery } from '../components/ProductPhotoGallery';
 import { CatalogLanding } from '../components/CatalogLanding';
+import { VideoProof } from '../components/VideoProof';
+import { FOAM_STEPS_CLIP } from '../lib/assets';
 import { MAX_QUANTITY } from '../lib/purchase-provider';
+import { usePageMeta } from '../lib/use-page-meta';
 
 export const CatalogProductPage: React.FC = () => {
   const { handle = '' } = useParams();
@@ -72,6 +75,7 @@ export const CatalogProductPage: React.FC = () => {
 
   const maxQuantity = Math.max(1, Math.min(MAX_QUANTITY, stock ?? MAX_QUANTITY));
   const safeQuantity = Math.min(quantity, maxQuantity);
+  usePageMeta(product ? productPath(product) : '/dog-ramps');
 
   if (!product || product.flagship) {
     return (
@@ -183,6 +187,8 @@ export const CatalogProductPage: React.FC = () => {
           )}
         </div>
       </div>
+
+      {product.slug === FOAM_STEPS_CLIP.productSlug && <VideoProof />}
 
       {barVisible && scrolled && <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white px-4 py-3 shadow-[0_-8px_24px_rgba(28,36,32,0.08)] md:hidden">
         <div className="flex items-center gap-3">

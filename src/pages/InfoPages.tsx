@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BUSINESS } from '../lib/assets';
+import { BUSINESS, FOAM_STEPS_CLIP } from '../lib/assets';
+import { findBySlug, formatPrice, productPath } from '../lib/catalog';
 import { slopeDeg, RAMP_SIZES } from '../lib/offers';
 import {
   FREE_SHIPPING_LABEL,
@@ -8,10 +9,13 @@ import {
   POLICY,
   WARRANTY_PRODUCT_LABEL,
 } from '../lib/policy';
+import { usePageMeta } from '../lib/use-page-meta';
 
 const prose = 'mx-auto max-w-3xl px-4 py-12 text-[#444] sm:px-6 [&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:tracking-tight [&_h1]:text-ink [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:text-ink [&_a]:font-semibold [&_a]:text-pine [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:mt-1';
 
-export const AboutPage: React.FC = () => (
+export const AboutPage: React.FC = () => {
+  usePageMeta('/about');
+  return (
   <main className={prose}>
     <h1>About Paw Grip</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -41,9 +45,12 @@ export const AboutPage: React.FC = () => (
       <Link to="/contact">Talk to us</Link>. We reply {POLICY.supportReply}.
     </p>
   </main>
-);
+  );
+};
 
-export const ShippingPage: React.FC = () => (
+export const ShippingPage: React.FC = () => {
+  usePageMeta('/shipping');
+  return (
   <main className={prose}>
     <h1>Shipping Policy</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -65,9 +72,12 @@ export const ShippingPage: React.FC = () => (
       Every shipment is insured. If a ramp arrives damaged, or tracking says delivered and nothing turns up, email us with the order number.
     </p>
   </main>
-);
+  );
+};
 
-export const ReturnsPage: React.FC = () => (
+export const ReturnsPage: React.FC = () => {
+  usePageMeta('/returns');
+  return (
   <main className={prose}>
     <h1>Returns and refunds</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -93,9 +103,12 @@ export const ReturnsPage: React.FC = () => (
       A manufacturing defect is covered by the <Link to="/warranty">{WARRANTY_PRODUCT_LABEL}</Link>, separate from the {GUARANTEE_LABEL}.
     </p>
   </main>
-);
+  );
+};
 
-export const WarrantyPage: React.FC = () => (
+export const WarrantyPage: React.FC = () => {
+  usePageMeta('/warranty');
+  return (
   <main className={prose}>
     <h1>Hardware warranty</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -119,9 +132,12 @@ export const WarrantyPage: React.FC = () => (
       Email <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> with your order number and a photo of the fault. We reply {POLICY.supportReply}.
     </p>
   </main>
-);
+  );
+};
 
-export const PrivacyPage: React.FC = () => (
+export const PrivacyPage: React.FC = () => {
+  usePageMeta('/privacy');
+  return (
   <main className={prose}>
     <h1>Privacy Policy</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -149,9 +165,12 @@ export const PrivacyPage: React.FC = () => (
       Email <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a> to ask what we hold, to correct it, or to delete it. We reply {POLICY.supportReply}.
     </p>
   </main>
-);
+  );
+};
 
-export const TermsPage: React.FC = () => (
+export const TermsPage: React.FC = () => {
+  usePageMeta('/terms');
+  return (
   <main className={prose}>
     <h1>Terms of Service</h1>
     <p className="text-sm text-muted">Last updated: October 2026</p>
@@ -173,9 +192,11 @@ export const TermsPage: React.FC = () => (
     <h2>Governing law</h2>
     <p>These terms are governed by the laws of the United States and the state in which the business is registered.</p>
   </main>
-);
+  );
+};
 
 export const ContactPage: React.FC = () => {
+  usePageMeta('/contact');
   const [sent, setSent] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -232,6 +253,7 @@ const Field: React.FC<{ id: string; label: string; type: string; autoComplete: s
 const HEIGHTS = [20, 24, 28, 30, 32, 36];
 
 export const GuidePage: React.FC = () => {
+  usePageMeta('/guide/how-to-choose-a-dog-car-ramp');
   const [sent, setSent] = useState(false);
   const compact = RAMP_SIZES[0];
   const extended = RAMP_SIZES[1];
@@ -327,6 +349,54 @@ export const GuidePage: React.FC = () => {
           </button>
         </form>
       )}
+    </main>
+  );
+};
+
+const STAIR_SLUGS = ['orthopedic-foam-bed-steps', 'folding-pet-steps', 'bed-ramp'] as const;
+
+export const StairsGuidePage: React.FC = () => {
+  usePageMeta('/guide/dog-stairs-for-bed-or-couch');
+  const products = STAIR_SLUGS.map((slug) => findBySlug(slug)).filter((item) => item !== undefined);
+
+  return (
+    <main className={prose}>
+      <p className="text-sm font-bold uppercase tracking-wide text-[#0F6E62]">Buyer&apos;s guide</p>
+      <h1>Dog stairs for a bed or a couch</h1>
+      <p>
+        Three ways up inside the house. Pick from how high the seat is, how much the dog weighs, and whether the steps need to fold away.
+      </p>
+      <figure className="mt-6">
+        <video
+          className="aspect-square w-full rounded-2xl bg-black object-contain"
+          controls
+          playsInline
+          preload="metadata"
+          poster={FOAM_STEPS_CLIP.poster}
+          src={FOAM_STEPS_CLIP.src}
+        >
+          <track kind="captions" src={FOAM_STEPS_CLIP.captions} srcLang="en" label="English" default />
+        </video>
+        <figcaption className="mt-3 text-sm">{FOAM_STEPS_CLIP.caption}</figcaption>
+      </figure>
+      {products.map((product) => (
+        <section key={product.slug}>
+          <h2>
+            <Link to={productPath(product)}>{product.name}</Link>
+          </h2>
+          <p>
+            {product.summary} Rated to {product.capacityLb} lb. {formatPrice(product.price)}.
+          </p>
+          <ul>
+            {product.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <p>
+        The car is a different job. The <Link to="/guide/how-to-choose-a-dog-car-ramp">car ramp guide</Link> starts with the cargo height.
+      </p>
     </main>
   );
 };

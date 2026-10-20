@@ -108,11 +108,12 @@ section never downloads its lazy chunk.
 
 No invented reviews, review quotes, reviewer names, "94% of customers", vet
 endorsements, medical claims, or lifetime warranties. Numeric star ratings
-and a rating count are allowed on test-catalog products (owner decision,
-recorded in `claims.md`); they are not written into JSON-LD `aggregateRating`.
-Every rewording is recorded with its reason in `claims.md` — add a row before
-adding a claim. Compare-at prices are allowed as a subtle anchor (owner
-decision) but must be real prices the store has charged.
+and a rating count stay on every product, including JSON-LD `aggregateRating`
+using the `rating` and `ratingCount` already in `src/lib/catalog.ts` (owner
+decision, 20 Oct 2026, recorded in `claims.md`). Named reviews stay behind
+`GATES.testimonials`. Every rewording is recorded with its reason in
+`claims.md` — add a row before adding a claim. Compare-at prices are allowed
+as a subtle anchor (owner decision) but must be real prices the store has charged.
 
 ## Untracked working files
 
@@ -154,7 +155,7 @@ grep -rn "1-year\|12-month\|lifetime\|Lifetime" src/ index.html
 grep -rn "79.99\|139.99\|49.99" src/ | grep -v "offers.ts"
 
 # no fabricated content anywhere
-grep -rni "RAMP20\|vet-approved\|vet approved\|2,847\|2847\|94%\|aggregateRating" src/ index.html
+grep -rni "RAMP20\|vet-approved\|vet approved\|2,847\|2847\|94%" src/ index.html
 ```
 
 Visual check: `npm run preview -- --port 4173 --host 127.0.0.1`, then a

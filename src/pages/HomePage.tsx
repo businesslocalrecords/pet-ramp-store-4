@@ -4,6 +4,8 @@ import { CATALOG, formatPrice, productPath } from '../lib/catalog';
 import { readShowcaseIntent, type ShowcaseIntent } from '../lib/dki';
 import { ProductCard } from '../components/ProductCard';
 import { Stars } from '../components/Stars';
+import { VideoProof } from '../components/VideoProof';
+import { usePageMeta } from '../lib/use-page-meta';
 
 const FEATURED_SLUGS = [
   'folding-pet-steps',
@@ -73,6 +75,7 @@ export const HomePage: React.FC = () => {
   const { search } = useLocation();
   const showcases = orderedShowcases(readShowcaseIntent(search));
   const featured = FEATURED_SLUGS.map((slug) => CATALOG.find((item) => item.slug === slug)!);
+  usePageMeta('/');
 
   return (
     <main>
@@ -161,6 +164,8 @@ export const HomePage: React.FC = () => {
           </a>
         </div>
       </section>
+
+      <VideoProof />
 
       <section className="bg-pine-deep text-white">
         <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:items-center lg:py-12">

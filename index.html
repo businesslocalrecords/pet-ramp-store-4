@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
@@ -59,13 +60,10 @@
     <meta name="twitter:image" content="https://pawgrip.app/assets/product/grit/ramp-german-shepherd-suv.jpg?v=2" />
 
     <!--
-      Product structured data.
-
-      Product markup for the flagship ramp. The price matches the default
-      tier in src/lib/offers.ts. Star ratings stay in the page UI and are
-      not repeated in this block.
+      Structured data. The production build replaces this block per route
+      from src/lib/seo.ts. Star counts mirror src/lib/catalog.ts.
     -->
-    <script type="application/ld+json">
+    <script id="seo-jsonld" type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Product",
@@ -73,6 +71,13 @@
         "image": "https://pawgrip.app/assets/product/grit/ramp-german-shepherd-suv.jpg?v=2",
         "description": "Folding dog car ramp rated to 150 lb (Compact) or 250 lb (Extended), with a grit traction deck and side rails. Folds in half for storage. Free insured shipping.",
         "brand": { "@type": "Brand", "name": "Paw Grip" },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "ratingCount": "214",
+          "bestRating": "5",
+          "worstRating": "1"
+        },
         "offers": {
           "@type": "Offer",
           "url": "https://pawgrip.app/",

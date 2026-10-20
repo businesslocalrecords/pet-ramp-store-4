@@ -62,7 +62,9 @@ server {
         add_header Cache-Control "public, immutable";
         try_files $uri =404;
     }
-    location = /index.html {
+    # Root and per-route shells (dist/<path>/index.html). An exact match
+    # only covered /, so a cached product shell could keep an old title.
+    location ~* /index\.html$ {
         add_header Cache-Control "no-store";
     }
 

@@ -30,6 +30,7 @@ const linkGroups = [
     title: 'Company',
     links: [
       { label: 'About', href: '/about/' },
+      { label: 'Dog stairs for a bed or a couch', href: '/guide/dog-stairs-for-bed-or-couch/' },
       { label: 'Privacy policy', href: '/privacy/' },
       { label: 'Terms of service', href: '/terms/' },
     ],

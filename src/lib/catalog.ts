@@ -185,9 +185,15 @@ const OWN_CATALOG: readonly CatalogProduct[] = [
     price: 65,
     rating: 4.4,
     ratingCount: 41,
-    image: '/assets/catalog/foam-steps.jpg',
-    imageAlt: 'Foam pet steps on a white background',
+    image: '/assets/catalog/foam-steps-corgi.jpg',
+    imageHover: '/assets/catalog/foam-steps.jpg',
+    imageAlt: 'A corgi standing on gray foam pet steps beside a bed',
     photos: [
+      {
+        src: '/assets/catalog/foam-steps-corgi.jpg',
+        alt: 'A corgi standing on gray foam pet steps beside a bed',
+        label: 'Beside the bed',
+      },
       {
         src: '/assets/catalog/foam-steps.jpg',
         alt: 'Foam pet steps on a white background',

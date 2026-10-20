@@ -16,6 +16,7 @@ import { GATES } from '../lib/assets';
 import { findBySlug, formatPrice, productPath, relatedProducts } from '../lib/catalog';
 import { GUARANTEE_LABEL, WARRANTY_PRODUCT_LABEL } from '../lib/policy';
 import { Stars } from '../components/Stars';
+import { usePageMeta } from '../lib/use-page-meta';
 
 /* --------------------------------------------------------------------------
    Core Web Vitals: defer below-the-fold sections.
@@ -24,7 +25,6 @@ import { Stars } from '../components/Stars';
    They are additionally gated (assets.ts) so a disabled section never even
    downloads its chunk — see the asset-gate pattern documented there.
    -------------------------------------------------------------------------- */
-const VideoProof = lazy(() => import('../components/VideoProof').then((m) => ({ default: m.VideoProof })));
 const UGCGallery = lazy(() => import('../components/UGCGallery').then((m) => ({ default: m.UGCGallery })));
 const Testimonials = lazy(() => import('../components/Testimonials').then((m) => ({ default: m.Testimonials })));
 
@@ -93,6 +93,7 @@ const Page: React.FC = () => {
   const similar = findBySlug('side-door-pet-steps');
   const ramp = findBySlug('foldable-dog-car-ramp');
   const related = ramp ? relatedProducts(ramp) : [];
+  usePageMeta('/products/foldable-dog-car-ramp');
 
   return (
     <div className="bg-white text-ink antialiased selection:bg-mist selection:text-ink">
@@ -173,14 +174,6 @@ const Page: React.FC = () => {
               </p>
             </div>
           </aside>
-
-          {GATES.videoProof && (
-            <div className="lg:col-span-7 lg:order-2">
-              <Suspense fallback={<SectionFallback label="the demo video" />}>
-                <VideoProof />
-              </Suspense>
-            </div>
-          )}
 
           {GATES.ugcGallery && (
             <div className="lg:col-span-7 lg:order-3">

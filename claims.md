@@ -11,9 +11,10 @@ here first.
    live in `src/lib/offers.ts` / `src/lib/policy.ts` and are single-sourced.
 2. **No invented reviews.** No review quotes, reviewer names, "94% of
    customers", customer counts, or vet/medical endorsements. Numeric star
-   ratings and a rating count are allowed on the test catalog (owner
-   decision, October 2026). They are shown in the UI only — never as
-   JSON-LD `aggregateRating`, and never as the removed 4.9 / 2,847 figure.
+   ratings and a rating count stay on every product (owner decision, 20 Oct
+   2026). The same `rating` and `ratingCount` from `src/lib/catalog.ts` are
+   written into JSON-LD `aggregateRating`. The removed 4.9 / 2,847 figure
+   stays removed. Named reviews stay behind `GATES.testimonials`.
 3. **No medical claims.** The ramp is described with physics and specs
    (slope angles, published weight ratings); health outcomes are deferred to
    the visitor's veterinarian.
@@ -183,8 +184,8 @@ Uploaded to Shopify by `scripts/shopify-product-images.mjs`
   with EXIF, XMP, and IPTC stripped. The owner cleared those photos
   for this project. Captions under the photos are Paw-Grip copy. Product
   titles on the storefront are Paw-Grip names, not the manufacturer's marks.
-  Star ratings on these cards are numeric test ratings (see rule 2). There
-  is no review text.
+  Star ratings on these cards are numeric ratings (see rule 2). There
+  is no review text. The same numbers are in JSON-LD `aggregateRating`.
 
 ## Voice pass (October 2026)
 
@@ -226,8 +227,11 @@ Measurements, setup steps, box contents, and product questions render only after
 |---|---|---|
 | Homepage, `/dog-ramps`, `/products/:handle` | The site is a ramp-and-stairs shop, not a one-product landing | Owner decision: meet any pet owner looking for a ramp, using Shopify handles, for this test |
 | `public/assets/catalog/` | Manufacturer photographs on the new products | Owner has written notice from the manufacturer that the photos may be used. Chewy itself returned 403 to the browser on port 9222, so the files were saved from the manufacturer's own product images |
-| Star ratings | A rating and a count on each Paw Grip catalog card | Owner allowed invented ratings and not reviews. No `aggregateRating` JSON-LD |
-| Chewy catalog cards | The star number and count printed on the Chewy page, for 117 of the 184 products (`src/lib/chewy-ratings.json`) | Owner decision: these 184 products are test catalog items and should show a numeric rating the way the Paw Grip test products do. The numbers are copied from the Chewy page. No review text is copied. The 67 pages with no rating stay blank. No `aggregateRating` JSON-LD |
+| Star ratings | A rating and a count on each catalog card, the car-ramp buy box, and JSON-LD `aggregateRating` | Owner decision, 20 Oct 2026: stars stay. Same `rating` / `ratingCount` as `catalog.ts`. No review quotes, no reviewer names, and not the removed 4.9 / 2,847 figure |
+| Chewy catalog cards | The star number and count printed on the Chewy page, for 117 of the 184 products (`src/lib/chewy-ratings.json`) | Owner decision: these 184 products are test catalog items and should show a numeric rating the way the Paw Grip test products do. The numbers are copied from the Chewy page. No review text is copied. The 67 pages with no rating stay blank. `aggregateRating` uses the same number when the product has one |
+| Foam-steps still and green paw mark | Lead photo on the foam bed steps, and `favicon.png` | Owner confirmed, 20 Oct 2026, these may be published as Paw Grip product photos |
+| Foam-steps clip | 9-second file on the homepage, the foam-steps page, and the stairs guide. Caption: a corgi climbs the gray foam steps beside a bed, stands on the top, steps back down to the carpet, then moves on the bed | The frames show that sequence. A Magic Hour mark stays in the corner. The caption does not name the dog, call it a customer, or describe the car ramp |
+| `/guide/dog-stairs-for-bed-or-couch` | Restates each product's catalog name, summary, capacity, price, and bullets for the foam steps, folding steps, and bed ramp | No new specification. Prices and capacities come from `catalog.ts` |
 
 
 ## Layout and wording pass (October 2026)

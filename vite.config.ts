@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { writeSeoShells } from './scripts/write-seo-shells.mjs'
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,7 +34,21 @@ if (process.env.VITE_REQUIRE_BUSINESS_INFO === 'true' && businessIdentityIsPlace
   );
 }
 
+/**
+ * Writes sitemap.xml and one HTML shell per public route after the bundle
+ * exists, so the hashed script tags in dist/index.html are copied intact.
+ */
+function seoShellsPlugin() {
+  return {
+    name: 'pawgrip-seo-shells',
+    apply: 'build' as const,
+    async closeBundle() {
+      await writeSeoShells(path.join(ROOT, 'dist'));
+    },
+  };
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), react()],
+  plugins: [tailwindcss(), react(), seoShellsPlugin()],
 })

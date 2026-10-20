@@ -82,25 +82,36 @@ assembly, folded dimensions, actual weight) and the seeder's variant data.
 **Done when:** the values match the supplier's spec sheet; `rampWeightLb` is
 filled in.
 
-## 5. Real reviews → Testimonials gate
+## 5. Numeric stars — DONE
+
+**Where:** `rating` / `ratingCount` in `src/lib/catalog.ts`, the `Stars` row
+on catalog cards and the car-ramp buy box, and `aggregateRating` from
+`src/lib/seo.ts`.
+
+**Why it is done:** owner decision, 20 Oct 2026. Stars stay. JSON-LD uses
+those same numbers. The removed 4.9 / 2,847 figure is not restored.
+
+## 5b. Real review quotes → Testimonials gate
 
 **Where:** `GATES.testimonials` in `src/lib/assets.ts`.
 
 **Why:** the gate is OFF because there is no review source. FTC and
-ad-network rules prohibit invented reviews; `index.html` also carries no
-`aggregateRating` for the same reason.
+ad-network rules prohibit invented review quotes and reviewer names. Stars
+are a separate, already-shipped decision (item 5).
 
 **Done when:** a real review source (Judge.me / Shopify Product Reviews /
-manual) is wired in, the JSON-LD `aggregateRating` is restored from real
-data, and the gate is flipped.
+manual) is wired in and the gate is flipped. Do not invent quotes to get there.
 
-## 6. Real demo video → VideoProof gate
+## 6. Demo video → VideoProof gate — DONE
 
-**Where:** `GATES.videoProof`. The section's copy ("Rocky", "2 min 15 s",
-"26° slope") is placeholder narrative.
+**Where:** `GATES.videoProof`. Clip: `public/assets/catalog/foam-steps-corgi.mp4`
+(9 seconds, H.264, under 10 MB) with `foam-steps-corgi.vtt`.
 
-**Done when:** a real 15–30 s clip (H.264, < 10 MB, captions) is in
-`public/assets/`, the copy matches what the video shows, and the gate flips.
+**What it shows:** a corgi climbs gray foam steps beside a bed, stands on the
+top, steps back down to the carpet, then moves on the bed. The caption says
+that and nothing else. It is on the homepage and
+`/products/orthopedic-foam-bed-steps`, not presented as the car ramp. A
+"Magic Hour" mark stays in the frame.
 
 ## 7. Owner UGC → UGCGallery gate
 

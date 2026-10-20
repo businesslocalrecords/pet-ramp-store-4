@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CATALOG, type CatalogKind, type CatalogUse } from '../lib/catalog';
 import { ProductCard } from '../components/ProductCard';
+import { usePageMeta } from '../lib/use-page-meta';
 
 const PLACES: { id: CatalogUse; label: string }[] = [
   { id: 'car', label: 'Car, SUV or truck' },
@@ -23,6 +24,7 @@ function readList(params: URLSearchParams, key: string): string[] {
 }
 
 export const CategoryPage: React.FC = () => {
+  usePageMeta('/dog-ramps');
   const [params, setParams] = useSearchParams();
   const q = (params.get('q') ?? '').trim().toLowerCase();
   const places = readList(params, 'place') as CatalogUse[];

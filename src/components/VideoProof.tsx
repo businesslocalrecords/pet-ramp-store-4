@@ -1,15 +1,13 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react';
-import { GATES } from '../lib/assets';
+import { Link, useLocation } from 'react-router-dom';
+import { FOAM_STEPS_CLIP, GATES } from '../lib/assets';
+import { productPath, findBySlug } from '../lib/catalog';
 
 /**
- * Video proof section — product demo with custom player controls.
- *
- * GATED (see the asset-gate pattern in src/lib/assets.ts): renders nothing
- * until GATES.videoProof is enabled. The copy below — "Rocky", the "2 min 15 s"
- * and "26° slope" stats — is placeholder narrative, NOT verified fact. When
- * the owner's real demo clip lands, replace the copy with claims the video
- * actually supports before flipping the gate.
+ * Foam-steps demo. The caption is limited to the 9-second clip: a corgi
+ * climbs the gray steps beside a bed, stands on top, steps down, then
+ * moves on the bed. The gate stays after the hooks.
  */
 export const VideoProof: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,8 +15,12 @@ export const VideoProof: React.FC = () => {
   const [muted, setMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const [started, setStarted] = useState(false);
+  const product = findBySlug(FOAM_STEPS_CLIP.productSlug);
+  const { pathname } = useLocation();
+  const onThisProduct = product
+    ? pathname === productPath(product) || pathname === `${productPath(product)}/`
+    : false;
 
-  // Track progress for custom progress bar
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -75,117 +77,109 @@ export const VideoProof: React.FC = () => {
     video.currentTime = pos * video.duration;
   };
 
-  // Gate after the hooks so hook order is stable across renders.
   if (!GATES.videoProof) return null;
 
   return (
-    <section id="video" className="py-20 lg:py-24 bg-stone-900 text-stone-100 scroll-mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase bg-amber-500/15 text-amber-400 border border-amber-500/20">
-            <Play className="w-3.5 h-3.5 fill-amber-400" /> See It Work
+    <section id="video" className="bg-stone-900 py-16 text-stone-100 scroll-mt-20 lg:py-20">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6">
+        <div className="mb-8 text-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/15 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-400">
+            <Play className="h-3.5 w-3.5 fill-amber-400" /> See it work
           </span>
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-            Watch Rocky Go From
-            <br />
-            <span className="text-amber-400">Hesitant to Hop-In</span>
+          <h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
+            A corgi on the foam steps
           </h2>
-          <p className="mt-4 text-stone-400 text-lg">
-            PLACEHOLDER — replace with a caption the real clip supports, e.g. the dog's name and
-            what the video actually shows. Do not describe an arthritis story the footage does
-            not evidence.
-          </p>
+          <p className="mt-4 text-lg text-stone-400">{FOAM_STEPS_CLIP.caption}</p>
         </div>
 
-        {/* Video player */}
-        <div className="relative group rounded-3xl overflow-hidden bg-black shadow-2xl ring-1 ring-stone-800">
+        <div className="group relative overflow-hidden rounded-3xl bg-black shadow-2xl ring-1 ring-stone-800">
           <video
             ref={videoRef}
-            className="w-full aspect-video object-cover"
+            className="aspect-square w-full object-contain"
             muted={muted}
             loop
             playsInline
             preload="metadata"
-            poster="/assets/poster-placeholder.svg"
-            src="/assets/demo-video.mp4"
+            poster={FOAM_STEPS_CLIP.poster}
+            src={FOAM_STEPS_CLIP.src}
             onClick={togglePlay}
-          />
+          >
+            <track
+              kind="captions"
+              src={FOAM_STEPS_CLIP.captions}
+              srcLang="en"
+              label="English"
+              default
+            />
+          </video>
 
-          {/* Big play overlay (before first play) */}
           {!started && (
             <button
               onClick={togglePlay}
               className="absolute inset-0 flex items-center justify-center bg-black/40 transition-colors hover:bg-black/30"
-              aria-label="Play demo video"
+              aria-label="Play the foam steps clip"
             >
               <span className="relative flex items-center justify-center">
-                <span className="absolute w-24 h-24 rounded-full bg-white/20 animate-ping" />
-                <span className="relative w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-2xl transition-transform group-hover:scale-110">
-                  <Play className="w-9 h-9 text-stone-900 fill-stone-900 ml-1" />
+                <span className="absolute h-24 w-24 animate-ping rounded-full bg-white/20" />
+                <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-2xl transition-transform group-hover:scale-110">
+                  <Play className="ml-1 h-9 w-9 fill-stone-900 text-stone-900" />
                 </span>
               </span>
             </button>
           )}
 
-          {/* Pause overlay (during playback) */}
           {started && !playing && (
             <button
               onClick={togglePlay}
               className="absolute inset-0 flex items-center justify-center bg-black/30 transition-opacity"
               aria-label="Resume video"
             >
-              <span className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
-                <Play className="w-7 h-7 text-stone-900 fill-stone-900 ml-1" />
+              <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/90">
+                <Play className="ml-1 h-7 w-7 fill-stone-900 text-stone-900" />
               </span>
             </button>
           )}
 
-          {/* Controls bar */}
-          <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {/* Progress bar */}
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
             <div
-              className="w-full h-1.5 bg-white/25 rounded-full cursor-pointer mb-3 group/progress"
+              className="group/progress mb-3 h-1.5 w-full cursor-pointer rounded-full bg-white/25"
               onClick={handleProgressClick}
             >
               <div
-                className="h-full bg-amber-500 rounded-full relative transition-all"
+                className="relative h-full rounded-full bg-amber-500 transition-all"
                 style={{ width: `${progress}%` }}
               >
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3.5 h-3.5 bg-amber-500 rounded-full shadow-lg opacity-0 group-hover/progress:opacity-100 transition-opacity" />
+                <span className="absolute right-0 top-1/2 h-3.5 w-3.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500 opacity-0 shadow-lg transition-opacity group-hover/progress:opacity-100" />
               </div>
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <button onClick={togglePlay} className="text-white hover:text-amber-400 transition-colors" aria-label={playing ? 'Pause' : 'Play'}>
-                  {playing ? <Pause className="w-5 h-5 fill-white" /> : <Play className="w-5 h-5 fill-white" />}
+                <button onClick={togglePlay} className="text-white transition-colors hover:text-amber-400" aria-label={playing ? 'Pause' : 'Play'}>
+                  {playing ? <Pause className="h-5 w-5 fill-white" /> : <Play className="h-5 w-5 fill-white" />}
                 </button>
-                <button onClick={toggleMute} className="text-white hover:text-amber-400 transition-colors" aria-label={muted ? 'Unmute' : 'Mute'}>
-                  {muted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                <button onClick={toggleMute} className="text-white transition-colors hover:text-amber-400" aria-label={muted ? 'Unmute' : 'Mute'}>
+                  {muted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                 </button>
-                <span className="text-xs text-white/70 font-medium">Rocky's first week &middot; 0:32</span>
+                <span className="text-xs font-medium text-white/70">Foam steps · {FOAM_STEPS_CLIP.durationLabel}</span>
               </div>
-              <button onClick={toggleFullscreen} className="text-white hover:text-amber-400 transition-colors" aria-label="Fullscreen">
-                <Maximize className="w-5 h-5" />
+              <button onClick={toggleFullscreen} className="text-white transition-colors hover:text-amber-400" aria-label="Fullscreen">
+                <Maximize className="h-5 w-5" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Video proof points */}
-        <div className="mt-10 grid sm:grid-cols-3 gap-6">
-          {[
-            { k: '20–25°', v: 'Typical slope at SUV height (see the size finder)' },
-            { k: '150–250 lb', v: 'Published rating, by size' },
-            { k: '0 lbs', v: 'Lifting required — that is the point of a ramp' },
-          ].map((item, i) => (
-            <div key={i} className="text-center p-5 rounded-2xl bg-stone-800/60 border border-stone-800">
-              <div className="text-2xl font-extrabold text-amber-400">{item.k}</div>
-              <div className="mt-1 text-sm text-stone-400">{item.v}</div>
-            </div>
-          ))}
-        </div>
+        {product && !onThisProduct && (
+          <p className="mt-6 text-center">
+            <Link
+              to={productPath(product)}
+              className="inline-flex h-12 items-center rounded-full bg-white px-6 font-bold text-stone-900"
+            >
+              Shop the foam steps
+            </Link>
+          </p>
+        )}
       </div>
     </section>
   );

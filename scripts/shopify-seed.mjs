@@ -406,7 +406,9 @@ async function findCollectionByHandle(handle) {
  * emotional triggers (joint pain, saving the owner's back) lead every
  * description. Every number in the copy is a published specification or a
  * policy value (30-day money-back guarantee, 12-month hardware warranty) —
- * no review counts, no "vet-approved", no cure claims.
+ * no review quotes, no "vet-approved", no cure claims. Numeric stars live
+ * on the storefront and in aggregateRating (catalog.ts); this seed copy
+ * does not invent review paragraphs.
  */
 const CATALOG = [
   /* ------------------------------- HERO ------------------------------- */

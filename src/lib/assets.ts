@@ -137,13 +137,28 @@ export interface HeroPhoto {
   vehicles?: readonly string[];
 }
 
+/**
+ * Owner-supplied foam-steps clip (9 seconds). The caption in VideoProof and
+ * the stairs guide must stay limited to what the frames show.
+ */
+export const FOAM_STEPS_CLIP = {
+  src: '/assets/catalog/foam-steps-corgi.mp4',
+  poster: '/assets/catalog/foam-steps-corgi.jpg',
+  captions: '/assets/catalog/foam-steps-corgi.vtt',
+  caption:
+    'A corgi climbs the gray foam steps beside a bed, stands on the top, steps back down to the carpet, then moves on the bed.',
+  durationLabel: '0:09',
+  productSlug: 'orthopedic-foam-bed-steps',
+} as const;
+
 /* --------------------------------------------------------------------------
-   Content gates — all OFF until real, verified material exists.
+   Content gates. videoProof is on: the corgi clip is in public/assets.
+   The others stay OFF until real, verified material exists.
    -------------------------------------------------------------------------- */
 
 export const GATES = {
-  /** Product demo video (needs a real clip, not a placeholder). */
-  videoProof: false,
+  /** 9-second corgi clip on the foam steps. Copy matches the footage. */
+  videoProof: true,
   /** Owner-submitted vertical clips (needs real, credited customer videos). */
   ugcGallery: false,
   /** Verified buyer reviews (needs a real review source — see LAUNCH_BLOCKERS). */

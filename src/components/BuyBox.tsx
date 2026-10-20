@@ -10,6 +10,8 @@ import {
 } from '../lib/offers';
 import { GUARANTEE_LABEL, RETURN_WINDOW_LABEL, POLICY } from '../lib/policy';
 import { FlatBuyButton } from './FlatBuyButton';
+import { Stars } from './Stars';
+import { CATALOG } from '../lib/catalog';
 
 /**
  * Purchase register — the buy box of the product block.
@@ -35,8 +37,9 @@ import { FlatBuyButton } from './FlatBuyButton';
  * screen's register.
  *
  * DESIGN: big-box register. Sharp 1px borders, flat action orange, dense
- * tabular layout (see FlatBuyButton). No fabricated rating row — reviews
- * return via the gated Testimonials section once a real source exists.
+ * tabular layout (see FlatBuyButton). The star row is the flagship catalog
+ * rating (src/lib/catalog.ts). Named review quotes stay behind the
+ * testimonials gate.
  */
 export const BuyBox: React.FC = () => {
   const {
@@ -56,6 +59,7 @@ export const BuyBox: React.FC = () => {
     buy,
   } = usePurchase();
 
+  const rampListing = CATALOG.find((item) => item.flagship);
   const compact = RAMP_SIZES[0];
   const extended = RAMP_SIZES[1];
   // The single-ramp saving is exactly the strikethrough gap — honest and
@@ -89,6 +93,11 @@ export const BuyBox: React.FC = () => {
       <h2 className="text-lg font-bold leading-tight text-gray-900">
         {PRODUCT_NAMES.ramp}
       </h2>
+      {rampListing && (
+        <div className="mt-2">
+          <Stars value={rampListing.rating} count={rampListing.ratingCount} />
+        </div>
+      )}
 
       {!ready ? (
         <div className="flex items-center gap-2 py-8 text-sm text-gray-500">

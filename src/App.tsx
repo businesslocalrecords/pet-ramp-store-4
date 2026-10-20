@@ -8,6 +8,7 @@ import {
   AboutPage,
   ContactPage,
   GuidePage,
+  StairsGuidePage,
   PrivacyPage,
   ReturnsPage,
   ShippingPage,
@@ -40,6 +41,8 @@ export default function App() {
           <Route path="/terms/" element={<TermsPage />} />
           <Route path="/guide/how-to-choose-a-dog-car-ramp" element={<GuidePage />} />
           <Route path="/guide/how-to-choose-a-dog-car-ramp/" element={<GuidePage />} />
+          <Route path="/guide/dog-stairs-for-bed-or-couch" element={<StairsGuidePage />} />
+          <Route path="/guide/dog-stairs-for-bed-or-couch/" element={<StairsGuidePage />} />
         </Routes>
       </Shell>
     </BrowserRouter>
