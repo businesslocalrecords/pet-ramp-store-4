@@ -15,7 +15,7 @@ const SHOWCASES = [
   {
     slug: 'foldable-dog-car-ramp',
     title: 'Most popular for the car',
-    image: '/assets/product/grit/ramp-boxer-hatchback-hero.jpg',
+    image: '/assets/product/grit/ramp-boxer-hatchback-hero.jpg?v=2',
     imageAlt: 'A brindle Boxer stepping onto the Paw Grip ramp at the open hatch of a blue hatchback',
     frame: 'object-center',
     shopLabel: 'Shop the car ramp',

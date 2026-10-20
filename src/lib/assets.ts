@@ -59,14 +59,14 @@ export const ASSETS = {
    */
   heroPhotos: [
     {
-      src: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
+      src: '/assets/product/grit/ramp-german-shepherd-suv.jpg?v=2',
       alt:
         'A German Shepherd walking up the Paw Grip grit-deck ramp into the cargo area of a blue SUV',
       label: 'Walks right in',
       vehicles: ['suv', 'jeep', '4x4', '4wd'],
     },
     {
-      src: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
+      src: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg?v=2',
       alt:
         'A large white dog walking up the Paw Grip grit-deck ramp into a white SUV',
       label: 'No more lifting',
@@ -79,7 +79,7 @@ export const ASSETS = {
       label: 'Paw Grip deck',
     },
     {
-      src: '/assets/product/grit/ramp-boxer-hatchback.jpg',
+      src: '/assets/product/grit/ramp-boxer-hatchback.jpg?v=2',
       alt:
         'A brindle Boxer stepping onto the Paw Grip ramp at the open hatch of a blue hatchback',
       label: 'Hatchbacks too',
