@@ -51,7 +51,7 @@ const OWN_CATALOG: readonly CatalogProduct[] = [
     ratingCount: 214,
     image: '/assets/product/grit/ramp-german-shepherd-suv.jpg',
     imageHover: '/assets/product/grit/ramp-white-dog-walking-up-suv.jpg',
-    imageAlt: 'A German Shepherd walking up the Paw Grip ramp into an SUV',
+    imageAlt: 'A German Shepherd walking up the Paw Grip ramp into a blue SUV',
     photos: [],
     use: 'car',
     kind: 'ramp',

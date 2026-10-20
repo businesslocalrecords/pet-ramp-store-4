@@ -156,10 +156,10 @@ const IMAGE_MANIFEST = [
   {
     handle: 'premium-foldable-dog-car-ramp',
     images: [
-      { file: 'assets/product/grit/ramp-german-shepherd-suv.jpg', alt: 'A German Shepherd walking up the Paw Grip grit-deck ramp into the cargo area of a blue SUV while its owner encourages it' },
-      { file: 'assets/product/grit/ramp-white-dog-walking-up-suv.jpg', alt: 'A large white dog walking up the Paw Grip grit-deck ramp into a white SUV, guided by its owner' },
+      { file: 'assets/product/grit/ramp-german-shepherd-suv.jpg', alt: 'A German Shepherd walking up the Paw Grip grit-deck ramp into the cargo area of a blue SUV' },
+      { file: 'assets/product/grit/ramp-white-dog-walking-up-suv.jpg', alt: 'A large white dog walking up the Paw Grip grit-deck ramp into a white SUV' },
       { file: 'assets/product/grit/ramp-grit-deck-tailgate.jpg', alt: 'Close view of the Paw Grip ramp at the tailgate of a white SUV, showing the grit walking surface, side rails and center hinge' },
-      { file: 'assets/product/grit/ramp-boxer-hatchback.jpg', alt: 'A brindle Boxer stepping onto the Paw Grip ramp at the hatch of a blue hatchback while its owner watches' },
+      { file: 'assets/product/grit/ramp-boxer-hatchback.jpg', alt: 'A brindle Boxer stepping onto the Paw Grip ramp at the open hatch of a blue hatchback' },
       { file: 'assets/product/grit/ramp-pickup-truck-rear-door.jpg', alt: 'The Paw Grip ramp set up at the open rear door of a brown pickup truck cab' },
       { file: 'assets/product/revised/ramp-scene-carrying-folded.jpg', alt: 'A man holding the folded Paw Grip ramp at the open hatch of a white SUV while a white dog waits in the cargo area' },
       { file: 'assets/product/revised/ramp-studio-three-quarter.jpg', alt: 'Studio view of the Paw Grip foldable dog car ramp at a three-quarter angle on a white background' },

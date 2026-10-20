@@ -5,8 +5,6 @@ import { HeroSection } from '../components/HeroSection';
 import { BuyBox } from '../components/BuyBox';
 import { QuickAnswers } from '../components/QuickAnswers';
 import { AboutItem } from '../components/AboutItem';
-import { Benefits } from '../components/Benefits';
-import { ComparisonTable } from '../components/ComparisonTable';
 import { SizeGuide } from '../components/SizeGuide';
 import { MoreRamps } from '../components/MoreRamps';
 import { ShippingReturns } from '../components/ShippingReturns';
@@ -75,7 +73,7 @@ function useFitsViewport<T extends HTMLElement>() {
  * Single-product landing page — 12-column split-screen layout.
  *
  * Mobile reading order (one column from 390px): hero → size finder → select
- * package (buy column) → why a ramp → the remaining editorial sections.
+ * package (buy column) → the remaining editorial sections.
  * Size first, price second, story third.
  *
  * Vertical rhythm is gap-y-16 everywhere; tap targets are min-h-12; there is
@@ -84,8 +82,7 @@ function useFitsViewport<T extends HTMLElement>() {
  * globals.css.
  *
  * At `lg` the `lg:order-*` values restore today's editorial sequence
- * (hero, benefits, comparison, size guide, founder, related products,
- * shipping, faq)
+ * (hero, size guide, founder, related products, shipping, faq)
  * while the buy column takes explicit grid placement — `col-start-8`
  * spanning `row-span-full` so the sticky purchase column stays glued for
  * the full page.
@@ -137,7 +134,7 @@ const Page: React.FC = () => {
               size finder and the long editorial sections. On desktop it spans
               the left column's rows (row-span-full only covers explicit rows,
               of which there are none) so the left sections stack beside it. */}
-          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-10">
+          <aside className="order-2 lg:col-start-8 lg:col-span-5 lg:row-start-1 lg:row-span-8">
             <div
               id="offer"
               ref={offerRef}
@@ -176,16 +173,6 @@ const Page: React.FC = () => {
               </p>
             </div>
           </aside>
-
-          {/* ---------------- WHY A RAMP (mobile 4 | desktop 4) ---------------- */}
-          <div className="order-4 lg:col-span-7 lg:order-4">
-            <Benefits />
-          </div>
-
-          {/* ---------------- HEAD TO HEAD (mobile 5 | desktop 5) ---------------- */}
-          <div className="order-5 lg:col-span-7 lg:order-5">
-            <ComparisonTable />
-          </div>
 
           {GATES.videoProof && (
             <div className="lg:col-span-7 lg:order-2">
